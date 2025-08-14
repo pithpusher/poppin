@@ -3,7 +3,11 @@ import "./globals.css";
 import type { Metadata } from "next";
 import Link from "next/link";
 import ThemeProvider from "@/components/theme/ThemeProvider";
-import ThemeToggle from "@/components/theme/ThemeToggle";
+import BottomNav from "@/components/ui/BottomNav";
+import Logo from "@/components/icons/Logo";
+import LocationSearchBar from "@/components/ui/LocationSearchBar";
+import HamburgerMenu from "@/components/ui/HamburgerMenu";
+import { LocationSearchProvider } from "@/components/context/LocationSearchContext";
 
 export const metadata: Metadata = {
   title: "Poppin",
@@ -14,56 +18,45 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" suppressHydrationWarning>
       <body className="min-h-screen flex flex-col">
-        <ThemeProvider>
-          {/* Top bar */}
-          <header className="sticky top-0 z-20 border-b border-white/10 bg-[rgb(var(--bg))]/80 backdrop-blur html.light:bg-white/80 html.light:border-zinc-200">
-            <div className="mx-auto max-w-6xl px-4 py-3 flex items-center justify-between">
-              <Link href="/" className="text-lg font-semibold">Poppin</Link>
-              <nav className="hidden sm:flex items-center gap-4 text-sm">
-                <Link href="/map" className="hover:underline">Map</Link>
-                <Link href="/events/new" className="hover:underline">Post</Link>
-                <Link href="/organizer/apply" className="hover:underline">Apply</Link>
-                <Link href="/auth" className="hover:underline">Sign in</Link>
-                <ThemeToggle />
-              </nav>
-              {/* Mobile toggle only */}
-              <div className="sm:hidden">
-                <ThemeToggle />
+                <ThemeProvider>
+          <LocationSearchProvider>
+            {/* Top bar */}
+            <header className="sticky top-0 z-20 token-border-b bg-[rgb(var(--bg))]/80 backdrop-blur light:bg-white/80">
+              <div className="mx-auto max-w-6xl px-4 py-3 flex items-center gap-4">
+                {/* Logo */}
+                <Link href="/" className="flex items-center flex-shrink-0">
+                  <Logo width={90} height={29} className="text-[rgb(var(--text))]" />
+                </Link>
+                
+                {/* Search Bar - Center */}
+                <div className="flex-1 max-w-md mx-auto">
+                  <LocationSearchBar 
+                    placeholder="Search for a location..."
+                    className="w-full"
+                  />
+                </div>
+                
+                {/* Hamburger Menu */}
+                <div className="flex-shrink-0">
+                  <HamburgerMenu />
+                </div>
               </div>
-            </div>
-          </header>
+            </header>
 
-          <main className="flex-1">{children}</main>
+            <main className="flex-1">{children}</main>
 
-          {/* Bottom tab bar (mobile) */}
-          <nav className="sm:hidden sticky bottom-0 z-20 border-t border-white/10 bg-[rgb(var(--bg))]/90 backdrop-blur html.light:bg-white/90 html.light:border-zinc-200">
-            <div className="grid grid-cols-4 text-xs">
-              <Tab href="/" label="Home" />
-              <Tab href="/map" label="Map" />
-              <Tab href="/events/new" label="Post" />
-              <Tab href="/auth" label="Account" />
-            </div>
-          </nav>
+            {/* Bottom navigation */}
+            <BottomNav />
 
-          <footer className="hidden sm:block border-t border-white/10 html.light:border-zinc-200">
-            <div className="mx-auto max-w-6xl px-4 py-4 text-sm text-zinc-400 html.light:text-zinc-600 flex justify-between">
-              <span>&copy; {new Date().getFullYear()} Poppin</span>
-              <span>Made for your city</span>
-            </div>
-          </footer>
+            <footer className="hidden sm:block token-border-t">
+              <div className="mx-auto max-w-6xl px-4 py-4 text-sm text-zinc-400 light:text-zinc-600 flex justify-between">
+                <span>&copy; {new Date().getFullYear()} Poppin</span>
+                <span>Made for your city</span>
+              </div>
+            </footer>
+          </LocationSearchProvider>
         </ThemeProvider>
       </body>
     </html>
-  );
-}
-
-function Tab({ href, label }: { href: string; label: string }) {
-  return (
-    <Link
-      href={href}
-      className="flex flex-col items-center justify-center py-3 text-zinc-400 hover:text-white html.light:text-zinc-600 html.light:hover:text-zinc-900"
-    >
-      <span>{label}</span>
-    </Link>
   );
 }

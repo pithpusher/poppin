@@ -11,8 +11,8 @@ export default function PillTabs({tabs,active,onChange}:{tabs:Tab[];active:strin
           className={clsx(
             "h-10 px-4 rounded-full border text-sm transition whitespace-nowrap",
             active===t.id
-              ? "border-[rgb(var(--border-color))] bg-[rgb(var(--panel))] text-[rgb(var(--text))] shadow-card"
-              : "border-[rgb(var(--border-color))] text-[rgb(var(--muted))] hover:bg-white/5"
+              ? "token-border bg-[rgb(var(--panel))] text-[rgb(var(--text))] shadow-card"
+              : "token-border text-[rgb(var(--muted))] hover:bg-white/5"
           )}
         >
           {t.label}

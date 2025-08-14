@@ -4,5 +4,5 @@ export const tokens = {
   panel: "bg-[rgb(var(--panel))]",
   text: "text-[rgb(var(--text))]",
   muted: "text-[rgb(var(--muted))]",
-  border: "border border-[rgb(var(--border))]",
+  border: "token-border",
 };

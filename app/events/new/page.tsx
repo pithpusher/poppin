@@ -153,7 +153,7 @@ export default function NewEventPage() {
             onFocus={() => suggestions.length && setShowSug(true)}
           />
           {showSug && suggestions.length > 0 && (
-            <div className="absolute z-10 mt-1 w-full rounded-lg border bg-white shadow-md">
+            <div className="absolute z-10 mt-1 w-full rounded-lg token-border bg-white shadow-md">
               {suggestions.map((s, idx) => (
                 <button
                   key={idx}

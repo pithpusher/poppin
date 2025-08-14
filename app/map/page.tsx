@@ -18,10 +18,8 @@ import "mapbox-gl/dist/mapbox-gl.css";
 import {
     supabase
 } from "@/lib/supabaseClient";
-import {
-    FilterBar,
-    Range
-} from "@/components/map/FilterBar";
+import FilterBar, { Range } from "@/components/map/FilterBar";
+import { useLocation } from "@/components/map/useLocation";
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN || "";
 type Ev = {
     id: string;
@@ -32,20 +30,41 @@ type Ev = {
     lng: number | null;
     image_url: string | null;
     status: "approved" | "pending" | "rejected" | string;
-    is_free ? : boolean | null;
-    price_cents ? : number | null;
+    is_free?: boolean | null;
+    price_cents?: number | null;
+    event_type?: string | null;
+    age_restriction?: string | null;
 };
 export default function MapPage() {
-    const mapEl = useRef < HTMLDivElement > (null);
-    const mapRef = useRef < mapboxgl.Map | null > (null);
-    const markersRef = useRef < Map < string,
-        mapboxgl.Marker >> (new Map());
-    const [events, setEvents] = useState < Ev[] > ([]);
-    const [range, setRange] = useState < Range > ("all");
+    const mapEl = useRef<HTMLDivElement>(null);
+    const mapRef = useRef<mapboxgl.Map | null>(null);
+    const markersRef = useRef<Map<string, mapboxgl.Marker>>(new Map());
+    const [events, setEvents] = useState<Ev[]>([]);
+    const [range, setRange] = useState<Range>("all");
     const [onlyFree, setOnlyFree] = useState(false);
-    const [startDate, setStartDate] = useState < string | null > (null);
-    const [endDate, setEndDate] = useState < string | null > (null);
-    const [selectedId, setSelectedId] = useState < string | null > (null);
+    const [startDate, setStartDate] = useState<string | null>(null);
+    const [endDate, setEndDate] = useState<string | null>(null);
+    const [selectedId, setSelectedId] = useState<string | null>(null);
+    const [searchLocation, setSearchLocation] = useState<{ lat: number; lng: number; formatted: string } | null>(null);
+    const [eventTypes, setEventTypes] = useState<string[]>([]);
+    const [ageRestriction, setAgeRestriction] = useState<string>("All Ages");
+    const { location, isLoading, error } = useLocation();
+
+    // Handle URL search parameters
+    useEffect(() => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const lat = urlParams.get('lat');
+        const lng = urlParams.get('lng');
+        const query = urlParams.get('query');
+        
+        if (lat && lng && query) {
+            setSearchLocation({
+                lat: parseFloat(lat),
+                lng: parseFloat(lng),
+                formatted: query
+            });
+        }
+    }, []);
     // Deduplicate rows (prevents dupes from re-mounts)
     const uniqueEvents = useMemo(
         () => Array.from(new Map(events.map((e) => [e.id, e])).values()),
@@ -53,10 +72,14 @@ export default function MapPage() {
     // Init map
     useEffect(() => {
         if (mapRef.current || !mapEl.current) return;
+        
+        // Use search location if available, otherwise use user location
+        const centerLocation = searchLocation || location;
+        
         const map = new mapboxgl.Map({
             container: mapEl.current,
             style: getInitialMapStyle(),
-            center: [-122.4579, 37.7699],
+            center: [centerLocation.lng, centerLocation.lat],
             zoom: 11,
         });
         mapRef.current = map;
@@ -66,36 +89,51 @@ export default function MapPage() {
             map.remove();
             mapRef.current = null;
         };
-    }, []);
+    }, [location, searchLocation]);
     // Fetch with filters
     useEffect(() => {
         const load = async () => {
             try {
-                let q = supabase.from("events").select("id,title,start_at,venue_name,lat,lng,image_url,status,price_cents,is_free").eq("status", "approved").filter("lat", "not.is", null).filter("lng", "not.is", null).order("start_at", {
+                let q = supabase.from("events").select("id,title,start_at,venue_name,lat,lng,image_url,status,price_cents,is_free,event_type,age_restriction").eq("status", "approved").filter("lat", "not.is", null).filter("lng", "not.is", null).order("start_at", {
                     ascending: true
                 }).limit(500);
+                
                 const now = new Date();
                 const startOfDay = new Date(now);
                 startOfDay.setHours(0, 0, 0, 0);
                 const endOfDay = new Date(now);
                 endOfDay.setHours(23, 59, 59, 999);
                 const in7 = new Date(now);
-                in7.setDate(in7.getDate() + 7);
+                in7.setDate(now.getDate() + 7);
                 const in30 = new Date(now);
-                in30.setDate(in30.getDate() + 30);
+                in30.setDate(now.getDate() + 30);
+                
                 // Date constraints
                 if (range !== "all" && range !== "custom") {
                     q = q.gte("start_at", startOfDay.toISOString());
                     if (range === "today") q = q.lte("start_at", endOfDay.toISOString());
                     if (range === "week") q = q.lte("start_at", in7.toISOString());
-                    if (range === "30") q = q.lte("start_at", in30.toISOString());
+                    if (range === "month") q = q.lte("start_at", in30.toISOString());
                 }
+                
                 if (range === "custom" && startDate && endDate) {
                     const startIso = new Date(startDate + "T00:00:00").toISOString();
                     const endIso = new Date(endDate + "T23:59:59").toISOString();
                     q = q.gte("start_at", startIso).lte("start_at", endIso);
                 }
+                
+                // Pricing filter
                 if (onlyFree) q = q.eq("is_free", true);
+                
+                // Event type filter
+                if (eventTypes.length > 0) {
+                    q = q.in("event_type", eventTypes);
+                }
+                
+                // Age restriction filter
+                if (ageRestriction !== "All Ages") {
+                    q = q.eq("age_restriction", ageRestriction);
+                }
                 const {
                     data,
                     error,
@@ -124,7 +162,7 @@ export default function MapPage() {
             }
         };
         load();
-    }, [range, onlyFree, startDate, endDate]);
+    }, [range, onlyFree, startDate, endDate, eventTypes, ageRestriction]);
     // Markers
     useEffect(() => {
         const map = mapRef.current;
@@ -169,6 +207,10 @@ export default function MapPage() {
     const selected = useMemo(
         () => uniqueEvents.find((e) => e.id === selectedId) || null,
         [uniqueEvents, selectedId]);
+
+    // The search functionality is now handled by the context in the header
+    // This component will automatically respond to URL parameter changes
+
     return (<div className="min-h-[70vh]">
       <FilterBar
         range={range}
@@ -180,10 +222,24 @@ export default function MapPage() {
         setStartDate={setStartDate}
         setEndDate={setEndDate}
         onApplyCustom={() => setRange("custom")}
+        eventTypes={eventTypes}
+        setEventTypes={setEventTypes}
+        ageRestriction={ageRestriction}
+        setAgeRestriction={setAgeRestriction}
       />
 
       <div className="grid md:grid-cols-[2fr,1fr] gap-6 max-w-6xl mx-auto px-4 py-6">
-        <div className="relative w-full h-[70vh] rounded-2xl border border-[color:var(--border-color)] overflow-hidden">
+        <div className="relative w-full h-[70vh] rounded-2xl token-border overflow-hidden">
+          {error && (
+            <div className="absolute top-4 left-4 z-10 bg-yellow-500/90 text-white px-3 py-2 rounded-lg text-sm backdrop-blur">
+              {error}
+            </div>
+          )}
+          {searchLocation && (
+            <div className="absolute top-4 left-4 z-10 bg-blue-500/90 text-white px-3 py-2 rounded-lg text-sm backdrop-blur">
+              Showing events near: {searchLocation.formatted}
+            </div>
+          )}
           <div ref={mapEl} className="w-full h-full" />
         </div>
 
@@ -203,7 +259,7 @@ export default function MapPage() {
                     mapRef.current.flyTo({ center: [ev.lng!, ev.lat!], zoom: 13 });
                   }
                 }}
-                className={`text-left rounded-lg border border-[color:var(--border-color)] p-3 bg-[rgb(var(--panel))] hover:border-[color:var(--border-color)] ${selectedId===ev.id ? "outline outline-1 outline-blue-500" : ""}`}
+                className={`text-left rounded-lg token-border p-3 bg-[rgb(var(--panel))] hover:border-[color:var(--border-color)] ${selectedId===ev.id ? "outline outline-1 outline-blue-500" : ""}`}
 
               >
                 <div className="flex items-center justify-between">
@@ -221,24 +277,31 @@ export default function MapPage() {
                 <div className="text-xs text-[rgb(var(--muted))]">
                   {fmt(ev.start_at)}
                   {ev.venue_name ? " · " + ev.venue_name : ""}
+                  {ev.event_type ? ` · ${ev.event_type}` : ""}
                 </div>
               </button>
             ))}
 
             {uniqueEvents.length === 0 && (
-              <div className="rounded-lg border border-[color:var(--border-color)] p-3 bg-[rgb(var(--panel))] text-sm text-[rgb(var(--text))]">
+              <div className="rounded-lg token-border p-3 bg-[rgb(var(--panel))] text-sm text-[rgb(var(--text))]">
                 No events match these filters.
               </div>
             )}
           </div>
 
           {selected && (
-            <div className="rounded-lg border border-[color:var(--border-color)] p-3 bg-[rgb(var(--panel))]">
+            <div className="rounded-lg token-border p-3 bg-[rgb(var(--panel))]">
               <div className="text-sm font-semibold">{selected.title}</div>
               <div className="text-xs text-zinc-600 mt-1">
                 {fmt(selected.start_at)}
                 {selected.venue_name ? " · " + selected.venue_name : ""}
+                {selected.event_type ? ` · ${selected.event_type}` : ""}
               </div>
+              {selected.age_restriction && selected.age_restriction !== "All Ages" && (
+                <div className="text-xs text-zinc-500 mt-1">
+                  Age: {selected.age_restriction}
+                </div>
+              )}
             </div>
           )}
         </aside>
@@ -263,10 +326,23 @@ function makePin(isFree ? : boolean | null) {
 }
 // popup template (drop this at the bottom of the map file)
 function popupHtml(ev: {
-    id: string;title: string;start_at: string;lat ? : number;lng ? : number;image_url ? : string | null;is_free ? : boolean | null;venue_name ? : string | null;
+    id: string;
+    title: string;
+    start_at: string;
+    lat?: number;
+    lng?: number;
+    image_url?: string | null;
+    is_free?: boolean | null;
+    venue_name?: string | null;
+    event_type?: string | null;
+    age_restriction?: string | null;
 }) {
     const img = ev.image_url ? `<img src="${escapeHtml(ev.image_url)}" alt="" class="w-full h-28 object-cover rounded-t-xl">` : "";
     const badge = ev.is_free ? `<span class="inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-medium bg-green-50 border-green-200 text-green-700">Free</span>` : `<span class="inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-medium bg-amber-50 border-amber-200 text-amber-700">Paid</span>`;
+    
+    const eventTypeInfo = ev.event_type ? `<div class="text-xs text-[rgb(var(--muted))] mt-1">${escapeHtml(ev.event_type)}</div>` : "";
+    const ageInfo = ev.age_restriction && ev.age_restriction !== "All Ages" ? `<div class="text-xs text-[rgb(var(--muted))] mt-1">Age: ${escapeHtml(ev.age_restriction)}</div>` : "";
+    
     return `
     <div class="overflow-hidden rounded-xl bg-[rgb(var(--panel))] text-[rgb(var(--text))]">
       ${img}
@@ -276,6 +352,8 @@ function popupHtml(ev: {
           ${badge}
         </div>
         <div class="text-xs text-[rgb(var(--muted))] mt-1">${fmt(ev.start_at)}${ev.venue_name ? " · " + escapeHtml(ev.venue_name) : ""}</div>
+        ${eventTypeInfo}
+        ${ageInfo}
         <div class="mt-2 flex items-center gap-3">
           <a class="text-blue-400 underline text-xs" href="/e/${ev.id}">Details</a>
           ${ev.lat && ev.lng ? `<a class="text-blue-400 underline text-xs" target="_blank" rel="noreferrer" href="https://www.google.com/maps?q=${ev.lat},${ev.lng}">Directions</a>` : ""}

@@ -11,24 +11,9 @@ export function Button({ className, variant="primary", size="md", ...props }: Pr
   };
   const variants = {
     primary:  "bg-brand text-white hover:opacity-95 focus:ring-2 focus:ring-[color:var(--ring)]",
-    secondary:"bg-[rgb(var(--panel))] border border-[rgb(var(--border-color))] text-[rgb(var(--text))] hover:bg-white/5",
+    secondary:"bg-[rgb(var(--panel))] token-border text-[rgb(var(--text))] hover:bg-white/5",
     ghost:    "bg-transparent text-[rgb(var(--text))] hover:bg-white/5",
   };
   return <button className={clsx(base, sizes[size], variants[variant], className)} {...props} />;
 }
-// components/ui/Chip.tsx (or inline where you render chips)
-export function Chip({ active, children, ...props }: React.ButtonHTMLAttributes<HTMLButtonElement> & { active?: boolean }) {
-  return (
-    <button
-      {...props}
-      className={
-        "px-3 py-1.5 rounded-full text-sm transition " +
-        (active
-          ? "bg-[rgb(var(--bg))] text-[rgb(var(--text))] border border-[color:var(--border-color)] shadow"
-          : "bg-[rgb(var(--panel))] text-[rgb(var(--muted))] border border-[color:var(--border-color)] hover:bg-white/5")
-      }
-    >
-      {children}
-    </button>
-  );
-}
+

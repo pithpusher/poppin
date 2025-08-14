@@ -1,6 +1,6 @@
 export default function SearchBar({placeholder="Search events…"}:{placeholder?:string}){
   return (
-    <div className="h-12 rounded-full border border-[rgb(var(--border-color))] bg-[rgb(var(--panel))] px-4 flex items-center gap-3">
+    <div className="h-12 rounded-full token-border bg-[rgb(var(--panel))] px-4 flex items-center gap-3">
       <span className="i-mdi-magnify w-5 h-5 opacity-70" aria-hidden />
       <input
         placeholder={placeholder}

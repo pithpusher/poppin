@@ -29,7 +29,7 @@ export default function Pricing(){
   return (
     <div className="grid gap-6 md:grid-cols-4">
       {plans.map(p=>(
-        <div key={p.key} className="border rounded-xl p-4 bg-white">
+        <div key={p.key} className="token-border rounded-xl p-4 bg-white">
           <div className="font-semibold text-lg">{p.name}</div>
           <div className="text-sm text-gray-600">{p.desc}</div>
           <button onClick={()=>checkout(p.priceId)} className="mt-4 px-4 py-2 rounded-md bg-blue-600 text-white">

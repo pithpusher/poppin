@@ -6,6 +6,7 @@ import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { supabase } from "@/lib/supabaseClient";
 import { bindThemeToMap, getInitialMapStyle } from "./useMapTheme";
+import { useLocation } from "./useLocation";
 
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN || "";
 
@@ -18,6 +19,8 @@ type Ev = {
   is_free?: boolean | null;
   image_url?: string | null;
   venue_name?: string | null;
+  event_type?: string | null;
+  age_restriction?: string | null;
 };
 
 export default function MiniMap() {
@@ -25,13 +28,14 @@ export default function MiniMap() {
   const mapRef = useRef<mapboxgl.Map | null>(null);
   const markersRef = useRef<Map<string, mapboxgl.Marker>>(new Map());
   const [events, setEvents] = useState<Ev[]>([]);
+  const { location, isLoading, error } = useLocation();
 
   useEffect(() => {
     if (mapRef.current || !mapEl.current) return;
     const map = new mapboxgl.Map({
       container: mapEl.current,
       style: getInitialMapStyle(),
-      center: [-122.4579, 37.7699],
+      center: [location.lng, location.lat],
       zoom: 10,
     });
     mapRef.current = map;
@@ -42,7 +46,7 @@ export default function MiniMap() {
       map.remove();
       mapRef.current = null;
     };
-  }, []);
+  }, [location]);
 
   useEffect(() => {
     const load = async () => {
@@ -52,7 +56,7 @@ export default function MiniMap() {
 
       const { data, error } = await supabase
         .from("events")
-        .select("id,title,start_at,lat,lng,is_free,image_url,venue_name")
+        .select("id,title,start_at,lat,lng,is_free,image_url,venue_name,event_type,age_restriction")
         .eq("status", "approved")
         .filter("lat", "not.is", null)
         .filter("lng", "not.is", null)
@@ -113,18 +117,22 @@ bounds.extend([ev.lng!, ev.lat!]);
   }, [events]);
 
   return (
-    <div className="relative w-full h-[50vh] rounded-2xl border border-[color:var(--border-color)] overflow-hidden">
+    <div className="relative w-full h-[50vh] rounded-2xl token-border overflow-hidden">
+      {error && (
+        <div className="absolute top-4 left-4 z-10 bg-yellow-500/90 text-white px-3 py-2 rounded-lg text-sm backdrop-blur">
+          {error}
+        </div>
+      )}
       <div ref={mapEl} className="w-full h-full" />
-<a
-  href="/map"
-  className="absolute bottom-4 right-4 rounded-xl px-3 py-1 text-sm shadow
-             border border-[color:var(--border-color)]
-             bg-[rgb(var(--panel))]/80 backdrop-blur
-             hover:bg-[rgb(var(--panel))]"
->
-  View Full Map
-</a>
-
+      <a
+        href="/map"
+        className="absolute bottom-4 right-4 rounded-xl px-3 py-1 text-sm shadow
+                   token-border
+                   bg-[rgb(var(--panel))]/80 backdrop-blur
+                   hover:bg-[rgb(var(--panel))]"
+      >
+        View Full Map
+      </a>
     </div>
   );
 }
@@ -154,6 +162,9 @@ function popupHtml(ev: Ev) {
     ? `<span class="inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-medium bg-green-50 border-green-200 text-green-700">Free</span>`
     : `<span class="inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-medium bg-amber-50 border-amber-200 text-amber-700">Paid</span>`;
 
+  const eventTypeInfo = ev.event_type ? `<div class="text-xs text-[rgb(var(--muted))] mt-1">${escapeHtml(ev.event_type)}</div>` : "";
+  const ageInfo = ev.age_restriction && ev.age_restriction !== "All Ages" ? `<div class="text-xs text-[rgb(var(--muted))] mt-1">Age: ${escapeHtml(ev.age_restriction)}</div>` : "";
+
   return `
     <div class="overflow-hidden rounded-xl bg-[rgb(var(--panel))] text-[rgb(var(--text))]">
       ${img}
@@ -163,6 +174,8 @@ function popupHtml(ev: Ev) {
           ${badge}
         </div>
         <div class="text-xs text-[rgb(var(--muted))] mt-1">${fmt(ev.start_at)}</div>
+        ${eventTypeInfo}
+        ${ageInfo}
         <div class="mt-2 flex items-center gap-3">
           <a class="text-blue-400 underline text-xs" href="/e/${ev.id}">Details</a>
           <a class="text-blue-400 underline text-xs" target="_blank" rel="noreferrer" href="https://www.google.com/maps?q=${ev.lat},${ev.lng}">Directions</a>

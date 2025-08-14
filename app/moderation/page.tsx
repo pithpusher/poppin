@@ -43,7 +43,7 @@ export default function Moderation(){
       {msg && <p>{msg}</p>}
       <div style={{ display:'grid', gap:8, marginTop:12 }}>
         {rows.map(e=>(
-          <div key={e.id} style={{ border:'1px solid #333', padding:12, borderRadius:8 }}>
+          <div key={e.id} style={{ padding:12, borderRadius:8 }} className="token-border">
             <div style={{ fontWeight:600 }}>{e.title}</div>
             <div style={{ fontSize:12, opacity:.8 }}>{new Date(e.start_at).toLocaleString()} · {e.city_slug} · {e.status}</div>
             <div style={{ marginTop:8, display:'flex', gap:8 }}>

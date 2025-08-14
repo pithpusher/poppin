@@ -10,16 +10,15 @@ export default function HomePage() {
       <section
         className={`
           py-12 sm:py-16
-          ${tokens.bg}          /* flat in light */
-          dark:${tokens.bg}     /* keep bg consistent in dark */
+          bg-[rgb(var(--bg))]
         `}
       >
         <div className="max-w-6xl mx-auto px-4 text-center">
           <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight">
-            Find what’s poppin’ this week
+            Find what's poppin' this week
           </h1>
           <p className={`mt-3 text-base sm:text-lg ${tokens.muted} max-w-2xl mx-auto`}>
-            A clean, push-first local events app. Less noise, more go-time.
+          Local happenings, curated just for you.
           </p>
           <div className="mt-6 flex justify-center gap-3">
             <a
@@ -30,7 +29,7 @@ export default function HomePage() {
             </a>
             <a
               href="/events/new"
-              className={`inline-flex items-center rounded-xl px-4 py-2 text-sm border ${tokens.muted} ${tokens.panel}
+              className={`inline-flex items-center rounded-xl px-4 py-2 text-sm ${tokens.border} ${tokens.muted} ${tokens.panel}
                           hover:bg-white/10 html.light:hover:bg-zinc-50`}
             >
               Post an Event
@@ -47,28 +46,26 @@ export default function HomePage() {
       {/* Featured Events */}
       <FeaturedEvents />
 
-      {/* How it works */}
-      <section className={`${tokens.panel} html.light:bg-gray-50 py-14`}>
-        <div className="max-w-6xl mx-auto px-4">
-          <h2 className="text-2xl font-bold mb-6 text-center">How it works</h2>
-          <div className="grid sm:grid-cols-3 gap-4">
-            <div className={`card p-5 ${tokens.border}`}>
-              <h3 className="font-semibold mb-1">Browse by map</h3>
-              <p className={`text-sm ${tokens.muted}`}>See what’s around you right now.</p>
-            </div>
-            <div className={`card p-5 ${tokens.border}`}>
-              <h3 className="font-semibold mb-1">Filter what you want</h3>
-              <p className={`text-sm ${tokens.muted}`}>Date ranges and Free vs Paid, fast.</p>
-            </div>
-            <div className={`card p-5 ${tokens.border}`}>
-              <h3 className="font-semibold mb-1">Post your event</h3>
-              <p className={`text-sm ${tokens.muted}`}>
-                Verified organizers reach locals who show up.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
+                                                                                                                                                                                                               {/* Why Poppin Works */}
+          <section className={`${tokens.bg} py-8 mb-20`}>
+           <div className="max-w-6xl mx-auto px-4">
+             <h2 className="text-xl font-bold mb-3 text-center">Why Poppin Works</h2>
+             <div className="grid grid-cols-3 gap-2">
+               <div className={`card p-3 ${tokens.border}`}>
+                 <h3 className="font-bold mb-1 text-xs">Verified Organizers</h3>
+                 <p className={`text-xs ${tokens.muted}`}>Only approved hosts, no spam.</p>
+               </div>
+               <div className={`card p-3 ${tokens.border}`}>
+                 <h3 className="font-bold mb-1 text-xs">Curated Events</h3>
+                 <p className={`text-xs ${tokens.muted}`}>Fresh list of local things to do.</p>
+               </div>
+               <div className={`card p-3 ${tokens.border}`}>
+                 <h3 className="font-bold mb-1 text-xs">Easy Planning</h3>
+                 <p className={`text-xs ${tokens.muted}`}>Save, share, and get reminders.</p>
+               </div>
+             </div>
+           </div>
+         </section>
     </>
   );
 }

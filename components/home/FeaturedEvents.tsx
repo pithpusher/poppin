@@ -41,7 +41,7 @@ export default function FeaturedEvents() {
 
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
         {rows.map((ev) => (
-          <a key={ev.id} href={`/e/${ev.id}`} className="group rounded-xl overflow-hidden border border-white/10 html.light:border-zinc-200 bg-[rgb(var(--panel))] html.light:bg-white hover:shadow-card transition">
+          <a key={ev.id} href={`/e/${ev.id}`} className="group rounded-xl overflow-hidden token-border bg-[rgb(var(--panel))] html.light:bg-white hover:shadow-card transition">
             <div className="aspect-[4/3] bg-black/20">
               {ev.image_url ? (
                 // eslint-disable-next-line @next/next/no-img-element

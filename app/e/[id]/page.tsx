@@ -55,7 +55,7 @@ export default function EventPage() {
     <div className="max-w-3xl mx-auto px-4 py-8">
       {ev.image_url && (
         // eslint-disable-next-line @next/next/no-img-element
-        <img src={ev.image_url} alt="" className="w-full aspect-[16/9] object-cover rounded-xl border border-[color:rgb(var(--border))]" />
+        <img src={ev.image_url} alt="" className="w-full aspect-[16/9] object-cover rounded-xl token-border" />
       )}
 
       <h1 className="mt-6 text-3xl font-bold">{ev.title}</h1>
@@ -79,7 +79,7 @@ export default function EventPage() {
           </a>
         )}
         {ev.website_url && (
-          <a href={ev.website_url} target="_blank" rel="noreferrer" className="px-4 py-2 rounded-xl border border-[color:rgb(var(--border))] text-sm">
+          <a href={ev.website_url} target="_blank" rel="noreferrer" className="px-4 py-2 rounded-xl token-border text-sm">
             Event Website
           </a>
         )}
@@ -88,7 +88,7 @@ export default function EventPage() {
             target="_blank"
             rel="noreferrer"
             href={`https://www.google.com/maps?q=${ev.lat},${ev.lng}`}
-            className="px-4 py-2 rounded-xl border border-[color:rgb(var(--border))] text-sm"
+            className="px-4 py-2 rounded-xl token-border text-sm"
           >
             Directions
           </a>
@@ -96,10 +96,10 @@ export default function EventPage() {
       </div>
 
       {org && (
-        <div className="mt-10 p-4 rounded-xl border border-[color:rgb(var(--border))] bg-[rgb(var(--panel))]">
+        <div className="mt-10 p-4 rounded-xl token-border bg-[rgb(var(--panel))]">
           <div className="flex items-center gap-4">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            {org.avatar_url && <img src={org.avatar_url} alt="" className="w-12 h-12 rounded-full border border-[color:rgb(var(--border))]" />}
+            {org.avatar_url && <img src={org.avatar_url} alt="" className="w-12 h-12 rounded-full token-border" />}
             <div className="flex-1">
               <a href={`/o/${org.slug}`} className="font-semibold hover:underline">{org.name}</a>
               {org.bio && <div className="text-sm text-[rgb(var(--muted))] line-clamp-2">{org.bio}</div>}

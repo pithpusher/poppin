@@ -54,7 +54,7 @@ export default function OrganizerPage() {
     <div className="max-w-5xl mx-auto px-4 py-8">
       <header className="flex items-start gap-4">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        {org.avatar_url && <img src={org.avatar_url} className="w-16 h-16 rounded-full border border-[color:rgb(var(--border))]" alt="" />}
+        {org.avatar_url && <img src={org.avatar_url} className="w-16 h-16 rounded-full token-border" alt="" />}
         <div className="flex-1">
           <h1 className="text-2xl font-bold">{org.name}</h1>
           {org.bio && <p className="mt-1 text-[rgb(var(--muted))]">{org.bio}</p>}
@@ -69,7 +69,7 @@ export default function OrganizerPage() {
           <h2 className="text-lg font-semibold mb-3">Events</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {events.map((ev) => (
-              <a key={ev.id} href={`/e/${ev.id}`} className="rounded-xl border border-[color:rgb(var(--border))] bg-[rgb(var(--panel))] overflow-hidden">
+              <a key={ev.id} href={`/e/${ev.id}`} className="rounded-xl token-border bg-[rgb(var(--panel))] overflow-hidden">
                 <div className="aspect-[4/3] bg-black/10">
                   {ev.image_url && <img src={ev.image_url} alt="" className="w-full h-full object-cover" />}
                 </div>
