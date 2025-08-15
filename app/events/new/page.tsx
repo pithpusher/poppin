@@ -192,7 +192,7 @@ export default function NewEventPage() {
           </div>
         )}
 
-        {error && <div className="text-sm text-red-600">{error}</div>}
+        {error && <div className="text-sm text-orange-600">{error}</div>}
 
         <Button disabled={submitting}>{submitting ? "Posting..." : "Post event"}</Button>
       </form>

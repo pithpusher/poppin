@@ -1,16 +1,21 @@
 // components/theme/ThemeToggle.tsx
 "use client";
 import { useTheme } from "./ThemeProvider";
+import { SunIcon, MoonIcon } from '@heroicons/react/24/outline';
 
 export default function ThemeToggle() {
   const { theme, toggle } = useTheme();
   return (
     <button
       onClick={toggle}
-      className="inline-flex items-center rounded-xl px-3 py-2 text-sm token-border bg-white/5 hover:bg-white/10 html.light:bg-white html.light:hover:bg-zinc-50"
+      className="flex items-center justify-center w-10 h-10 rounded-lg transition-colors"
       aria-label="Toggle theme"
     >
-      {theme === "dark" ? "Light mode" : "Dark mode"}
+      {theme === "dark" ? (
+        <SunIcon className="w-6 h-6 text-[rgb(var(--text))]" />
+      ) : (
+        <MoonIcon className="w-5 h-5 text-[rgb(var(--text))]" />
+      )}
     </button>
   );
 }

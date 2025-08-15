@@ -14,8 +14,8 @@ export default function HomePage() {
         `}
       >
         <div className="max-w-6xl mx-auto px-4 text-center">
-          <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight">
-            Find what's poppin' this week
+          <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
+            Find what's poppin' this week.
           </h1>
           <p className={`mt-3 text-base sm:text-lg ${tokens.muted} max-w-2xl mx-auto`}>
           Local happenings, curated just for you.

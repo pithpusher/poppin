@@ -133,17 +133,7 @@ export default function FilterBar({
               ))}
             </div>
 
-            {/* Free Toggle */}
-            <button
-              onClick={() => setOnlyFree(!onlyFree)}
-              className={`px-3 py-1 text-xs rounded-md transition-colors font-medium ${
-                onlyFree
-                  ? "bg-green-600 text-white shadow-sm"
-                  : "bg-[rgb(var(--bg))] text-[rgb(var(--text))] hover:bg-green-600 hover:text-white"
-              }`}
-            >
-              Free Only
-            </button>
+
 
             {/* More Filters Button */}
             <button
@@ -181,7 +171,7 @@ export default function FilterBar({
            <div className="bg-[rgb(var(--panel))] rounded-2xl max-w-2xl w-full max-h-[85vh] flex flex-col mb-16">
              {/* Modal Header */}
              <div className="flex items-center justify-between p-3 border-b border-gray-600">
-               <h2 className="text-lg font-semibold text-white">More Filters</h2>
+               <h2 className="text-lg font-semibold text-[rgb(var(--text))]">More Filters</h2>
                <button
                  onClick={() => setIsModalOpen(false)}
                  className="p-2 hover:bg-[rgb(var(--bg))] rounded-lg transition-colors"
@@ -194,7 +184,7 @@ export default function FilterBar({
              <div className="p-3 space-y-3 flex-1 overflow-y-auto">
                {/* Custom Date Range Section */}
                <div>
-                 <h3 className="text-sm font-semibold mb-2 text-white">Date Range</h3>
+                 <h3 className="text-sm font-semibold mb-2 text-[rgb(var(--text))]">Date Range</h3>
                  <div className="p-2 bg-[rgb(var(--bg))] rounded-lg token-border">
                    <div className="grid grid-cols-2 gap-2">
                      <div>
@@ -229,22 +219,23 @@ export default function FilterBar({
 
                {/* Pricing & Age Restrictions Section - Combined in one card */}
                <div>
-                 <h3 className="text-sm font-semibold mb-2 text-white">Pricing & Age Restrictions</h3>
+                 <h3 className="text-sm font-semibold mb-2 text-[rgb(var(--text))]">Pricing & Age Restrictions</h3>
                  <div className="p-2 bg-[rgb(var(--bg))] rounded-lg token-border">
                    <div className="grid grid-cols-2 gap-3">
                      {/* Pricing Section */}
                      <div>
                        <h4 className="text-xs font-medium mb-1 text-[rgb(var(--muted))]">Pricing</h4>
                        <div className="space-y-1">
-                         <label className="flex items-center gap-2">
-                           <input
-                             type="checkbox"
-                             checked={onlyFree}
-                             onChange={(e) => setOnlyFree(e.target.checked)}
-                             className="w-3 h-3 text-red-500 rounded [&:checked]:bg-red-500 [&:checked]:border-red-500"
-                           />
-                           <span className="text-xs text-[rgb(var(--text))]">Free events only</span>
-                         </label>
+                         <button
+                           onClick={() => setOnlyFree(!onlyFree)}
+                           className={`px-3 py-1.5 text-xs rounded-md transition-colors font-medium ${
+                             onlyFree
+                               ? "bg-red-800 text-white"
+                               : "bg-[rgb(var(--bg))] text-[rgb(var(--text))] hover:bg-red-800 hover:text-white"
+                           }`}
+                         >
+                           Free events only
+                         </button>
                        </div>
                      </div>
 
@@ -252,19 +243,21 @@ export default function FilterBar({
                      <div>
                        <h4 className="text-xs font-medium mb-1 text-[rgb(var(--muted))]">Age Restrictions</h4>
                        <div className="space-y-1">
-                         {ageRestrictions.map((age) => (
-                           <label key={age} className="flex items-center gap-2">
-                             <input
-                               type="radio"
-                               name="ageRestriction"
-                               value={age}
-                               checked={ageRestriction === age}
-                               onChange={(e) => setAgeRestriction(e.target.value)}
-                               className="w-3 h-3 text-red-500 [&:checked]:bg-red-500 [&:checked]:border-red-500"
-                             />
-                             <span className="text-xs text-[rgb(var(--text))]">{age}</span>
-                           </label>
-                         ))}
+                         <div className="flex gap-1">
+                           {ageRestrictions.map((age) => (
+                             <button
+                               key={age}
+                               onClick={() => setAgeRestriction(age)}
+                               className={`px-2 py-1 text-xs rounded-md transition-colors font-medium ${
+                                 ageRestriction === age
+                                   ? "bg-red-800 text-white"
+                                   : "bg-[rgb(var(--bg))] text-[rgb(var(--text))] hover:bg-red-800 hover:text-white"
+                               }`}
+                             >
+                               {age}
+                             </button>
+                           ))}
+                         </div>
                        </div>
                      </div>
                    </div>
@@ -273,7 +266,7 @@ export default function FilterBar({
 
                {/* Event Types Section - Individual Cards */}
                <div>
-                 <h3 className="text-sm font-semibold mb-2 text-white">Event Categories</h3>
+                 <h3 className="text-sm font-semibold mb-2 text-[rgb(var(--text))]">Event Categories</h3>
                  <div className="grid grid-cols-1 gap-2">
                    {Object.entries(eventTypeCategories).map(([category, types]) => (
                      <div key={category} className="p-2 bg-[rgb(var(--bg))] rounded-lg token-border">
@@ -290,15 +283,17 @@ export default function FilterBar({
                        </div>
                        <div className="grid grid-cols-2 gap-1">
                          {types.map((type) => (
-                           <label key={type} className="flex items-center gap-2 text-xs">
-                             <input
-                               type="checkbox"
-                               checked={eventTypes.includes(type)}
-                               onChange={() => handleEventTypeToggle(type)}
-                               className="w-3 h-3 text-red-500 rounded [&:checked]:bg-red-500 [&:checked]:border-red-500"
-                             />
-                             <span className="text-[rgb(var(--text))]">{type}</span>
-                           </label>
+                           <button
+                             key={type}
+                             onClick={() => handleEventTypeToggle(type)}
+                             className={`px-2 py-1 text-xs rounded-md transition-colors font-medium text-left ${
+                               eventTypes.includes(type)
+                                 ? "bg-red-800 text-white"
+                                 : "bg-[rgb(var(--bg))] text-[rgb(var(--text))] hover:bg-red-800 hover:text-white"
+                             }`}
+                           >
+                             {type}
+                           </button>
                          ))}
                        </div>
                      </div>

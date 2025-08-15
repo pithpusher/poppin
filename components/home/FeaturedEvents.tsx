@@ -46,20 +46,18 @@ export default function FeaturedEvents() {
               {ev.image_url ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img src={ev.image_url} alt="" className="w-full h-full object-cover" />
-              ) : null}
+              ) : (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img 
+                  src="https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?w=400&h=300&fit=crop&crop=center" 
+                  alt="Event placeholder" 
+                  className="w-full h-full object-cover opacity-80" 
+                />
+              )}
             </div>
             <div className="p-3">
-              <div className="flex items-center justify-between">
-                <div className="text-sm font-medium line-clamp-1">{ev.title}</div>
-                <span
-                  className={`ml-2 inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-medium ${
-                    ev.is_free ? "bg-green-50 border-green-200 text-green-700" : "bg-amber-50 border-amber-200 text-amber-700"
-                  }`}
-                >
-                  {ev.is_free ? "Free" : "Paid"}
-                </span>
-              </div>
-              <div className="text-xs text-zinc-400 html.light:text-zinc-600 mt-1">{fmt(ev.start_at)}</div>
+              <div className="text-sm font-bold line-clamp-1 mb-1">{ev.title}</div>
+              <div className="text-xs text-zinc-400 html.light:text-zinc-600">{fmt(ev.start_at)}</div>
             </div>
           </a>
         ))}

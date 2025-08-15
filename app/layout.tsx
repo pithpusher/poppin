@@ -7,6 +7,7 @@ import BottomNav from "@/components/ui/BottomNav";
 import Logo from "@/components/icons/Logo";
 import LocationSearchBar from "@/components/ui/LocationSearchBar";
 import HamburgerMenu from "@/components/ui/HamburgerMenu";
+import ThemeToggle from "@/components/theme/ThemeToggle";
 import { LocationSearchProvider } from "@/components/context/LocationSearchContext";
 
 export const metadata: Metadata = {
@@ -22,22 +23,23 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <LocationSearchProvider>
             {/* Top bar */}
             <header className="sticky top-0 z-20 token-border-b bg-[rgb(var(--bg))]/80 backdrop-blur light:bg-white/80">
-              <div className="mx-auto max-w-6xl px-4 py-3 flex items-center gap-4">
+              <div className="mx-auto max-w-6xl px-4 py-3 flex items-center justify-between">
                 {/* Logo */}
                 <Link href="/" className="flex items-center flex-shrink-0">
-                  <Logo width={90} height={29} className="text-[rgb(var(--text))]" />
+                  <Logo width={70} height={22} className="text-[rgb(var(--text))]" />
                 </Link>
                 
                 {/* Search Bar - Center */}
-                <div className="flex-1 max-w-md mx-auto">
+                <div className="absolute left-1/2 transform -translate-x-1/2">
                   <LocationSearchBar 
                     placeholder="Search for a location..."
-                    className="w-full"
+                    className="w-72"
                   />
                 </div>
                 
-                {/* Hamburger Menu */}
-                <div className="flex-shrink-0">
+                {/* Right side controls */}
+                <div className="flex items-center justify-end gap-1 flex-1">
+                  <ThemeToggle />
                   <HamburgerMenu />
                 </div>
               </div>

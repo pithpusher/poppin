@@ -129,7 +129,7 @@ export default function LocationSearchBar({
 
       {/* Error message */}
       {error && (
-        <div className="absolute top-full left-0 right-0 mt-1 text-xs text-red-500 bg-red-50 dark:bg-red-900/20 px-2 py-1 rounded">
+        <div className="absolute top-full left-0 right-0 mt-1 text-xs text-orange-500 bg-orange-50 dark:bg-orange-900/20 px-2 py-1 rounded">
           {error}
         </div>
       )}

@@ -62,8 +62,8 @@ export default function HamburgerMenu() {
             <Link
               key={item.href}
               href={item.href}
-              className={`block px-4 py-2 text-sm hover:bg-[rgb(var(--bg))] transition-colors ${
-                pathname === item.href ? 'text-[rgb(var(--brand))] font-medium' : 'text-[rgb(var(--text))]'
+              className={`block px-4 py-2 text-sm hover:bg-[rgb(var(--bg))] hover:text-white transition-colors ${
+                pathname === item.href ? 'text-white font-medium' : 'text-[rgb(var(--muted))]'
               }`}
             >
               {item.label}

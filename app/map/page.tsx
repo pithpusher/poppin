@@ -211,102 +211,107 @@ export default function MapPage() {
     // The search functionality is now handled by the context in the header
     // This component will automatically respond to URL parameter changes
 
-    return (<div className="min-h-[70vh]">
-      <FilterBar
-        range={range}
-        setRange={setRange}
-        onlyFree={onlyFree}
-        setOnlyFree={setOnlyFree}
-        startDate={startDate}
-        endDate={endDate}
-        setStartDate={setStartDate}
-        setEndDate={setEndDate}
-        onApplyCustom={() => setRange("custom")}
-        eventTypes={eventTypes}
-        setEventTypes={setEventTypes}
-        ageRestriction={ageRestriction}
-        setAgeRestriction={setAgeRestriction}
-      />
+    return (
+      <div className="min-h-screen">
+        <FilterBar
+          range={range}
+          setRange={setRange}
+          onlyFree={onlyFree}
+          setOnlyFree={setOnlyFree}
+          startDate={startDate}
+          endDate={endDate}
+          setStartDate={setStartDate}
+          setEndDate={setEndDate}
+          onApplyCustom={() => setRange("custom")}
+          eventTypes={eventTypes}
+          setEventTypes={setEventTypes}
+          ageRestriction={ageRestriction}
+          setAgeRestriction={setAgeRestriction}
+        />
 
-      <div className="grid md:grid-cols-[2fr,1fr] gap-6 max-w-6xl mx-auto px-4 py-6">
-        <div className="relative w-full h-[70vh] rounded-2xl token-border overflow-hidden">
-          {error && (
-            <div className="absolute top-4 left-4 z-10 bg-yellow-500/90 text-white px-3 py-2 rounded-lg text-sm backdrop-blur">
-              {error}
-            </div>
-          )}
-          {searchLocation && (
-            <div className="absolute top-4 left-4 z-10 bg-blue-500/90 text-white px-3 py-2 rounded-lg text-sm backdrop-blur">
-              Showing events near: {searchLocation.formatted}
-            </div>
-          )}
-          <div ref={mapEl} className="w-full h-full" />
-        </div>
-
-        <aside className="space-y-3">
-          <div className="text-sm text-[rgb(var(--muted))]">{uniqueEvents.length} upcoming at this location</div>
-
-
-          <div className="grid gap-3">
-            {uniqueEvents.map((ev) => (
-              <button
-                key={ev.id}
-                onClick={() => {
-                  setSelectedId(ev.id);
-                  const m = markersRef.current.get(ev.id);
-                  if (m && mapRef.current) {
-                    m.togglePopup();
-                    mapRef.current.flyTo({ center: [ev.lng!, ev.lat!], zoom: 13 });
-                  }
-                }}
-                className={`text-left rounded-lg token-border p-3 bg-[rgb(var(--panel))] hover:border-[color:var(--border-color)] ${selectedId===ev.id ? "outline outline-1 outline-blue-500" : ""}`}
-
-              >
-                <div className="flex items-center justify-between">
-                  <div className="font-medium text-sm">{ev.title}</div>
-                  <span
-                    className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-medium ${
-                      ev.is_free
-                        ? "bg-green-50 border-green-200 text-green-700"
-                        : "bg-amber-50 border-amber-200 text-amber-700"
-                    }`}
-                  >
-                    {ev.is_free ? "Free" : "Paid"}
-                  </span>
-                </div>
-                <div className="text-xs text-[rgb(var(--muted))]">
-                  {fmt(ev.start_at)}
-                  {ev.venue_name ? " · " + ev.venue_name : ""}
-                  {ev.event_type ? ` · ${ev.event_type}` : ""}
-                </div>
-              </button>
-            ))}
-
-            {uniqueEvents.length === 0 && (
-              <div className="rounded-lg token-border p-3 bg-[rgb(var(--panel))] text-sm text-[rgb(var(--text))]">
-                No events match these filters.
+        <div className="grid md:grid-cols-[2fr,1fr] gap-6 max-w-6xl mx-auto px-4 py-6">
+          <div className="relative w-full h-[70vh] rounded-2xl token-border overflow-hidden">
+            {error && (
+              <div className="absolute top-4 left-4 z-10 text-yellow-400 px-3 py-2 text-sm font-bold">
+                {error}
               </div>
             )}
+            {searchLocation && (
+              <div className="absolute top-2 left-0 right-0 z-10 text-center">
+                <div className="text-xs text-[rgb(var(--text))] font-normal">
+                  Showing events near:
+                </div>
+                <div className="text-lg text-[rgb(var(--text))] font-bold -mt-1">
+                  {searchLocation.formatted.split(',').slice(0, 2).join(', ')}
+                </div>
+              </div>
+            )}
+            <div ref={mapEl} className="w-full h-full" />
           </div>
 
-          {selected && (
-            <div className="rounded-lg token-border p-3 bg-[rgb(var(--panel))]">
-              <div className="text-sm font-semibold">{selected.title}</div>
-              <div className="text-xs text-zinc-600 mt-1">
-                {fmt(selected.start_at)}
-                {selected.venue_name ? " · " + selected.venue_name : ""}
-                {selected.event_type ? ` · ${selected.event_type}` : ""}
-              </div>
-              {selected.age_restriction && selected.age_restriction !== "All Ages" && (
-                <div className="text-xs text-zinc-500 mt-1">
-                  Age: {selected.age_restriction}
+          <aside className="space-y-3 pb-6">
+            <div className="text-sm text-[rgb(var(--muted))]">{uniqueEvents.length} upcoming at this location</div>
+
+            <div className="grid gap-3">
+              {uniqueEvents.map((ev) => (
+                <button
+                  key={ev.id}
+                  onClick={() => {
+                    setSelectedId(ev.id);
+                    const m = markersRef.current.get(ev.id);
+                    if (m && mapRef.current) {
+                      m.togglePopup();
+                      mapRef.current.flyTo({ center: [ev.lng!, ev.lat!], zoom: 13 });
+                    }
+                  }}
+                  className={`text-left rounded-lg token-border p-3 bg-[rgb(var(--panel))] hover:border-[color:var(--border-color)] ${selectedId===ev.id ? "outline outline-1 outline-blue-500" : ""}`}
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="font-medium text-sm">{ev.title}</div>
+                    <span
+                      className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-medium ${
+                        ev.is_free
+                          ? "bg-green-50 border-green-200 text-green-700"
+                          : "bg-amber-50 border-amber-200 text-amber-700"
+                      }`}
+                    >
+                      {ev.is_free ? "Free" : "Paid"}
+                    </span>
+                  </div>
+                  <div className="text-xs text-[rgb(var(--muted))]">
+                    {fmt(ev.start_at)}
+                    {ev.venue_name ? " · " + ev.venue_name : ""}
+                    {ev.event_type ? ` · ${ev.event_type}` : ""}
+                  </div>
+                </button>
+              ))}
+
+              {uniqueEvents.length === 0 && (
+                <div className="rounded-lg token-border p-3 bg-[rgb(var(--panel))] text-sm text-[rgb(var(--text))]">
+                  No events match these filters.
                 </div>
               )}
             </div>
-          )}
-        </aside>
+
+            {selected && (
+              <div className="rounded-lg token-border p-3 bg-[rgb(var(--panel))]">
+                <div className="text-sm font-semibold">{selected.title}</div>
+                <div className="text-xs text-zinc-600 mt-1">
+                  {fmt(selected.start_at)}
+                  {selected.venue_name ? " · " + selected.venue_name : ""}
+                  {selected.event_type ? ` · ${selected.event_type}` : ""}
+                </div>
+                {selected.age_restriction && selected.age_restriction !== "All Ages" && (
+                  <div className="text-xs text-zinc-500 mt-1">
+                    Age: {selected.age_restriction}
+                  </div>
+                )}
+              </div>
+            )}
+          </aside>
+        </div>
       </div>
-    </div>);
+    );
 }
 // --- paste this ABOVE popupHtml() ---
 function makePin(isFree ? : boolean | null) {
