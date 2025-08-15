@@ -264,3 +264,17 @@ body {
   background: rgba(24, 24, 27, 0.08);
 }
 *::-webkit-scrollbar-track { background: transparent; }
+
+/* -------------------------------------------------
+   SAFE AREA SUPPORT (iPhone)
+-------------------------------------------------- */
+.safe-area-bottom {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* Ensure viewport height works properly on mobile */
+@supports (-webkit-touch-callout: none) {
+  .h-screen {
+    height: -webkit-fill-available;
+  }
+}
