@@ -6,7 +6,7 @@ import Link from "next/link";
 
 export default function HomePage() {
   return (
-    <div className="bg-[rgb(var(--bg))] min-h-screen flex flex-col justify-center">
+    <div className="bg-[rgb(var(--bg))]">
       {/* Hero */}
       <section
         className={`
