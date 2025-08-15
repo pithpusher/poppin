@@ -7,7 +7,7 @@ import { toCents, formatMoneyFromCents } from "@/lib/money";
 import { forwardGeocode, GeocodeResult } from "@/lib/geocode";
 import { generateEventDescription } from "@/lib/ai";
 import { searchVenues, VenueSearchResult } from "@/lib/googlePlaces";
-import { tokens } from "@/components/tokens";
+
 import { PhotoIcon, XMarkIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline';
 
 // Event type categories mapping
@@ -94,7 +94,7 @@ export default function NewEventPage() {
       try {
         const parsed = JSON.parse(saved);
         setFormData(parsed);
-      } catch (e) {
+      } catch {
         console.error('Failed to parse saved form data');
       }
     }
@@ -343,9 +343,10 @@ export default function NewEventPage() {
       // Redirect to map with success message
       router.push('/map?success=event_submitted');
       
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Submission error:', error);
-      alert(`Failed to submit event: ${error.message || 'Unknown error'}`);
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      alert(`Failed to submit event: ${errorMessage}`);
     } finally {
       setIsSubmitting(false);
     }

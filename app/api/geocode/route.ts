@@ -28,8 +28,12 @@ export async function POST(req: Request) {
     const [lng, lat] = best.center;
     const formatted = best.place_name as string;
 
-    return NextResponse.json({ lat, lng, formatted, suggestions: features.map((f: any) => ({ label: f.place_name, center: f.center })) });
-  } catch (e: any) {
-    return NextResponse.json({ error: e?.message || "Geocode failed" }, { status: 500 });
+    return NextResponse.json({ lat, lng, formatted, suggestions: features.map((f: unknown) => ({ 
+      label: (f as { place_name: string }).place_name, 
+      center: (f as { center: number[] }).center 
+    })) });
+  } catch (e: unknown) {
+    const errorMessage = e instanceof Error ? e.message : 'Geocode failed';
+    return NextResponse.json({ error: errorMessage }, { status: 500 });
   }
 }

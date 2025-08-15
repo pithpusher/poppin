@@ -1,5 +1,5 @@
 import clsx from "clsx";
-export default function Card({className, ...props}: any){
+export default function Card({className, ...props}: React.HTMLAttributes<HTMLDivElement>){
   return <div className={clsx("rounded-xl2 token-border bg-[rgb(var(--panel))] shadow-card", className)} {...props} />;
 }
 export function CardHeader(props: React.HTMLAttributes<HTMLDivElement>) {

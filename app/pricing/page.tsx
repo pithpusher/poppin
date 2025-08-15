@@ -1,5 +1,6 @@
 'use client';
 import { useState } from 'react';
+import Link from 'next/link';
 
 type Plan = { key:string; name:string; desc:string; priceId?:string };
 
@@ -39,7 +40,7 @@ export default function Pricing(){
       ))}
       <div className="md:col-span-4">
         <p className="text-sm text-gray-600">
-          Need a one-off post? <a className="text-blue-600 underline" href="/pricing/yard-sale">Yard sale</a>
+          Need a one-off post? <Link className="text-blue-600 underline" href="/pricing/yard-sale">Yard sale</Link>
         </p>
       </div>
     </div>

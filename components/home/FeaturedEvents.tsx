@@ -3,6 +3,7 @@
 
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
+import Link from "next/link";
 
 type Ev = {
   id: string;
@@ -36,12 +37,12 @@ export default function FeaturedEvents() {
     <section className="max-w-6xl mx-auto px-4 my-12">
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-xl font-semibold">Featured this week</h2>
-        <a href="/map" className="text-sm text-blue-400 underline html.light:text-blue-600">See all</a>
+        <Link href="/map" className="text-sm text-blue-400 underline html.light:text-blue-600">See all</Link>
       </div>
 
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
         {rows.map((ev) => (
-          <a key={ev.id} href={`/e/${ev.id}`} className="group rounded-xl overflow-hidden token-border bg-[rgb(var(--panel))] html.light:bg-white hover:shadow-card transition">
+          <Link key={ev.id} href={`/e/${ev.id}`} className="group rounded-xl overflow-hidden token-border bg-[rgb(var(--panel))] html.light:bg-white hover:shadow-card transition">
             <div className="aspect-[4/3] bg-black/20">
               {ev.image_url ? (
                 // eslint-disable-next-line @next/next/no-img-element
@@ -59,7 +60,7 @@ export default function FeaturedEvents() {
               <div className="text-sm font-bold line-clamp-1 mb-1">{ev.title}</div>
               <div className="text-xs text-zinc-400 html.light:text-zinc-600">{fmt(ev.start_at)}</div>
             </div>
-          </a>
+          </Link>
         ))}
       </div>
     </section>

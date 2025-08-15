@@ -2,6 +2,7 @@
 import MiniMap from "@/components/map/MiniMap";
 import FeaturedEvents from "@/components/home/FeaturedEvents";
 import { tokens } from "@/components/tokens";
+import Link from "next/link";
 
 export default function HomePage() {
   return (
@@ -14,25 +15,25 @@ export default function HomePage() {
       >
         <div className="max-w-6xl mx-auto px-4 text-center">
           <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
-            Find what's poppin' this week.
+            Find what&apos;s poppin&apos; this week.
           </h1>
           <p className={`mt-3 text-base sm:text-lg ${tokens.muted} max-w-2xl mx-auto`}>
           Local happenings, curated just for you.
           </p>
           <div className="mt-6 flex justify-center gap-3">
-            <a
+            <Link
               href="/map"
               className={`inline-flex items-center rounded-xl px-4 py-2 text-sm bg-brand text-white hover:${tokens.panel}`}
             >
               Explore Events
-            </a>
-            <a
+            </Link>
+            <Link
               href="/events/new"
               className={`inline-flex items-center rounded-xl px-4 py-2 text-sm ${tokens.border} ${tokens.muted} ${tokens.panel}
                           hover:bg-white/10 html.light:hover:bg-zinc-50`}
             >
               Post an Event
-            </a>
+            </Link>
           </div>
         </div>
       </section>

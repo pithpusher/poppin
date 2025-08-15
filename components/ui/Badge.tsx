@@ -1,6 +1,6 @@
 import clsx from "clsx";
 export default function Badge({children, color="muted"}:{children:React.ReactNode;color?:"muted"|"success"|"warning"|"danger"}){
-  const map:any = {
+  const map: Record<string, string> = {
     muted:   "bg-white/5 token-border text-[rgb(var(--text))]",
     success: "bg-green-50 text-green-700 border border-green-200",
     warning: "bg-amber-50 text-amber-700 border border-amber-200",

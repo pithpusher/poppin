@@ -7,6 +7,7 @@ import "mapbox-gl/dist/mapbox-gl.css";
 import { supabase } from "@/lib/supabaseClient";
 import { bindThemeToMap, getInitialMapStyle } from "./useMapTheme";
 import { useLocation } from "./useLocation";
+import Link from "next/link";
 
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN || "";
 
@@ -124,15 +125,15 @@ bounds.extend([ev.lng!, ev.lat!]);
         </div>
       )}
       <div ref={mapEl} className="w-full h-full" />
-      <a
+      <Link
         href="/map"
-        className="absolute bottom-2 left-1/2 transform -translate-x-1/2 rounded-xl px-3 py-1 text-sm shadow
+        className="absolute bottom-2 left-1/2 transform -translate-x-1/2 rounded-xl px-3 py-2 text-sm shadow
                    token-border
                    bg-[rgb(var(--panel))]/80 backdrop-blur
                    hover:bg-[rgb(var(--panel))]"
       >
         View Full Map
-      </a>
+      </Link>
     </div>
   );
 }

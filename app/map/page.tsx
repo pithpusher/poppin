@@ -148,12 +148,12 @@ export default function MapPage() {
                     setEvents([]);
                     return;
                 }
-                const rows: Ev[] = (data ?? []).map((r: any) => ({
-                    ...r,
-                    lat: r.lat != null ? Number(r.lat) : null,
-                    lng: r.lng != null ? Number(r.lng) : null,
-                    image_url: r.image_url ?? null,
-                    venue_name: r.venue_name ?? null,
+                const rows: Ev[] = (data ?? []).map((r: unknown) => ({
+                    ...(r as Record<string, unknown>),
+                    lat: (r as { lat: number | null }).lat != null ? Number((r as { lat: number | null }).lat) : null,
+                    lng: (r as { lng: number | null }).lng != null ? Number((r as { lng: number | null }).lng) : null,
+                    image_url: (r as { image_url: string | null }).image_url ?? null,
+                    venue_name: (r as { venue_name: string | null }).venue_name ?? null,
                 })) || [];
                 setEvents(rows);
             } catch (e) {
