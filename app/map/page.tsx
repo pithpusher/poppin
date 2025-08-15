@@ -240,7 +240,7 @@ export default function MapPage() {
         />
 
         <div className="grid md:grid-cols-[2fr,1fr] gap-6 max-w-6xl mx-auto px-4 py-6">
-          <div className="relative w-[88%] h-[50vh] rounded-2xl token-border overflow-hidden mx-auto">
+          <div className="relative w-full h-[52.5vh] rounded-2xl token-border overflow-hidden">
             {error && (
               <div className="absolute top-4 left-4 z-10 text-yellow-400 px-3 py-2 text-sm font-bold">
                 {error}
