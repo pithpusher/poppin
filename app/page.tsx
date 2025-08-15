@@ -5,12 +5,11 @@ import { tokens } from "@/components/tokens";
 
 export default function HomePage() {
   return (
-    <>
+    <div className="bg-[rgb(var(--bg))]">
       {/* Hero */}
       <section
         className={`
           py-12 sm:py-16
-          bg-[rgb(var(--bg))]
         `}
       >
         <div className="max-w-6xl mx-auto px-4 text-center">
@@ -46,26 +45,26 @@ export default function HomePage() {
       {/* Featured Events */}
       <FeaturedEvents />
 
-                                                                                                                                                                                                               {/* Why Poppin Works */}
-          <section className={`${tokens.bg} py-8 mb-20`}>
-           <div className="max-w-6xl mx-auto px-4">
-             <h2 className="text-xl font-bold mb-3 text-center">Why Poppin Works</h2>
-             <div className="grid grid-cols-3 gap-2">
-               <div className={`card p-3 ${tokens.border}`}>
-                 <h3 className="font-bold mb-1 text-xs">Verified Organizers</h3>
-                 <p className={`text-xs ${tokens.muted}`}>Only approved hosts, no spam.</p>
-               </div>
-               <div className={`card p-3 ${tokens.border}`}>
-                 <h3 className="font-bold mb-1 text-xs">Curated Events</h3>
-                 <p className={`text-xs ${tokens.muted}`}>Fresh list of local things to do.</p>
-               </div>
-               <div className={`card p-3 ${tokens.border}`}>
-                 <h3 className="font-bold mb-1 text-xs">Easy Planning</h3>
-                 <p className={`text-xs ${tokens.muted}`}>Save, share, and get reminders.</p>
-               </div>
-             </div>
-           </div>
-         </section>
-    </>
+      {/* Why Poppin Works */}
+      <section className={`${tokens.panel} py-8 mt-20 pb-24`}>
+        <div className="max-w-6xl mx-auto px-4">
+          <h2 className="text-xl font-bold mb-3 text-center">Why Poppin Works</h2>
+          <div className="grid grid-cols-3 gap-2">
+            <div className={`card p-3 ${tokens.border}`}>
+              <h3 className="font-bold mb-1 text-xs">Verified Organizers</h3>
+              <p className={`text-xs ${tokens.muted}`}>Only approved hosts, no spam.</p>
+            </div>
+            <div className={`card p-3 ${tokens.border}`}>
+              <h3 className="font-bold mb-1 text-xs">Curated Events</h3>
+              <p className={`text-xs ${tokens.muted}`}>Fresh list of local things to do.</p>
+            </div>
+            <div className={`card p-3 ${tokens.border}`}>
+              <h3 className="font-bold mb-1 text-xs">Easy Planning</h3>
+              <p className={`text-xs ${tokens.muted}`}>Save, share, and get reminders.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
   );
 }

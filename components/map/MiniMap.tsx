@@ -126,7 +126,7 @@ bounds.extend([ev.lng!, ev.lat!]);
       <div ref={mapEl} className="w-full h-full" />
       <a
         href="/map"
-        className="absolute bottom-4 right-4 rounded-xl px-3 py-1 text-sm shadow
+        className="absolute bottom-2 left-1/2 transform -translate-x-1/2 rounded-xl px-3 py-1 text-sm shadow
                    token-border
                    bg-[rgb(var(--panel))]/80 backdrop-blur
                    hover:bg-[rgb(var(--panel))]"
