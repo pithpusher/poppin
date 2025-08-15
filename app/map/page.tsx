@@ -81,6 +81,13 @@ export default function MapPage() {
             style: getInitialMapStyle(),
             center: [centerLocation.lng, centerLocation.lat],
             zoom: 11,
+            // Disable zooming on mobile
+            scrollZoom: !('ontouchstart' in window),
+            dragPan: true,
+            dragRotate: false,
+            keyboard: false,
+            doubleClickZoom: !('ontouchstart' in window),
+            touchZoomRotate: false,
         });
         mapRef.current = map;
         const off = bindThemeToMap(map);
@@ -230,7 +237,7 @@ export default function MapPage() {
         />
 
         <div className="grid md:grid-cols-[2fr,1fr] gap-6 max-w-6xl mx-auto px-4 py-6">
-          <div className="relative w-full h-[70vh] rounded-2xl token-border overflow-hidden">
+          <div className="relative w-4/5 h-[42vh] rounded-2xl token-border overflow-hidden">
             {error && (
               <div className="absolute top-4 left-4 z-10 text-yellow-400 px-3 py-2 text-sm font-bold">
                 {error}
