@@ -118,7 +118,7 @@ bounds.extend([ev.lng!, ev.lat!]);
   }, [events]);
 
   return (
-    <div className="relative w-full h-[20vh] rounded-2xl token-border overflow-hidden">
+    <div className="relative w-full h-[36vh] rounded-2xl token-border overflow-hidden">
       {error && (
         <div className="absolute top-4 left-4 z-10 bg-yellow-500/90 text-white px-3 py-2 rounded-lg text-sm backdrop-blur">
           {error}

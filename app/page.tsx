@@ -15,7 +15,7 @@ export default function HomePage() {
       >
         <div className="max-w-6xl mx-auto px-4 text-center">
           <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
-            Find what&apos;s poppin&apos; this week.
+            Find what&apos;s poppin&apos;.
           </h1>
           <p className={`mt-3 text-base sm:text-lg ${tokens.muted} max-w-2xl mx-auto`}>
           Local happenings, curated just for you.
@@ -46,8 +46,8 @@ export default function HomePage() {
       {/* Featured Events */}
       <FeaturedEvents />
 
-      {/* Why Poppin Works */}
-      <section className={`${tokens.panel} py-8 mt-20 pb-24`}>
+      {/* Why Poppin Works - Hidden for now */}
+      {/* <section className={`${tokens.panel} py-8 mt-20 pb-24`}>
         <div className="max-w-6xl mx-auto px-4">
           <h2 className="text-xl font-bold mb-3 text-center">Why Poppin Works</h2>
           <div className="grid grid-cols-3 gap-2">
@@ -65,7 +65,7 @@ export default function HomePage() {
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
     </div>
   );
 }
