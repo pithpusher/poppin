@@ -88,6 +88,9 @@ export default function MapPage() {
             keyboard: false,
             doubleClickZoom: !('ontouchstart' in window),
             touchZoomRotate: false,
+            // Disable pinch zoom
+            touchPitch: false,
+            touchZoomRotate: false,
         });
         mapRef.current = map;
         const off = bindThemeToMap(map);
@@ -237,7 +240,7 @@ export default function MapPage() {
         />
 
         <div className="grid md:grid-cols-[2fr,1fr] gap-6 max-w-6xl mx-auto px-4 py-6">
-          <div className="relative w-4/5 h-[42vh] rounded-2xl token-border overflow-hidden">
+          <div className="relative w-[88%] h-[50vh] rounded-2xl token-border overflow-hidden mx-auto">
             {error && (
               <div className="absolute top-4 left-4 z-10 text-yellow-400 px-3 py-2 text-sm font-bold">
                 {error}
@@ -257,7 +260,7 @@ export default function MapPage() {
           </div>
 
           <aside className="space-y-3 pb-6">
-            <div className="text-sm text-[rgb(var(--muted))]">{uniqueEvents.length} upcoming at this location</div>
+            <div className="text-sm text-[rgb(var(--muted))] text-center">{uniqueEvents.length} upcoming at this location</div>
 
             <div className="grid gap-3">
               {uniqueEvents.map((ev) => (
