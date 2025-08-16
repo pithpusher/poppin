@@ -8,7 +8,11 @@ import {
   MapPinIcon, 
   CheckIcon, 
   StarIcon,
-  ArrowLeftIcon 
+  ArrowLeftIcon,
+  BoltIcon,
+  ChartBarIcon,
+  HandRaisedIcon,
+  CursorArrowRaysIcon
 } from '@heroicons/react/24/outline';
 
 export default function YardSalePage() {
@@ -42,22 +46,22 @@ export default function YardSalePage() {
 
   const benefits = [
     {
-      icon: '🎯',
+      icon: CursorArrowRaysIcon,
       title: 'Reach Your Neighbors',
       description: 'Put your event in front of locals actually looking.'
     },
     {
-      icon: '⚡',
+      icon: BoltIcon,
       title: 'Easy Setup',
       description: 'Post, edit, track. All in one simple dashboard.'
     },
     {
-      icon: '📊',
+      icon: ChartBarIcon,
       title: 'See the Results',
       description: 'Views, saves, shares—it\'s all there.'
     },
     {
-      icon: '🙌',
+      icon: HandRaisedIcon,
       title: 'No Strings Attached',
       description: 'Pay once, done. No subs, no stress.'
     }
@@ -161,7 +165,7 @@ export default function YardSalePage() {
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
             {benefits.map((benefit, index) => (
               <div key={index} className="text-center p-6 bg-[rgb(var(--panel))] token-border rounded-xl">
-                <div className="text-4xl mb-4">{benefit.icon}</div>
+                <benefit.icon className="w-8 h-8 mx-auto text-[rgb(var(--muted))] mb-4" />
                 <h3 className="text-lg font-semibold text-[rgb(var(--text))] mb-2">
                   {benefit.title}
                 </h3>

@@ -8,7 +8,13 @@ import {
   UserPlusIcon,
   KeyIcon,
   ShieldCheckIcon,
-  EnvelopeIcon
+  EnvelopeIcon,
+  FaceSmileIcon,
+  CalendarIcon,
+  UserGroupIcon,
+  LockClosedIcon,
+  ShieldExclamationIcon,
+  CheckBadgeIcon
 } from '@heroicons/react/24/outline';
 import { supabase } from '@/lib/supabaseClient';
 
@@ -193,17 +199,17 @@ export default function AuthPage() {
           <p className="text-[rgb(var(--muted))] mb-6">Join thousands of users who are already discovering and creating amazing events</p>
           <div className="grid md:grid-cols-3 gap-6">
             <div className="text-center">
-              <div className="text-3xl mb-3">🎉</div>
+              <FaceSmileIcon className="w-8 h-8 mx-auto text-[rgb(var(--muted))] mb-3" />
               <div className="font-medium text-[rgb(var(--text))]">Discover Great Events</div>
               <div className="text-[rgb(var(--muted))]">Concerts, classes, and hidden gems near you.</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl mb-3">📅</div>
+              <CalendarIcon className="w-8 h-8 mx-auto text-[rgb(var(--muted))] mb-3" />
               <div className="font-medium text-[rgb(var(--text))]">Create & Share</div>
               <div className="text-[rgb(var(--muted))]">Post your event and get real turnout.</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl mb-3">🤝</div>
+              <UserGroupIcon className="w-8 h-8 mx-auto text-[rgb(var(--muted))] mb-3" />
               <div className="font-medium text-[rgb(var(--text))]">Connect & Network</div>
               <div className="text-[rgb(var(--muted))]">Find your crew, expand your circle.</div>
             </div>
@@ -224,13 +230,13 @@ export default function AuthPage() {
             </p>
             <div className="flex justify-center gap-4">
               <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[rgb(var(--panel))] text-sm">
-                🔒 Encrypted
+                <LockClosedIcon className="w-4 h-4" /> Encrypted
               </span>
               <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[rgb(var(--panel))] text-sm">
-                🛡️ Privacy first
+                <ShieldExclamationIcon className="w-4 h-4" /> Privacy first
               </span>
               <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[rgb(var(--panel))] text-sm">
-                ✅ GDPR ready
+                <CheckBadgeIcon className="w-4 h-4" /> GDPR ready
               </span>
             </div>
           </div>

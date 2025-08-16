@@ -8,7 +8,10 @@ import {
   EnvelopeIcon, 
   LockClosedIcon,
   ArrowRightIcon,
-  SparklesIcon
+  SparklesIcon,
+  MagnifyingGlassIcon,
+  CalendarIcon,
+  UserGroupIcon
 } from '@heroicons/react/24/outline';
 import { supabase } from '@/lib/supabaseClient';
 
@@ -263,17 +266,17 @@ export default function SignInPage() {
           <h3 className="text-lg font-semibold mb-4">Why join Poppin?</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="text-center">
-              <div className="text-2xl mb-2">👀</div>
+              <MagnifyingGlassIcon className="w-6 h-6 mx-auto text-[rgb(var(--muted))] mb-2" />
               <div className="font-medium text-[rgb(var(--text))]">Discover</div>
               <div className="text-[rgb(var(--muted))]">See the real happenings around town.</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl mb-2">📅</div>
+              <CalendarIcon className="w-6 h-6 mx-auto text-[rgb(var(--muted))] mb-2" />
               <div className="font-medium text-[rgb(var(--text))]">Create</div>
               <div className="text-[rgb(var(--muted))]">Post your own and get noticed.</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl mb-2">🤝</div>
+              <UserGroupIcon className="w-6 h-6 mx-auto text-[rgb(var(--muted))] mb-2" />
               <div className="font-medium text-[rgb(var(--text))]">Connect</div>
               <div className="text-[rgb(var(--muted))]">Link up with people who match your vibe.</div>
             </div>

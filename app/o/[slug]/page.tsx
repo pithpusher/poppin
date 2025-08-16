@@ -9,7 +9,12 @@ import {
   CalendarIcon, 
   UserIcon,
   BuildingOfficeIcon,
-  StarIcon
+  StarIcon,
+  FaceFrownIcon,
+  CameraIcon,
+  BookOpenIcon,
+  ChatBubbleLeftRightIcon,
+  BriefcaseIcon
 } from '@heroicons/react/24/outline';
 import { supabase } from '@/lib/supabaseClient';
 
@@ -129,7 +134,7 @@ export default function OrganizerDetailPage() {
     return (
       <div className="min-h-screen bg-[rgb(var(--bg))] py-12 px-4">
         <div className="max-w-6xl mx-auto text-center">
-          <div className="text-6xl mb-4">😕</div>
+          <FaceFrownIcon className="w-12 h-12 mx-auto text-[rgb(var(--muted))] mb-4" />
           <h1 className="text-2xl font-bold text-[rgb(var(--text))] mb-4">
             {error || 'Organizer not found'}
           </h1>
@@ -237,7 +242,7 @@ export default function OrganizerDetailPage() {
                   rel="noopener noreferrer"
                   className="flex items-center gap-2 px-4 py-2 bg-[rgb(var(--bg))] text-[rgb(var(--text))] rounded-lg hover:bg-[rgb(var(--bg))]/80 transition-colors token-border"
                 >
-                  📷 Instagram
+                  <CameraIcon className="w-4 h-4" /> Instagram
                 </a>
               )}
               
@@ -248,7 +253,7 @@ export default function OrganizerDetailPage() {
                   rel="noopener noreferrer"
                   className="flex items-center gap-2 px-4 py-2 bg-[rgb(var(--bg))] text-[rgb(var(--text))] rounded-lg hover:bg-[rgb(var(--bg))]/80 transition-colors token-border"
                 >
-                  📘 Facebook
+                  <BookOpenIcon className="w-4 h-4" /> Facebook
                 </a>
               )}
               
@@ -259,7 +264,7 @@ export default function OrganizerDetailPage() {
                   rel="noopener noreferrer"
                   className="flex items-center gap-2 px-4 py-2 bg-[rgb(var(--bg))] text-[rgb(var(--text))] rounded-lg hover:bg-[rgb(var(--bg))]/80 transition-colors token-border"
                 >
-                  🐦 Twitter
+                  <ChatBubbleLeftRightIcon className="w-4 h-4" /> Twitter
                 </a>
               )}
               
@@ -270,7 +275,7 @@ export default function OrganizerDetailPage() {
                   rel="noopener noreferrer"
                   className="flex items-center gap-2 px-4 py-2 bg-[rgb(var(--bg))] text-[rgb(var(--text))] rounded-lg hover:bg-[rgb(var(--bg))]/80 transition-colors token-border"
                 >
-                  💼 LinkedIn
+                  <BriefcaseIcon className="w-4 h-4" /> LinkedIn
                 </a>
               )}
             </div>

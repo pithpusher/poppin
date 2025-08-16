@@ -274,7 +274,7 @@ export default function AccountPage() {
 
               {userEvents.length === 0 && (
                 <div className="text-center py-12">
-                  <div className="text-4xl mb-4">📅</div>
+                  <CalendarIcon className="w-10 h-10 mx-auto text-[rgb(var(--muted))] mb-4" />
                   <h3 className="text-xl font-semibold mb-2">No events yet.</h3>
                   <p className="text-[rgb(var(--muted))] mb-6">Post your first one and start building your reach.</p>
                   <Link

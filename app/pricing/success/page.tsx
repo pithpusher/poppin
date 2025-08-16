@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { CheckCircleIcon, CalendarIcon, UserIcon, SparklesIcon } from '@heroicons/react/24/outline';
+import { CheckCircleIcon, CalendarIcon, UserIcon, SparklesIcon, FaceSmileIcon, Cog6ToothIcon } from '@heroicons/react/24/outline';
 
 export default function CheckoutSuccessPage() {
   const [sessionId, setSessionId] = useState<string | null>(null);
@@ -28,7 +28,7 @@ export default function CheckoutSuccessPage() {
 
       <div className="bg-[rgb(var(--panel))] rounded-2xl p-8 max-w-2xl mx-auto mb-8">
         <div className="text-center">
-          <div className="text-2xl mb-2">🎉</div>
+          <FaceSmileIcon className="w-6 h-6 mx-auto text-[rgb(var(--muted))] mb-2" />
           <h2 className="text-2xl font-bold mb-2">All set.</h2>
           <p className="text-[rgb(var(--muted))]">
             Thanks for choosing Poppin. Your subscription is active—you can start posting right now. We just sent you a confirmation email.
@@ -43,7 +43,7 @@ export default function CheckoutSuccessPage() {
             href="/events/new"
             className="block w-full p-4 bg-[rgb(var(--bg))] rounded-xl hover:bg-[rgb(var(--bg))]/80 transition-colors text-center"
           >
-            <div className="text-2xl mb-2">📅</div>
+            <CalendarIcon className="w-6 h-6 mx-auto text-[rgb(var(--muted))] mb-2" />
             <div className="font-medium">Create Your First Event</div>
             <div className="text-sm text-[rgb(var(--muted))]">Start posting and reach your community</div>
           </Link>
@@ -51,7 +51,7 @@ export default function CheckoutSuccessPage() {
             href="/account"
             className="block w-full p-4 bg-[rgb(var(--bg))] rounded-xl hover:bg-[rgb(var(--bg))]/80 transition-colors text-center"
           >
-            <div className="text-2xl mb-2">⚙️</div>
+            <Cog6ToothIcon className="w-6 h-6 mx-auto text-[rgb(var(--muted))] mb-2" />
             <div className="font-medium">Manage Your Account</div>
             <div className="text-sm text-[rgb(var(--muted))]">Update settings and view analytics</div>
           </Link>
