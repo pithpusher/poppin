@@ -12,7 +12,10 @@ import {
   ShareIcon,
   HeartIcon,
   PhoneIcon,
-  EnvelopeIcon
+  EnvelopeIcon,
+  CurrencyDollarIcon,
+  UserGroupIcon,
+  FaceFrownIcon
 } from '@heroicons/react/24/outline';
 import { supabase } from '@/lib/supabaseClient';
 
@@ -141,7 +144,7 @@ export default function EventDetailPage() {
     return (
       <div className="min-h-screen bg-[rgb(var(--bg))] py-12 px-4">
         <div className="max-w-4xl mx-auto text-center">
-          <div className="text-6xl mb-4">😕</div>
+          <FaceFrownIcon className="w-12 h-12 mx-auto text-[rgb(var(--muted))] mb-4" />
           <h1 className="text-2xl font-bold text-[rgb(var(--text))] mb-4">
             {error || 'Event not found'}
           </h1>
@@ -307,7 +310,7 @@ export default function EventDetailPage() {
                 )}
 
                 <div className="flex items-start gap-3">
-                  <div className="w-5 h-5 text-[rgb(var(--muted))] mt-0.5">💰</div>
+                  <CurrencyDollarIcon className="w-5 h-5 text-[rgb(var(--muted))] mt-0.5" />
                   <div>
                     <div className="font-medium text-[rgb(var(--text))]">Price</div>
                     <div className="text-[rgb(var(--brand))] font-semibold">
@@ -318,7 +321,7 @@ export default function EventDetailPage() {
 
                 {event.age_restriction && (
                   <div className="flex items-start gap-3">
-                    <div className="w-5 h-5 text-[rgb(var(--muted))] mt-0.5">👥</div>
+                    <UserGroupIcon className="w-5 h-5 text-[rgb(var(--muted))] mt-0.5" />
                     <div>
                       <div className="font-medium text-[rgb(var(--text))]">Age Restriction</div>
                       <div className="text-[rgb(var(--muted))]">{event.age_restriction}</div>

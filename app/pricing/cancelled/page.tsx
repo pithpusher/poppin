@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { XCircleIcon, ArrowLeftIcon, QuestionMarkCircleIcon } from '@heroicons/react/24/outline';
+import { XCircleIcon, ArrowLeftIcon, QuestionMarkCircleIcon, CreditCardIcon } from '@heroicons/react/24/outline';
 
 export default function CheckoutCancelledPage() {
   return (
@@ -18,7 +18,7 @@ export default function CheckoutCancelledPage() {
 
       <div className="bg-[rgb(var(--panel))] rounded-2xl p-8 max-w-2xl mx-auto mb-8">
         <div className="text-center">
-          <div className="text-2xl mb-2">💳</div>
+          <CreditCardIcon className="w-6 h-6 mx-auto text-[rgb(var(--muted))] mb-2" />
           <h2 className="text-2xl font-bold mb-2">No charges made.</h2>
           <p className="text-[rgb(var(--muted))]">
             You're good—nothing was processed. Try again anytime or hit us up if you need help.

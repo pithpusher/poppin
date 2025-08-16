@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { MagnifyingGlassIcon, FunnelIcon, MapPinIcon, CalendarIcon, ClockIcon } from '@heroicons/react/24/outline';
+import { MagnifyingGlassIcon, FunnelIcon, MapPinIcon, CalendarIcon, ClockIcon, FaceSmileIcon } from '@heroicons/react/24/outline';
 import { supabase } from '@/lib/supabaseClient';
 
 type Event = {
@@ -249,7 +249,7 @@ export default function EventsPage() {
         {/* Events Grid */}
         {filteredEvents.length === 0 && (
           <div className="text-center py-12">
-            <div className="text-4xl mb-4">🎉</div>
+            <FaceSmileIcon className="w-10 h-10 mx-auto text-[rgb(var(--muted))] mb-4" />
             <h3 className="text-xl font-semibold mb-2">No events yet.</h3>
             <p className="text-[rgb(var(--muted))] mb-6">Tweak your filters and try again.</p>
             <Link
@@ -262,7 +262,7 @@ export default function EventsPage() {
         )}
         {filteredEvents.length === 0 && searchTerm && (
           <div className="text-center py-12">
-            <div className="text-4xl mb-4">🔍</div>
+            <MagnifyingGlassIcon className="w-10 h-10 mx-auto text-[rgb(var(--muted))] mb-4" />
             <h3 className="text-xl font-semibold mb-2">No events found</h3>
             <p className="text-[rgb(var(--muted))] mb-6">Try adjusting your search or filters to find more events.</p>
             <div className="bg-[rgb(var(--panel))] rounded-xl p-6 max-w-md mx-auto">

@@ -264,7 +264,7 @@ export default function Pricing() {
                     <td className="text-center p-4">-</td>
                     <td className="text-center p-4">-</td>
                     <td className="text-center p-4">-</td>
-                    <td className="text-center p-4">✓</td>
+                    <td className="text-center p-4"><CheckIcon className="w-4 h-4 inline text-green-500" /></td>
                   </tr>
                 </tbody>
               </table>
