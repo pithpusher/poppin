@@ -7,10 +7,10 @@ export const runtime = "nodejs"; // needed for raw body access on some hosts
 // Helper: map a price to your internal plan + quotas
 function planFromPrice(priceId: string) {
   const map: Record<string, { plan: string; quota: number }> = {
-    [process.env.PLAN_PRICE_STARTER || ""]: { plan: "starter", quota: 3 },
-    [process.env.PLAN_PRICE_HOST || ""]: { plan: "host", quota: 10 },
-    [process.env.PLAN_PRICE_PRO || ""]: { plan: "pro", quota: 9999 },
-    [process.env.PLAN_PRICE_PREMIUM || ""]: { plan: "premium", quota: 9999 },
+    [process.env.PLAN_PRICE_EXPLORER || ""]: { plan: "explorer", quota: 5 },
+    [process.env.PLAN_PRICE_HOST || ""]: { plan: "host", quota: 15 },
+    [process.env.PLAN_PRICE_PRO || ""]: { plan: "pro", quota: 50 },
+    [process.env.PLAN_PRICE_BUILDER || ""]: { plan: "builder", quota: 9999 },
   };
   return map[priceId] || { plan: "free", quota: 0 };
 }
@@ -53,36 +53,12 @@ export async function POST(req: Request) {
     switch (event.type) {
       case "checkout.session.completed": {
         const session = event.data.object as Stripe.Checkout.Session;
-
-        // Get customer + price
-        const custId = String(session.customer);
-        const priceId = (session.line_items?.data?.[0]?.price?.id ||
-          (session as any).display_items?.[0]?.price?.id) as string | undefined;
-
-        // If not expanded, fetch line items
-        let _priceId = priceId;
-        if (!_priceId && session.id) {
-          const li = await stripe.checkout.sessions.listLineItems(session.id, { limit: 1 });
-          _priceId = li.data?.[0]?.price?.id as string | undefined;
-        }
-        const { plan, quota } = planFromPrice(_priceId || "");
-
-        // Link customer to our user row using email (best-effort)
-        const email = session.customer_details?.email || session.customer_email || "";
-        if (email) {
-          // Upsert: attach stripe_customer_id if missing
-          await db.from("users").update({ stripe_customer_id: custId }).eq("email", email);
-        }
-
-        if (session.mode === "subscription") {
-          const sub = await stripe.subscriptions.retrieve(String(session.subscription));
-          await setUserPlanByCustomer(custId, plan, quota, sub.current_period_end);
-        } else if (session.mode === "payment") {
-          // one-off purchase; you could mark credits here
-          await db.from("analytics_events").insert({
-            event_name: "one_off_purchase",
-            payload: { priceId: _priceId, customerId: custId },
-          });
+        const customerId = String(session.customer);
+        const priceId = (session.line_items?.data[0]?.price?.id as string) || "";
+        
+        if (priceId) {
+          const { plan, quota } = planFromPrice(priceId);
+          await setUserPlanByCustomer(customerId, plan, quota);
         }
         break;
       }

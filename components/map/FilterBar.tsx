@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { XMarkIcon, FunnelIcon } from '@heroicons/react/24/outline';
 
 export type Range = "today" | "week" | "month" | "all";
@@ -39,6 +39,22 @@ export default function FilterBar({
 }: FilterBarProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  // Memoize event type categories to prevent unnecessary re-creation
+  const eventTypeCategories = useMemo(() => ({
+    "Music": ["Rock", "Hip-Hop / Rap", "EDM / Dance", "Country", "Jazz / Blues", "Pop", "Classical / Orchestra", "Open Mic / Jam"],
+    "Food & Drink": ["Food Trucks", "Wine / Beer Festivals", "Pop-up Dining"],
+    "Nightlife": ["Clubs / DJ Sets", "Bar Specials", "Karaoke"],
+    "Family & Kids": ["Storytime / Library Events", "Festivals / Fairs", "Sports / Rec"],
+    "Arts & Culture": ["Theatre / Plays", "Art Exhibits", "Comedy", "Film / Screenings"],
+    "Community & Causes": ["Markets / Craft Fairs", "Charity / Fundraisers", "Civic / Town Hall"],
+    "Education & Workshops": ["Business / Networking", "Classes & Seminars", "Tech & Startup Events"],
+    "Sports & Recreation": ["Games / Tournaments", "Races / Fun Runs", "Outdoor Adventures"],
+    "Shopping & Sales": ["Store Sales / Clearance", "Flea Markets", "Grand Openings"]
+  }), []);
+
+  // Memoize age restrictions
+  const ageRestrictions = useMemo(() => ["All Ages", "18+", "21+"], []);
+
   // Initialize all event types as selected when modal opens
   const initializeAllEventTypes = () => {
     const allTypes = Object.values(eventTypeCategories).flat();
@@ -52,54 +68,45 @@ export default function FilterBar({
     { value: "all", label: "All" },
   ];
 
-  const eventTypeCategories = {
-    "Music": ["Rock", "Hip-Hop / Rap", "EDM / Dance", "Country", "Jazz / Blues", "Pop", "Classical / Orchestra", "Open Mic / Jam"],
-    "Food & Drink": ["Food Trucks", "Wine / Beer Festivals", "Pop-up Dining"],
-    "Nightlife": ["Clubs / DJ Sets", "Bar Specials", "Karaoke"],
-    "Family & Kids": ["Storytime / Library Events", "Festivals / Fairs", "Sports / Rec"],
-    "Arts & Culture": ["Theatre / Plays", "Art Exhibits", "Comedy", "Film / Screenings"],
-    "Community & Causes": ["Markets / Craft Fairs", "Charity / Fundraisers", "Civic / Town Hall"],
-    "Education & Workshops": ["Business / Networking", "Classes & Seminars", "Tech & Startup Events"],
-    "Sports & Recreation": ["Games / Tournaments", "Races / Fun Runs", "Outdoor Adventures"],
-    "Shopping & Sales": ["Store Sales / Clearance", "Flea Markets", "Grand Openings"]
-  };
-
-  const ageRestrictions = ["All Ages", "18+", "21+"];
-
   const handleEventTypeToggle = (type: string) => {
-    if (eventTypes.includes(type)) {
-      setEventTypes(eventTypes.filter(t => t !== type));
-    } else {
-      setEventTypes([...eventTypes, type]);
-    }
+    setEventTypes(prev => {
+      if (prev.includes(type)) {
+        return prev.filter(t => t !== type);
+      } else {
+        return [...prev, type];
+      }
+    });
   };
 
   const handleCategoryToggle = (category: string) => {
     const categoryTypes = eventTypeCategories[category as keyof typeof eventTypeCategories] || [];
     const hasAllTypes = categoryTypes.every(type => eventTypes.includes(type));
     
-    if (hasAllTypes) {
-      // Remove all types from this category
-      setEventTypes(eventTypes.filter(type => !categoryTypes.includes(type)));
-    } else {
-      // Add all types from this category
-      const newTypes = [...eventTypes];
-      categoryTypes.forEach(type => {
-        if (!newTypes.includes(type)) {
-          newTypes.push(type);
-        }
-      });
-      setEventTypes(newTypes);
-    }
+    setEventTypes(prev => {
+      if (hasAllTypes) {
+        // Remove all types from this category
+        return prev.filter(type => !categoryTypes.includes(type));
+      } else {
+        // Add all types from this category
+        const newTypes = [...prev];
+        categoryTypes.forEach(type => {
+          if (!newTypes.includes(type)) {
+            newTypes.push(type);
+          }
+        });
+        return newTypes;
+      }
+    });
   };
 
-  const getActiveFiltersCount = () => {
+  // Memoize active filters count to prevent unnecessary recalculations
+  const activeFiltersCount = useMemo(() => {
     let count = 0;
     if (onlyFree) count++;
     if (eventTypes.length > 0) count++;
     if (ageRestriction !== "All Ages") count++;
     return count;
-  };
+  }, [onlyFree, eventTypes.length, ageRestriction]);
 
   const clearAllFilters = () => {
     setOnlyFree(false);
@@ -145,15 +152,15 @@ export default function FilterBar({
             >
               <FunnelIcon className="w-3.5 h-3.5" />
               More Filters
-              {getActiveFiltersCount() > 0 && (
+              {activeFiltersCount > 0 && (
                 <span className="bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center font-semibold">
-                  {getActiveFiltersCount()}
+                  {activeFiltersCount}
                 </span>
               )}
             </button>
 
             {/* Clear All */}
-            {getActiveFiltersCount() > 0 && (
+            {activeFiltersCount > 0 && (
               <button
                 onClick={clearAllFilters}
                 className="px-3 py-1 text-xs rounded-md bg-[rgb(var(--bg))] text-[rgb(var(--text))] hover:bg-red-500 hover:text-white transition-colors font-medium"
@@ -193,7 +200,7 @@ export default function FilterBar({
                          type="date"
                          value={startDate || ""}
                          onChange={(e) => setStartDate(e.target.value || null)}
-                         className="w-full px-2 py-1 rounded-lg token-border bg-[rgb(var(--panel))] text-[rgb(var(--text))] text-xs"
+                         className="w-full min-w-0 px-2 py-1 rounded-lg token-border bg-[rgb(var(--panel))] text-[rgb(var(--text))] text-xs"
                        />
                      </div>
                      <div>
@@ -202,7 +209,7 @@ export default function FilterBar({
                          type="date"
                          value={endDate || ""}
                          onChange={(e) => setEndDate(e.target.value || null)}
-                         className="w-full px-2 py-1 rounded-lg token-border bg-[rgb(var(--panel))] text-[rgb(var(--text))] text-xs"
+                         className="w-full min-w-0 px-2 py-1 rounded-lg token-border bg-[rgb(var(--panel))] text-[rgb(var(--text))] text-xs"
                        />
                      </div>
                    </div>
@@ -316,7 +323,7 @@ export default function FilterBar({
                      Select All
                    </button>
                    <button
-                     onClick={clearAllFilters}
+                     onClick={() => setEventTypes([])}
                      className="px-2 py-1 text-xs hover:bg-[rgb(var(--bg))] rounded-lg transition-colors text-[rgb(var(--muted))]"
                    >
                      Deselect All

@@ -34,7 +34,7 @@ export default function HamburgerMenu() {
     { href: '/', label: 'Home' },
     { href: '/map', label: 'Map' },
     { href: '/events/new', label: 'Post Event' },
-    { href: '/organizer/apply', label: 'Apply as Organizer' },
+    { href: '/organizer/apply', label: 'Host With Us' },
     { href: '/auth', label: 'Sign In' },
     { href: '/pricing', label: 'Pricing' },
     { href: '/moderation', label: 'Moderation' },
@@ -62,8 +62,8 @@ export default function HamburgerMenu() {
             <Link
               key={item.href}
               href={item.href}
-              className={`block px-4 py-2 text-sm hover:bg-[rgb(var(--bg))] hover:text-white transition-colors ${
-                pathname === item.href ? 'text-white font-medium' : 'text-[rgb(var(--muted))]'
+              className={`block px-4 py-2 text-sm hover:bg-[rgb(var(--bg))] hover:text-[rgb(var(--text))] transition-colors ${
+                pathname === item.href ? 'text-[rgb(var(--text))] font-medium bg-[rgb(var(--bg))]' : 'text-[rgb(var(--muted))]'
               }`}
             >
               {item.label}

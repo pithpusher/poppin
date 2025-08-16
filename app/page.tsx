@@ -32,7 +32,7 @@ export default function HomePage() {
               className={`inline-flex items-center rounded-xl px-4 py-2 text-sm ${tokens.border} ${tokens.muted} ${tokens.panel}
                           hover:bg-white/10 html.light:hover:bg-zinc-50`}
             >
-              Post an Event
+              Post Yours
             </Link>
           </div>
         </div>
@@ -53,15 +53,15 @@ export default function HomePage() {
           <div className="grid grid-cols-3 gap-2">
             <div className={`card p-3 ${tokens.border}`}>
               <h3 className="font-bold mb-1 text-xs">Verified Organizers</h3>
-              <p className={`text-xs ${tokens.muted}`}>Only approved hosts, no spam.</p>
+              <p className={`text-xs ${tokens.muted}`}>Real people, real groups. No fake posts, no junk invites.</p>
             </div>
             <div className={`card p-3 ${tokens.border}`}>
               <h3 className="font-bold mb-1 text-xs">Curated Events</h3>
-              <p className={`text-xs ${tokens.muted}`}>Fresh list of local things to do.</p>
+              <p className={`text-xs ${tokens.muted}`}>Hand-picked and worth your time. Always fresh, never filler.</p>
             </div>
             <div className={`card p-3 ${tokens.border}`}>
               <h3 className="font-bold mb-1 text-xs">Easy Planning</h3>
-              <p className={`text-xs ${tokens.muted}`}>Save, share, and get reminders.</p>
+              <p className={`text-xs ${tokens.muted}`}>Save it, share it, and we'll remind you when it's go-time.</p>
             </div>
           </div>
         </div>

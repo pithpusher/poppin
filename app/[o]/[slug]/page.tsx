@@ -89,6 +89,9 @@ export default function OrganizerPage() {
       ) : (
         <div className="mt-8 text-[rgb(var(--muted))]">No upcoming events.</div>
       )}
+
+      {/* Bottom spacing for navigation */}
+      <div className="pb-20"></div>
     </div>
   );
 }
