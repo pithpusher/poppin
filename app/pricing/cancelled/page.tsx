@@ -71,6 +71,7 @@ export default function CheckoutCancelledPage() {
         </div>
       </div>
 
+      <div className="bg-[rgb(var(--panel))] rounded-2xl p-8 max-w-2xl mx-auto mb-8">
         {/* Help Section */}
         <div className="mt-12 text-center">
           <p className="text-[rgb(var(--muted))] mb-4">
