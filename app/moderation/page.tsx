@@ -498,9 +498,9 @@ export default function ModerationPage() {
                             </button>
                           </>
                         )}
-                      </div>
-                    </div>
-                  ))}
+            </div>
+          </div>
+        ))}
                 </div>
               )}
             </div>
@@ -531,7 +531,7 @@ export default function ModerationPage() {
               </Link>
             </div>
           </div>
-        </div>
+      </div>
       </div>
 
       {/* Bottom spacing for navigation */}
