@@ -7,49 +7,52 @@ import Link from "next/link";
 export default function HomePage() {
   return (
     <div className="bg-[rgb(var(--bg))]">
-      {/* Hero */}
-      <section
-        className={`
-          py-12 sm:py-16 md:py-20 lg:py-24
-        `}
-      >
-        <div className="max-w-7xl mx-auto px-4 text-center">
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight">
-            Find what&apos;s poppin&apos;.
-          </h1>
-          <p className={`mt-3 md:mt-4 text-lg sm:text-xl md:text-2xl ${tokens.muted} max-w-2xl md:max-w-3xl mx-auto`}>
-          Local happenings, curated just for you.
-          </p>
-          <div className="mt-6 md:mt-8 flex flex-col sm:flex-row justify-center gap-3 md:gap-4">
-            <Link
-              href="/map"
-              className={`inline-flex items-center justify-center rounded-xl px-4 py-2 md:px-6 md:py-3 text-sm md:text-base bg-brand text-white hover:${tokens.panel} transition-all duration-200`}
-            >
-              View Events Near You
-            </Link>
-            <Link
-              href="/events/new"
-              className={`inline-flex items-center justify-center rounded-xl px-4 py-2 md:px-6 md:py-3 text-sm md:text-base ${tokens.border} ${tokens.muted} ${tokens.panel}
-                          hover:bg-white/10 html.light:hover:bg-zinc-50 transition-all duration-200`}
-            >
-              Post Yours
-            </Link>
+      {/* Hero with Mini Map Background */}
+      <section className="relative h-[calc(100vh-120px)]">
+        {/* Full Bleed Mini Map Background */}
+        <div className="absolute inset-0 w-full h-full">
+          <MiniMap className="h-full" showFullMapButton={false} />
+        </div>
+        
+        {/* Hero Content Overlay */}
+        <div className="relative z-10 h-full flex items-center justify-center">
+          <div className="max-w-7xl mx-auto px-4 text-center">
+            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight">
+              Find what&apos;s poppin&apos;.
+            </h1>
+            <p className={`mt-3 md:mt-4 text-lg sm:text-xl md:text-2xl ${tokens.muted} max-w-2xl md:max-w-3xl mx-auto`}>
+            Local happenings, curated just for you.
+            </p>
+            <div className="mt-6 md:mt-8 flex flex-row justify-center gap-3 md:gap-4">
+              <Link
+                href="/map"
+                className={`inline-flex items-center justify-center rounded-xl px-4 py-2 md:px-6 md:py-3 text-sm md:text-base bg-brand text-white hover:${tokens.panel} transition-all duration-200`}
+              >
+                View Events Near You
+              </Link>
+              <Link
+                href="/events/new"
+                className={`inline-flex items-center justify-center rounded-xl px-4 py-2 md:px-6 md:py-3 text-sm md:text-base ${tokens.border} ${tokens.muted} ${tokens.panel}
+                              hover:bg-white/10 html.light:hover:bg-zinc-50 transition-colors duration-200`}
+              >
+                Post Yours
+              </Link>
+            </div>
           </div>
         </div>
-      </section>
-
-      {/* Mini Map */}
-      <section className="max-w-7xl mx-auto px-4 my-18 md:my-24">
-        <MiniMap />
-        <div className="text-center mt-8 md:mt-12">
+        
+        {/* See All Events Button */}
+        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-10">
           <Link
             href="/events"
-            className="inline-flex items-center gap-2 px-4 py-2 md:px-6 md:py-3 bg-[rgb(var(--brand))] text-white rounded-xl text-sm md:text-base font-medium hover:bg-[rgb(var(--brand))]/90 transition-colors"
+            className={`inline-flex items-center gap-2 px-4 py-2 md:px-6 md:py-3 rounded-xl text-sm md:text-base ${tokens.border} ${tokens.muted} ${tokens.panel} hover:bg-white/10 html.light:hover:bg-zinc-50 transition-all duration-200`}
           >
-            See All Events
+            View List of Events
           </Link>
         </div>
       </section>
+
+
 
       {/* Featured Events */}
       <FeaturedEvents />
