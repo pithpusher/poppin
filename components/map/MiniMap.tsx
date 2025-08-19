@@ -118,19 +118,19 @@ bounds.extend([ev.lng!, ev.lat!]);
   }, [events]);
 
   return (
-    <div className="relative w-full h-[45vh] rounded-2xl token-border overflow-hidden">
+    <div className="relative w-full h-[45vh] md:h-[50vh] lg:h-[60vh] xl:h-[70vh] rounded-2xl md:rounded-3xl token-border overflow-hidden">
       {error && (
-        <div className="absolute top-4 left-4 z-10 bg-yellow-500/90 text-white px-3 py-2 rounded-lg text-sm backdrop-blur">
+        <div className="absolute top-4 left-4 z-10 bg-yellow-500/90 text-white px-3 py-2 md:px-4 md:py-3 lg:px-5 lg:py-4 rounded-lg md:rounded-xl text-sm md:text-base lg:text-lg backdrop-blur">
           {error}
         </div>
       )}
       <div ref={mapEl} className="w-full h-full" />
       <Link
         href="/map"
-        className="absolute bottom-2 left-1/2 transform -translate-x-1/2 rounded-xl px-3 py-2 text-sm shadow
+        className="absolute bottom-2 md:bottom-4 lg:bottom-6 left-1/2 transform -translate-x-1/2 rounded-xl md:rounded-2xl px-3 py-2 md:px-4 md:py-3 lg:px-6 lg:py-4 text-sm md:text-base lg:text-lg shadow-lg
                    token-border
                    bg-[rgb(var(--panel))]/80 backdrop-blur
-                   hover:bg-[rgb(var(--panel))]"
+                   hover:bg-[rgb(var(--panel))] transition-all duration-200 hover:scale-105"
       >
         View Full Map
       </Link>

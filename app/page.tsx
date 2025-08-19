@@ -10,27 +10,27 @@ export default function HomePage() {
       {/* Hero */}
       <section
         className={`
-          py-12 sm:py-16
+          py-12 sm:py-16 md:py-20 lg:py-24
         `}
       >
         <div className="max-w-6xl mx-auto px-4 text-center">
-          <h1 className="text-4xl md:text-6xl font-bold tracking-tight">
+          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight">
             Find what&apos;s poppin&apos;.
           </h1>
-          <p className={`mt-3 text-lg sm:text-xl ${tokens.muted} max-w-2xl mx-auto`}>
+          <p className={`mt-3 md:mt-4 lg:mt-6 text-lg sm:text-xl md:text-2xl lg:text-3xl ${tokens.muted} max-w-2xl md:max-w-3xl lg:max-w-4xl mx-auto`}>
           Local happenings, curated just for you.
           </p>
-          <div className="mt-6 flex justify-center gap-3">
+          <div className="mt-6 md:mt-8 lg:mt-10 flex flex-col sm:flex-row justify-center gap-3 md:gap-4">
             <Link
               href="/map"
-              className={`inline-flex items-center rounded-xl px-4 py-2 text-sm bg-brand text-white hover:${tokens.panel}`}
+              className={`inline-flex items-center justify-center rounded-xl px-4 py-2 md:px-6 md:py-3 lg:px-8 lg:py-4 text-sm md:text-base lg:text-lg font-medium bg-brand text-white hover:${tokens.panel} transition-all duration-200 hover:scale-105`}
             >
               View Events Near You
             </Link>
             <Link
               href="/events/new"
-              className={`inline-flex items-center rounded-xl px-4 py-2 text-sm ${tokens.border} ${tokens.muted} ${tokens.panel}
-                          hover:bg-white/10 html.light:hover:bg-zinc-50`}
+              className={`inline-flex items-center justify-center rounded-xl px-4 py-2 md:px-6 md:py-3 lg:px-8 lg:py-4 text-sm md:text-base lg:text-lg font-medium ${tokens.border} ${tokens.muted} ${tokens.panel}
+                          hover:bg-white/10 html.light:hover:bg-zinc-50 transition-all duration-200 hover:scale-105`}
             >
               Post Yours
             </Link>
@@ -39,12 +39,12 @@ export default function HomePage() {
       </section>
 
       {/* Mini Map */}
-      <section className="max-w-6xl mx-auto px-4 my-18">
+      <section className="max-w-6xl mx-auto px-4 my-18 md:my-20 lg:my-24">
         <MiniMap />
-        <div className="text-center mt-8">
+        <div className="text-center mt-8 md:mt-10 lg:mt-12">
           <Link
             href="/events"
-            className="inline-flex items-center gap-2 px-4 py-2 bg-[rgb(var(--brand))] text-white rounded-xl text-sm font-medium hover:bg-[rgb(var(--brand))]/90 transition-colors"
+            className="inline-flex items-center gap-2 px-4 py-2 md:px-6 md:py-3 lg:px-8 lg:py-4 bg-[rgb(var(--brand))] text-white rounded-xl text-sm md:text-base lg:text-lg font-medium hover:bg-[rgb(var(--brand))]/90 transition-all duration-200 hover:scale-105"
           >
             See All Events
           </Link>
@@ -55,24 +55,24 @@ export default function HomePage() {
       <FeaturedEvents />
       
       {/* Conversion CTA - Become an Organizer */}
-      <section className="max-w-6xl mx-auto px-4 mt-16 mb-20">
-        <div className="bg-[rgb(var(--panel))] token-border rounded-2xl p-8 text-center">
-          <h2 className="text-2xl md:text-3xl font-bold text-[rgb(var(--text))] mb-4">
+      <section className="max-w-6xl mx-auto px-4 mt-16 md:mt-20 lg:mt-24 mb-20 md:mb-24 lg:mb-32">
+        <div className="bg-[rgb(var(--panel))] token-border rounded-2xl md:rounded-3xl p-8 md:p-12 lg:p-16 text-center">
+          <h2 className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold text-[rgb(var(--text))] mb-4 md:mb-6 lg:mb-8">
             Have events to share?
           </h2>
-          <p className={`text-base sm:text-lg ${tokens.muted} mb-6 max-w-2xl mx-auto`}>
+          <p className={`text-base sm:text-lg md:text-xl lg:text-2xl ${tokens.muted} mb-6 md:mb-8 lg:mb-10 max-w-2xl md:max-w-3xl lg:max-w-4xl mx-auto`}>
             Join our community of organizers and reach thousands of people in your area.
           </p>
-          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+          <div className="flex flex-col sm:flex-row gap-3 md:gap-4 lg:gap-6 justify-center">
             <Link
               href="/organizer/apply"
-              className="inline-flex items-center gap-2 px-4 py-2 bg-[rgb(var(--brand))] text-white rounded-xl text-sm font-medium hover:bg-[rgb(var(--brand))]/90 transition-colors"
+              className="inline-flex items-center justify-center gap-2 px-4 py-2 md:px-6 md:py-3 lg:px-8 lg:py-4 bg-[rgb(var(--brand))] text-white rounded-xl text-sm md:text-base lg:text-lg font-medium hover:bg-[rgb(var(--brand))]/90 transition-all duration-200 hover:scale-105"
             >
               Become an Organizer
             </Link>
             <Link
               href="/pricing"
-              className="inline-flex items-center gap-2 px-4 py-2 border border-[rgb(var(--border))] text-[rgb(var(--text))] rounded-xl text-sm hover:bg-[rgb(var(--panel))] transition-colors"
+              className="inline-flex items-center justify-center gap-2 px-4 py-2 md:px-6 md:py-3 lg:px-8 lg:py-4 border border-[rgb(var(--border))] text-[rgb(var(--text))] rounded-xl text-sm md:text-base lg:text-lg font-medium hover:bg-[rgb(var(--panel))] transition-all duration-200 hover:scale-105"
             >
               View Pricing
             </Link>

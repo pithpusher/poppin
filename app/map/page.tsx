@@ -261,24 +261,24 @@ export default function MapPage() {
         <div className="min-h-screen bg-[rgb(var(--bg))]">
             {/* Header with Post Event Button */}
             <div className="relative z-10 bg-[rgb(var(--bg))] border-b border-[rgb(var(--border-color))]/20">
-                <div className="max-w-6xl mx-auto px-4 py-4">
+                <div className="max-w-6xl mx-auto px-4 py-4 md:py-6 lg:py-8">
                     <div className="flex items-center justify-between">
                         <div>
-                            <h1 className="text-2xl md:text-3xl font-bold text-[rgb(var(--text))]">Event Map</h1>
-                            <p className={`text-base sm:text-lg ${tokens.muted}`}>Discover events near you</p>
+                            <h1 className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold text-[rgb(var(--text))]">Event Map</h1>
+                            <p className={`text-base sm:text-lg md:text-xl lg:text-2xl ${tokens.muted}`}>Discover events near you</p>
                         </div>
                         
-                        <div className="flex gap-2">
+                        <div className="flex gap-2 md:gap-3 lg:gap-4">
                             <Link
                                 href="/events/new"
-                                className="inline-flex items-center gap-2 px-4 py-2 bg-[rgb(var(--brand))] text-white rounded-xl text-sm font-medium hover:bg-[rgb(var(--brand))]/90 transition-colors"
+                                className="inline-flex items-center gap-2 px-4 py-2 md:px-6 md:py-3 lg:px-8 lg:py-4 bg-[rgb(var(--brand))] text-white rounded-xl md:rounded-2xl text-sm md:text-base lg:text-lg font-medium hover:bg-[rgb(var(--brand))]/90 transition-all duration-200 hover:scale-105"
                             >
                                 Post Event
                             </Link>
                             
                             <Link
                                 href="/events"
-                                className="inline-flex items-center gap-2 px-4 py-2 bg-[rgb(var(--panel))] text-[rgb(var(--text))] border border-[rgb(var(--border-color))] rounded-xl text-sm font-medium hover:bg-[rgb(var(--bg))] transition-colors"
+                                className="inline-flex items-center gap-2 px-4 py-2 md:px-6 md:py-3 lg:px-8 lg:py-4 bg-[rgb(var(--panel))] text-[rgb(var(--text))] border border-[rgb(var(--border-color))] rounded-xl md:rounded-2xl text-sm md:text-base lg:text-lg font-medium hover:bg-[rgb(var(--bg))] transition-all duration-200 hover:scale-105"
                             >
                                 List View
                             </Link>
@@ -290,14 +290,14 @@ export default function MapPage() {
             {/* Filter Bar */}
             <div className="sticky top-0 z-10 bg-[rgb(var(--bg))] border-b border-[rgb(var(--border-color))]/20">
                 {/* Search Section */}
-                <div className="px-4 py-4">
-                    <div className="max-w-md mx-auto">
+                <div className="px-4 py-4 md:py-6 lg:py-8">
+                    <div className="max-w-md md:max-w-lg lg:max-w-xl mx-auto">
                         <div className="relative">
-                            <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-[rgb(var(--muted))]" />
+                            <MagnifyingGlassIcon className="absolute left-3 md:left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 md:w-6 md:h-6 text-[rgb(var(--muted))]" />
                             <input
                                 type="text"
                                 placeholder="Search events, venues, or locations..."
-                                className="w-full pl-10 pr-4 py-3 bg-[rgb(var(--panel))] text-[rgb(var(--text))] rounded-lg token-border focus:outline-none focus:ring-2 focus:ring-[rgb(var(--brand))] text-sm"
+                                className="w-full pl-10 md:pl-12 lg:pl-14 pr-4 md:pr-6 lg:pr-8 py-3 md:py-4 lg:py-5 bg-[rgb(var(--panel))] text-[rgb(var(--text))] rounded-lg md:rounded-xl lg:rounded-2xl token-border focus:outline-none focus:ring-2 focus:ring-[rgb(var(--brand))] text-sm md:text-base lg:text-lg"
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
                                 onKeyPress={(e) => {

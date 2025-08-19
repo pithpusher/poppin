@@ -235,47 +235,47 @@ export default function EventsPage() {
 
   return (
     <div className="min-h-screen bg-[rgb(var(--bg))] py-8 px-4">
-      <div className="max-w-6xl mx-auto px-4 py-8">
-        <div className="text-center mb-8">
-          <FaceSmileIcon className="w-16 h-16 text-[rgb(var(--brand))] mx-auto mb-4" />
-          <h1 className="text-2xl md:text-3xl font-bold mb-4">Discover What&apos;s Happening</h1>
-          <p className={`text-base sm:text-lg ${tokens.muted} max-w-2xl mx-auto`}>Your city's best events, all in one spot.</p>
+      <div className="max-w-6xl mx-auto px-4 py-8 md:py-12 lg:py-16">
+        <div className="text-center mb-8 md:mb-12 lg:mb-16">
+          <FaceSmileIcon className="w-16 h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 text-[rgb(var(--brand))] mx-auto mb-4 md:mb-6 lg:mb-8" />
+          <h1 className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold mb-4 md:mb-6 lg:mb-8">Discover What&apos;s Happening</h1>
+          <p className={`text-base sm:text-lg md:text-xl lg:text-2xl ${tokens.muted} max-w-2xl md:max-w-3xl lg:max-w-4xl mx-auto`}>Your city's best events, all in one spot.</p>
         </div>
 
         {/* Header with Search and Filters */}
-        <div className="mb-8">
-          <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
+        <div className="mb-8 md:mb-12 lg:mb-16">
+          <div className="flex flex-col sm:flex-row gap-4 md:gap-6 lg:gap-8 items-start sm:items-center justify-between">
             <div className="flex-1">
               <div className="relative">
-                <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-[rgb(var(--muted))]" />
+                <MagnifyingGlassIcon className="absolute left-3 md:left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 md:w-6 md:h-6 text-[rgb(var(--muted))]" />
                 <input
                   type="text"
                   placeholder="Search events..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 border border-[rgb(var(--border-color))] rounded-xl bg-[rgb(var(--bg))] text-[rgb(var(--text))] focus:outline-none focus:ring-2 focus:ring-[rgb(var(--brand))]"
+                  className="w-full pl-10 md:pl-12 lg:pl-14 pr-4 md:pr-6 lg:pr-8 py-2 md:py-3 lg:py-4 border border-[rgb(var(--border-color))] rounded-xl md:rounded-2xl bg-[rgb(var(--bg))] text-[rgb(var(--text))] focus:outline-none focus:ring-2 focus:ring-[rgb(var(--brand))] text-sm md:text-base lg:text-lg"
                 />
               </div>
             </div>
             
-            <div className="flex gap-2">
+            <div className="flex gap-2 md:gap-3 lg:gap-4">
               <button
                 onClick={() => setShowFilters(!showFilters)}
-                className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-colors ${
+                className={`flex items-center gap-2 px-4 py-2 md:px-6 md:py-3 lg:px-8 lg:py-4 rounded-xl md:rounded-2xl text-sm md:text-base lg:text-lg font-medium transition-all duration-200 hover:scale-105 ${
                   showFilters 
                     ? 'bg-[rgb(var(--brand))] text-white' 
                     : 'bg-[rgb(var(--panel))] text-[rgb(var(--text))] border border-[rgb(var(--border-color))]'
                 }`}
               >
-                <FunnelIcon className="w-4 h-4" />
+                <FunnelIcon className="w-4 h-4 md:w-5 md:h-5 lg:w-6 lg:h-6" />
                 Filters
               </button>
               
               <Link
                 href="/map"
-                className="flex items-center gap-2 px-4 py-2 bg-[rgb(var(--panel))] text-[rgb(var(--text))] border border-[rgb(var(--border-color))] rounded-xl text-sm font-medium hover:bg-[rgb(var(--bg))] transition-colors"
+                className="flex items-center gap-2 px-4 py-2 md:px-6 md:py-3 lg:px-8 lg:py-4 bg-[rgb(var(--panel))] text-[rgb(var(--text))] border border-[rgb(var(--border-color))] rounded-xl md:rounded-2xl text-sm md:text-base lg:text-lg font-medium hover:bg-[rgb(var(--bg))] transition-all duration-200 hover:scale-105"
               >
-                <MapIcon className="w-4 h-4" />
+                <MapIcon className="w-4 h-4 md:w-5 md:h-5 lg:w-6 lg:h-6" />
                 Map View
               </Link>
             </div>
@@ -283,15 +283,15 @@ export default function EventsPage() {
 
           {/* Advanced Filters */}
           {showFilters && (
-            <div className="mt-6 p-6 bg-[rgb(var(--panel))] token-border rounded-xl">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="mt-6 md:mt-8 lg:mt-10 p-6 md:p-8 lg:p-10 bg-[rgb(var(--panel))] token-border rounded-xl md:rounded-2xl">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 lg:gap-8">
                 {/* Date Range */}
                 <div>
-                  <label className="block text-sm font-medium text-[rgb(var(--text))] mb-2">Date Range</label>
+                  <label className="block text-sm md:text-base lg:text-lg font-medium text-[rgb(var(--text))] mb-2 md:mb-3">Date Range</label>
                   <select
                     value={range}
                     onChange={(e) => setRange(e.target.value as Range)}
-                    className="w-full px-3 py-2 border border-[rgb(var(--border-color))] rounded-lg bg-[rgb(var(--bg))] text-[rgb(var(--text))] text-sm focus:outline-none focus:ring-2 focus:ring-[rgb(var(--brand))]"
+                    className="w-full px-3 py-2 md:px-4 md:py-3 lg:px-5 lg:py-4 border border-[rgb(var(--border-color))] rounded-lg md:rounded-xl bg-[rgb(var(--bg))] text-[rgb(var(--text))] text-sm md:text-base lg:text-lg focus:outline-none focus:ring-2 focus:ring-[rgb(var(--brand))]"
                   >
                     <option value="all">All Dates</option>
                     <option value="today">Today</option>
@@ -302,33 +302,33 @@ export default function EventsPage() {
 
                 {/* Custom Date Range */}
                 <div>
-                  <label className="block text-sm font-medium text-[rgb(var(--text))] mb-2">Custom Start Date</label>
+                  <label className="block text-sm md:text-base lg:text-lg font-medium text-[rgb(var(--text))] mb-2 md:mb-3">Custom Start Date</label>
                   <input
                     type="date"
                     value={startDate || ''}
                     onChange={(e) => setStartDate(e.target.value)}
-                    className="w-full px-3 py-2 border border-[rgb(var(--border-color))] rounded-lg bg-[rgb(var(--bg))] text-[rgb(var(--text))] text-sm focus:outline-none focus:ring-2 focus:ring-[rgb(var(--brand))]"
+                    className="w-full px-3 py-2 md:px-4 md:py-3 lg:px-5 lg:py-4 border border-[rgb(var(--border-color))] rounded-lg md:rounded-xl bg-[rgb(var(--bg))] text-[rgb(var(--text))] text-sm md:text-base lg:text-lg focus:outline-none focus:ring-2 focus:ring-[rgb(var(--brand))]"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-[rgb(var(--text))] mb-2">Custom End Date</label>
+                  <label className="block text-sm md:text-base lg:text-lg font-medium text-[rgb(var(--text))] mb-2 md:mb-3">Custom End Date</label>
                   <input
                     type="date"
                     value={endDate || ''}
                     onChange={(e) => setEndDate(e.target.value)}
-                    className="w-full px-3 py-2 border border-[rgb(var(--border-color))] rounded-lg bg-[rgb(var(--bg))] text-[rgb(var(--text))] text-sm focus:outline-none focus:ring-2 focus:ring-[rgb(var(--brand))]"
+                    className="w-full px-3 py-2 md:px-4 md:py-3 lg:px-5 lg:py-4 border border-[rgb(var(--border-color))] rounded-lg md:rounded-xl bg-[rgb(var(--bg))] text-[rgb(var(--text))] text-sm md:text-base lg:text-lg focus:outline-none focus:ring-2 focus:ring-[rgb(var(--brand))]"
                   />
                 </div>
 
                 {/* Free Events Toggle */}
                 <div className="flex items-center">
-                  <label className="flex items-center gap-2 text-sm font-medium text-[rgb(var(--text))] cursor-pointer">
+                  <label className="flex items-center gap-2 text-sm md:text-base lg:text-lg font-medium text-[rgb(var(--text))] cursor-pointer">
                     <input
                       type="checkbox"
                       checked={onlyFree}
                       onChange={(e) => setOnlyFree(e.target.checked)}
-                      className="rounded border-[rgb(var(--border-color))] text-[rgb(var(--brand))] focus:ring-[rgb(var(--brand))]"
+                      className="rounded border-[rgb(var(--border-color))] text-[rgb(var(--brand))] focus:ring-[rgb(var(--brand))] w-4 h-4 md:w-5 md:h-5 lg:w-6 lg:h-6"
                     />
                     Free Events Only
                   </label>
@@ -336,14 +336,14 @@ export default function EventsPage() {
               </div>
 
               {/* Event Types */}
-              <div className="mt-4">
-                <label className="block text-sm font-medium text-[rgb(var(--text))] mb-2">Event Types</label>
-                <div className="flex flex-wrap gap-2">
+              <div className="mt-4 md:mt-6 lg:mt-8">
+                <label className="block text-sm md:text-base lg:text-lg font-medium text-[rgb(var(--text))] mb-2 md:mb-3">Event Types</label>
+                <div className="flex flex-wrap gap-2 md:gap-3 lg:gap-4">
                   {eventTypeOptions.map(type => (
                     <button
                       key={type}
                       onClick={() => toggleEventType(type)}
-                      className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${
+                      className={`px-3 py-1 md:px-4 md:py-2 lg:px-5 lg:py-3 rounded-full text-xs md:text-sm lg:text-base font-medium transition-all duration-200 hover:scale-105 ${
                         eventTypes.includes(type)
                           ? 'bg-[rgb(var(--brand))] text-white'
                           : 'bg-[rgb(var(--bg))] text-[rgb(var(--text))] border border-[rgb(var(--border-color))] hover:bg-[rgb(var(--panel))]'
@@ -356,12 +356,12 @@ export default function EventsPage() {
               </div>
 
               {/* Age Restriction */}
-              <div className="mt-4">
-                <label className="block text-sm font-medium text-[rgb(var(--text))] mb-2">Age Restriction</label>
+              <div className="mt-4 md:mt-6 lg:mt-8">
+                <label className="block text-sm md:text-base lg:text-lg font-medium text-[rgb(var(--text))] mb-2 md:mb-3">Age Restriction</label>
                 <select
                   value={ageRestriction}
                   onChange={(e) => setAgeRestriction(e.target.value)}
-                  className="px-3 py-2 border border-[rgb(var(--border-color))] rounded-lg bg-[rgb(var(--bg))] text-[rgb(var(--text))] text-sm focus:outline-none focus:ring-2 focus:ring-[rgb(var(--brand))]"
+                  className="px-3 py-2 md:px-4 md:py-3 lg:px-5 lg:py-4 border border-[rgb(var(--border-color))] rounded-lg md:rounded-xl bg-[rgb(var(--bg))] text-[rgb(var(--text))] text-sm md:text-base lg:text-lg focus:outline-none focus:ring-2 focus:ring-[rgb(var(--brand))]"
                 >
                   {ageOptions.map(age => (
                     <option key={age} value={age}>{age}</option>
