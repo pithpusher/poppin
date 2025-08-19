@@ -167,9 +167,9 @@ export default function Pricing() {
               )}
               
               <div className="text-center mb-5">
-                <h3 className="text-base font-bold text-[rgb(var(--text))] mb-2">{plan.name}</h3>
+                <h3 className="text-lg font-bold text-[rgb(var(--text))] mb-2">{plan.name}</h3>
                 <p className={`text-sm ${tokens.muted} mb-3`}>{plan.desc}</p>
-                <div className="text-xl font-bold text-[rgb(var(--text))] mb-4">{plan.price}</div>
+                <div className="text-2xl font-bold text-[rgb(var(--text))] mb-4">{plan.price}</div>
               </div>
 
               <ul className="space-y-2.5 mb-5">
