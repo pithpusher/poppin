@@ -261,7 +261,7 @@ export default function MapPage() {
         <div className="min-h-screen bg-[rgb(var(--bg))]">
             {/* Header with Post Event Button */}
             <div className="relative z-10 bg-[rgb(var(--bg))] border-b border-[rgb(var(--border-color))]/20">
-                <div className="max-w-6xl mx-auto px-4 py-4 md:py-6 lg:py-8">
+                <div className="max-w-7xl mx-auto px-4 py-4 md:py-6 lg:py-8">
                     <div className="flex items-center justify-between">
                         <div>
                             <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-[rgb(var(--text))]">Event Map</h1>
@@ -329,7 +329,7 @@ export default function MapPage() {
                 />
             </div>
 
-            <div className="grid md:grid-cols-[2fr,1fr] gap-6 max-w-6xl mx-auto px-4 py-6">
+            <div className="grid md:grid-cols-[2fr,1fr] gap-6 max-w-7xl mx-auto px-4 py-6">
               <div className="relative w-full h-[52.5vh] rounded-2xl token-border overflow-hidden">
                 {error && (
                   <div className="absolute top-4 left-4 z-10 text-yellow-400 px-3 py-2 text-sm font-bold">

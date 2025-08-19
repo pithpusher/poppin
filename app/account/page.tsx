@@ -102,7 +102,7 @@ export default function AccountPage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-[rgb(var(--bg))] py-12 px-4">
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-7xl mx-auto">
           <div className="text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[rgb(var(--brand))] mx-auto"></div>
             <p className="mt-4 text-[rgb(var(--muted))]">Loading account...</p>
@@ -115,7 +115,7 @@ export default function AccountPage() {
   if (!user) {
     return (
       <div className="min-h-screen bg-[rgb(var(--bg))] py-12 px-4">
-        <div className="max-w-4xl mx-auto text-center">
+        <div className="max-w-7xl mx-auto text-center">
           <h1 className="text-2xl font-bold text-[rgb(var(--text))] mb-4">
             Please sign in to access your account
           </h1>
@@ -132,7 +132,7 @@ export default function AccountPage() {
 
   return (
     <div className="min-h-screen bg-[rgb(var(--bg))] py-8 px-4">
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-3xl md:text-4xl font-bold mb-4">My Account</h1>

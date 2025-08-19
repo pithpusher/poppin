@@ -121,7 +121,7 @@ export default function OrganizerDetailPage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-[rgb(var(--bg))] py-12 px-4">
-        <div className="max-w-6xl mx-auto">
+        <div className="max-w-7xl mx-auto">
           <div className="text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[rgb(var(--brand))] mx-auto"></div>
             <p className="mt-4 text-[rgb(var(--muted))]">Loading organizer...</p>
@@ -134,7 +134,7 @@ export default function OrganizerDetailPage() {
   if (error || !organizer) {
     return (
       <div className="min-h-screen bg-[rgb(var(--bg))] py-12 px-4">
-        <div className="max-w-6xl mx-auto text-center">
+        <div className="max-w-7xl mx-auto text-center">
           <FaceFrownIcon className="w-12 h-12 mx-auto text-[rgb(var(--muted))] mb-4" />
           <h1 className="text-2xl font-bold text-[rgb(var(--text))] mb-4">
             {error || 'Organizer not found'}
@@ -155,7 +155,7 @@ export default function OrganizerDetailPage() {
 
   return (
     <div className="min-h-screen bg-[rgb(var(--bg))] py-8 px-4">
-      <div className="max-w-6xl mx-auto">
+      <div className="max-w-7xl mx-auto">
         {/* Back Button */}
         <div className="mb-6">
           <Link

@@ -34,7 +34,7 @@ export default function FeaturedEvents() {
   if (!rows.length) return null;
 
   return (
-    <section className="max-w-6xl mx-auto px-4 my-12 md:my-16 lg:my-20">
+    <section className="max-w-7xl mx-auto px-4 my-12 md:my-16 lg:my-20">
       <div className="flex items-center justify-between mb-4 md:mb-6">
         <h2 className="text-xl md:text-2xl lg:text-3xl font-semibold">Featured this week</h2>
         <Link href="/map" className="text-sm md:text-base text-blue-400 underline html.light:text-blue-600 hover:text-blue-300 transition-colors">See all</Link>

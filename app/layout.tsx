@@ -23,7 +23,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <LocationSearchProvider>
             {/* Top bar */}
             <header className="sticky top-0 z-20 token-border-b bg-[rgb(var(--bg))]/80 backdrop-blur light:bg-white/80">
-              <div className="mx-auto max-w-6xl px-4 py-3 flex items-center justify-between">
+              <div className="mx-auto max-w-7xl px-4 py-3 flex items-center justify-between">
                 {/* Logo */}
                 <Link href="/" className="flex items-center flex-shrink-0">
                   <Logo width={70} height={22} className="text-[rgb(var(--text))]" />
@@ -51,7 +51,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <BottomNav />
 
             <footer className="hidden sm:block token-border-t">
-              <div className="mx-auto max-w-6xl px-4 py-4 text-sm text-zinc-400 light:text-zinc-600 flex justify-between">
+              <div className="mx-auto max-w-7xl px-4 py-4 text-sm text-zinc-400 light:text-zinc-600 flex justify-between">
                 <span>&copy; {new Date().getFullYear()} Poppin</span>
                 <span>Made for your city</span>
               </div>

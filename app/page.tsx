@@ -13,7 +13,7 @@ export default function HomePage() {
           py-12 sm:py-16 md:py-20 lg:py-24
         `}
       >
-        <div className="max-w-6xl mx-auto px-4 text-center">
+        <div className="max-w-7xl mx-auto px-4 text-center">
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight">
             Find what&apos;s poppin&apos;.
           </h1>
@@ -39,7 +39,7 @@ export default function HomePage() {
       </section>
 
       {/* Mini Map */}
-      <section className="max-w-6xl mx-auto px-4 my-18 md:my-24">
+      <section className="max-w-7xl mx-auto px-4 my-18 md:my-24">
         <MiniMap />
         <div className="text-center mt-8 md:mt-12">
           <Link
@@ -55,7 +55,7 @@ export default function HomePage() {
       <FeaturedEvents />
       
       {/* Conversion CTA - Become an Organizer */}
-      <section className="max-w-6xl mx-auto px-4 mt-16 md:mt-20 lg:mt-24 mb-20 md:mb-24">
+      <section className="max-w-7xl mx-auto px-4 mt-16 md:mt-20 lg:mt-24 mb-20 md:mb-24">
         <div className="bg-[rgb(var(--panel))] token-border rounded-2xl md:rounded-3xl p-8 md:p-12 lg:p-16 text-center">
           <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-[rgb(var(--text))] mb-4 md:mb-6">
             Have events to share?

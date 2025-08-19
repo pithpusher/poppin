@@ -70,7 +70,7 @@ export default function YardSalePage() {
 
   return (
     <div className="min-h-screen bg-[rgb(var(--bg))] py-8 px-4">
-      <div className="max-w-6xl mx-auto">
+      <div className="max-w-7xl mx-auto">
         {/* Back Button */}
         <div className="mb-6">
           <Link
@@ -167,7 +167,7 @@ export default function YardSalePage() {
             Everything you need to know about one-off event posting
           </p>
           
-          <div className="max-w-4xl mx-auto space-y-6">
+          <div className="max-w-7xl mx-auto space-y-6">
             <div className="bg-[rgb(var(--panel))] token-border rounded-xl p-6">
               <h3 className="text-lg font-semibold text-[rgb(var(--text))] mb-2">
                 How long do my event posts stay active?

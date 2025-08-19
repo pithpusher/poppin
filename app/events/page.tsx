@@ -223,7 +223,7 @@ export default function EventsPage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-[rgb(var(--bg))] py-12 px-4">
-        <div className="max-w-6xl mx-auto">
+        <div className="max-w-7xl mx-auto">
           <div className="text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[rgb(var(--brand))] mx-auto"></div>
             <p className="mt-4 text-[rgb(var(--muted))]">Loading events...</p>
@@ -235,7 +235,7 @@ export default function EventsPage() {
 
   return (
     <div className="min-h-screen bg-[rgb(var(--bg))] py-8 md:py-12 lg:py-16 px-4">
-      <div className="max-w-6xl mx-auto px-4 py-8 md:py-12">
+      <div className="max-w-7xl mx-auto px-4 py-8 md:py-12">
         <div className="text-center mb-8 md:mb-12">
           <FaceSmileIcon className="w-16 h-16 md:w-20 md:h-20 text-[rgb(var(--brand))] mx-auto mb-4 md:mb-6" />
           <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-4 md:mb-6">Discover What&apos;s Happening</h1>

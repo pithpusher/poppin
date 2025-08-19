@@ -15,7 +15,7 @@ export default function BottomNav(){
   const path = usePathname();
   return (
     <nav className="sm:hidden fixed bottom-0 inset-x-0 z-50 bg-[rgb(var(--bg))] backdrop-blur-md border-t border-[rgb(var(--border-color))]/20 safe-area-bottom">
-      <div className="max-w-6xl mx-auto px-2 flex justify-around h-14">
+      <div className="max-w-7xl mx-auto px-2 flex justify-around h-14">
         {items.map((it) => {
           const active = path === it.href || (it.href !== "/" && path.startsWith(it.href));
           return (
