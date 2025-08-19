@@ -33,11 +33,12 @@ export default function HamburgerMenu() {
   const menuItems = [
     { href: '/', label: 'Home' },
     { href: '/map', label: 'Map' },
+    { href: '/events', label: 'Browse Events' },
     { href: '/events/new', label: 'Post Event' },
     { href: '/organizer/apply', label: 'Host With Us' },
-    { href: '/auth', label: 'Sign In' },
+    { href: '/account', label: 'My Account' },
     { href: '/pricing', label: 'Pricing' },
-    { href: '/moderation', label: 'Moderation' },
+    { href: '/auth', label: 'Sign In' },
   ];
 
   return (

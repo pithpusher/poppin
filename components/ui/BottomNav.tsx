@@ -1,11 +1,12 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { HomeIcon, MapPinIcon, CalendarIcon, UserIcon } from "@heroicons/react/24/outline";
+import { HomeIcon, MapPinIcon, PlusIcon, CalendarIcon, UserIcon } from "@heroicons/react/24/outline";
 
 const items = [
   { href: "/",       label: "Home", icon: HomeIcon },
   { href: "/map",    label: "Map", icon: MapPinIcon },
+  { href: "/events/new", label: "Post", icon: PlusIcon },
   { href: "/events", label: "Events", icon: CalendarIcon },
   { href: "/account",label: "Account", icon: UserIcon },
 ];
