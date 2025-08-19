@@ -260,7 +260,7 @@ export default function MapPage() {
     return (
         <div className="min-h-screen bg-[rgb(var(--bg))]">
             {/* Header with Post Event Button */}
-            <div className="relative z-10 bg-[rgb(var(--bg))] border-b border-[rgb(var(--border-color))]/20">
+            <div className="relative z-10 bg-[rgb(var(--bg))] border-b md:border-b-0 border-[rgb(var(--border-color))]/20">
                 <div className="max-w-7xl mx-auto px-4 py-4 md:py-6 lg:py-8">
                     <div className="flex items-center justify-between gap-4 md:gap-6">
                         {/* Left Column - Event Map Title */}
