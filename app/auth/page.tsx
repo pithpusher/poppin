@@ -194,112 +194,120 @@ export default function AuthPage() {
 
         {/* Why Choose Poppin? */}
         <div className="mb-12 md:mb-16 lg:mb-20">
-          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-[rgb(var(--text))] text-center mb-8 md:mb-12">Why Choose Poppin?</h2>
-          <p className={`text-base sm:text-lg md:text-xl ${tokens.muted} mb-6 md:mb-8 text-center`}>Join thousands of users who are already discovering and creating amazing events</p>
-          <div className="grid md:grid-cols-3 gap-6 md:gap-8">
-            <div className="text-center">
-              <FaceSmileIcon className="w-8 h-8 mx-auto text-[rgb(var(--muted))] mb-3" />
-              <div className="font-medium text-[rgb(var(--text))]">Discover Great Events</div>
-              <div className={`text-base sm:text-lg ${tokens.muted}`}>Concerts, classes, and hidden gems near you.</div>
-            </div>
-            <div className="text-center">
-              <CalendarIcon className="w-8 h-8 mx-auto text-[rgb(var(--muted))] mb-3" />
-              <div className="font-medium text-[rgb(var(--text))]">Create & Share</div>
-              <div className={`text-base sm:text-lg ${tokens.muted}`}>Post your event and get real turnout.</div>
-            </div>
-            <div className="text-center">
-              <UserGroupIcon className="w-8 h-8 mx-auto text-[rgb(var(--muted))] mb-3" />
-              <div className="font-medium text-[rgb(var(--text))]">Connect & Network</div>
-              <div className={`text-base sm:text-lg ${tokens.muted}`}>Find your crew, expand your circle.</div>
+          <div className="bg-[rgb(var(--panel))] backdrop-blur-sm border border-[rgb(var(--border-color))]/20 rounded-2xl md:rounded-3xl p-6 md:p-8">
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-[rgb(var(--text))] text-center mb-8 md:mb-12">Why Choose Poppin?</h2>
+            <p className={`text-base sm:text-lg md:text-xl ${tokens.muted} mb-6 md:mb-8 text-center`}>Join thousands of users who are already discovering and creating amazing events</p>
+            <div className="grid md:grid-cols-3 gap-6 md:gap-8">
+              <div className="text-center">
+                <FaceSmileIcon className="w-8 h-8 md:w-10 md:h-10 mx-auto text-[rgb(var(--muted))] mb-3 md:mb-4" />
+                <div className="font-medium text-[rgb(var(--text))] md:text-lg">Discover Great Events</div>
+                <div className={`text-base sm:text-lg ${tokens.muted} md:text-base`}>Concerts, classes, and hidden gems near you.</div>
+              </div>
+              <div className="text-center">
+                <CalendarIcon className="w-8 h-8 md:w-10 md:h-10 mx-auto text-[rgb(var(--muted))] mb-3 md:mb-4" />
+                <div className="font-medium text-[rgb(var(--text))] md:text-lg">Create & Share</div>
+                <div className={`text-base sm:text-lg ${tokens.muted} md:text-base`}>Post your event and get real turnout.</div>
+              </div>
+              <div className="text-center">
+                <UserGroupIcon className="w-8 h-8 md:w-10 md:h-10 mx-auto text-[rgb(var(--muted))] mb-3 md:mb-4" />
+                <div className="font-medium text-[rgb(var(--text))] md:text-lg">Connect & Network</div>
+                <div className={`text-base sm:text-lg ${tokens.muted} md:text-base`}>Find your crew, expand your circle.</div>
+              </div>
             </div>
           </div>
         </div>
 
         {/* Safe & Solid */}
-        <div className="mb-12">
-          <h2 className="text-2xl md:text-3xl font-bold text-[rgb(var(--text))] text-center mb-8">Safe & Solid</h2>
-          <p className={`text-base sm:text-lg ${tokens.muted} mb-6`}>
-            Your info stays locked down with top-grade security.
-          </p>
-          <div className="flex justify-center gap-4">
-            <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[rgb(var(--panel))] text-sm">
-              <LockClosedIcon className="w-4 h-4" /> Encrypted
-            </span>
-            <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[rgb(var(--panel))] text-sm">
-              <ShieldExclamationIcon className="w-4 h-4" /> Privacy first
-            </span>
-            <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[rgb(var(--panel))] text-sm">
-              <CheckBadgeIcon className="w-4 h-4" /> GDPR ready
-            </span>
+        <div className="mb-12 md:mb-16 lg:mb-20">
+          <div className="bg-[rgb(var(--panel))] backdrop-blur-sm border border-[rgb(var(--border-color))]/20 rounded-2xl md:rounded-3xl p-6 md:p-8">
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-[rgb(var(--text))] text-center mb-8 md:mb-12">Safe & Solid</h2>
+            <p className={`text-base sm:text-lg md:text-xl ${tokens.muted} mb-6 md:mb-8 text-center`}>
+              Your info stays locked down with top-grade security.
+            </p>
+            <div className="flex flex-col sm:flex-row justify-center gap-4 md:gap-6">
+              <span className="inline-flex items-center gap-2 px-3 py-1 md:px-4 md:py-2 rounded-full bg-[rgb(var(--bg))] text-sm md:text-base border border-[rgb(var(--border-color))]/20">
+                <LockClosedIcon className="w-4 h-4 md:w-5 md:h-5" /> Encrypted
+              </span>
+              <span className="inline-flex items-center gap-2 px-3 py-1 md:px-4 md:py-2 rounded-full bg-[rgb(var(--bg))] text-sm md:text-base border border-[rgb(var(--border-color))]/20">
+                <ShieldExclamationIcon className="w-4 h-4 md:w-5 md:h-5" /> Privacy first
+              </span>
+              <span className="inline-flex items-center gap-2 px-3 py-1 md:px-4 md:py-2 rounded-full bg-[rgb(var(--bg))] text-sm md:text-base border border-[rgb(var(--border-color))]/20">
+                <CheckBadgeIcon className="w-4 h-4 md:w-5 md:h-5" /> GDPR ready
+              </span>
+            </div>
           </div>
         </div>
 
         {/* Got Questions? */}
-        <div className="mb-12">
-          <h2 className="text-2xl md:text-3xl font-bold text-[rgb(var(--text))] text-center mb-8">Got Questions?</h2>
-          <p className={`text-base sm:text-lg ${tokens.muted} max-w-2xl mx-auto`}>
-            Everything you need to know about our pricing and plans
-          </p>
-          
-          <div className="grid gap-4 md:grid-cols-2">
-            <div className="bg-[rgb(var(--panel))] token-border rounded-xl p-5">
-              <h3 className="font-semibold mb-2">Can I change plans anytime?</h3>
-              <p className="text-sm text-[rgb(var(--muted))]">
-                Yes! You can upgrade or downgrade your plan at any time. Changes take effect immediately.
-              </p>
-            </div>
+        <div className="mb-12 md:mb-16 lg:mb-20">
+          <div className="bg-[rgb(var(--panel))] backdrop-blur-sm border border-[rgb(var(--border-color))]/20 rounded-2xl md:rounded-3xl p-6 md:p-8">
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-[rgb(var(--text))] text-center mb-8 md:mb-12">Got Questions?</h2>
+            <p className={`text-base sm:text-lg md:text-xl ${tokens.muted} max-w-2xl md:max-w-3xl mx-auto mb-6 md:mb-8 text-center`}>
+              Everything you need to know about our pricing and plans
+            </p>
             
-            <div className="bg-[rgb(var(--panel))] token-border rounded-xl p-5">
-              <h3 className="font-semibold mb-2">What happens if I exceed my event limit?</h3>
-              <p className="text-sm text-[rgb(var(--muted))]">
-                You'll be notified when you're close to your limit. Upgrade anytime to post more events.
-              </p>
+            <div className="grid gap-4 md:gap-6 md:grid-cols-2">
+              <div className="bg-[rgb(var(--bg))] token-border rounded-xl md:rounded-2xl p-4 md:p-6">
+                <h3 className="font-semibold mb-2 md:mb-3 text-base md:text-lg">Can I change plans anytime?</h3>
+                <p className="text-sm md:text-base text-[rgb(var(--muted))]">
+                  Yes! You can upgrade or downgrade your plan at any time. Changes take effect immediately.
+                </p>
+              </div>
+              
+              <div className="bg-[rgb(var(--bg))] token-border rounded-xl md:rounded-2xl p-4 md:p-6">
+                <h3 className="font-semibold mb-2 md:mb-3 text-base md:text-lg">What happens if I exceed my event limit?</h3>
+                <p className="text-sm md:text-base text-[rgb(var(--muted))]">
+                  You'll be notified when you're close to your limit. Upgrade anytime to post more events.
+                </p>
+              </div>
+              
+              <div className="bg-[rgb(var(--bg))] token-border rounded-xl md:rounded-2xl p-4 md:p-6">
+                <h3 className="font-semibold mb-2 md:mb-3 text-base md:text-lg">Do you offer refunds?</h3>
+                <p className="text-sm md:text-base text-[rgb(var(--muted))]">
+                  We offer a 30-day money-back guarantee. If you're not satisfied, we'll refund your subscription.
+                </p>
+              </div>
+              
+              <div className="bg-[rgb(var(--bg))] token-border rounded-xl md:rounded-2xl p-4 md:p-6">
+                <h3 className="font-semibold mb-2 md:mb-3 text-base md:text-lg">Is there a setup fee?</h3>
+                <p className="text-sm md:text-base text-[rgb(var(--muted))]">
+                  No setup fees! Just pay your monthly subscription and start posting events immediately.
+                </p>
+              </div>
             </div>
-            
-            <div className="bg-[rgb(var(--panel))] token-border rounded-xl p-5">
-              <h3 className="font-semibold mb-2">Do you offer refunds?</h3>
-              <p className="text-sm text-[rgb(var(--muted))]">
-                We offer a 30-day money-back guarantee. If you're not satisfied, we'll refund your subscription.
-              </p>
-            </div>
-            
-            <div className="bg-[rgb(var(--panel))] token-border rounded-xl p-5">
-              <h3 className="font-semibold mb-2">Is there a setup fee?</h3>
-              <p className="text-sm text-[rgb(var(--muted))]">
-                No setup fees! Just pay your monthly subscription and start posting events immediately.
-              </p>
-            </div>
-          </div>
 
-          <div className="text-center mt-6">
-            <Link
-              href="mailto:sales@poppin.com"
-              className="inline-flex items-center gap-2 px-4 py-2 bg-[rgb(var(--brand))] text-white rounded-xl text-sm font-medium hover:bg-[rgb(var(--brand))]/90 transition-colors"
-            >
-              Contact Sales
-            </Link>
+            <div className="text-center mt-6 md:mt-8">
+              <Link
+                href="mailto:sales@poppin.com"
+                className="inline-flex items-center gap-2 px-4 py-2 md:px-6 md:py-3 bg-[rgb(var(--brand))] text-white rounded-xl md:rounded-2xl text-sm md:text-base font-medium hover:bg-[rgb(var(--brand))]/90 transition-colors"
+              >
+                Contact Sales
+              </Link>
+            </div>
           </div>
         </div>
 
         {/* Ready to roll? */}
         <div className="text-center">
-          <h2 className="text-2xl md:text-3xl font-bold text-[rgb(var(--text))] mb-4">Ready to roll?</h2>
-          <p className={`text-base sm:text-lg ${tokens.muted} mb-6`}>
-            Join the locals already finding and sharing what's poppin.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Link
-              href="/auth/sign-in"
-              className="inline-flex items-center justify-center rounded-xl px-4 py-2 bg-brand text-white text-sm font-medium hover:bg-brand/90 transition-colors"
-            >
-              Sign Up
-            </Link>
-            <Link
-              href="/"
-              className="inline-flex items-center justify-center rounded-xl px-4 py-2 border border-[rgb(var(--border))] text-[rgb(var(--text))] text-sm font-medium hover:bg-[rgb(var(--panel))] transition-colors"
-            >
-              Learn More
-            </Link>
+          <div className="bg-[rgb(var(--panel))] backdrop-blur-sm border border-[rgb(var(--border-color))]/20 rounded-2xl md:rounded-3xl p-6 md:p-8">
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-[rgb(var(--text))] mb-4 md:mb-6">Ready to roll?</h2>
+            <p className={`text-base sm:text-lg md:text-xl ${tokens.muted} mb-6 md:mb-8`}>
+              Join the locals already finding and sharing what's poppin.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-3 md:gap-4 justify-center">
+              <Link
+                href="/auth/sign-in"
+                className="inline-flex items-center justify-center rounded-xl md:rounded-2xl px-4 py-2 md:px-6 md:py-3 bg-brand text-white text-sm md:text-base font-medium hover:bg-brand/90 transition-colors"
+              >
+                Sign Up
+              </Link>
+              <Link
+                href="/"
+                className="inline-flex items-center justify-center rounded-xl md:rounded-2xl px-4 py-2 md:px-6 md:py-3 border border-[rgb(var(--border))] text-[rgb(var(--text))] text-sm md:text-base font-medium hover:bg-[rgb(var(--panel))] transition-colors"
+              >
+                Learn More
+              </Link>
+            </div>
           </div>
         </div>
 
