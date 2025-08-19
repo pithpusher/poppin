@@ -269,9 +269,9 @@ export default function MapPage() {
                             <p className={`text-base sm:text-lg md:text-xl ${tokens.muted}`}>Discover events near you</p>
                         </div>
                         
-                        {/* Middle Column - Search Bar */}
-                        <div className="flex-1 max-w-md md:max-w-lg lg:max-w-xl mx-auto">
-                            <div className="relative">
+                        {/* Middle Column - Search Bar (Hidden on Mobile) */}
+                        <div className="hidden md:flex flex-1 max-w-md md:max-w-lg lg:max-w-xl mx-auto">
+                            <div className="relative w-full">
                                 <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-[rgb(var(--muted))]" />
                                 <input
                                     type="text"
@@ -312,6 +312,29 @@ export default function MapPage() {
 
             {/* Filter Bar */}
             <div className="sticky top-0 z-10 bg-[rgb(var(--bg))] border-b border-[rgb(var(--border-color))]/20">
+                {/* Search Section - Mobile Only */}
+                <div className="md:hidden px-4 py-4">
+                    <div className="max-w-md mx-auto">
+                        <div className="relative">
+                            <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-[rgb(var(--muted))]" />
+                            <input
+                                type="text"
+                                placeholder="Search events, venues, or locations..."
+                                className="w-full pl-10 pr-4 py-3 bg-[rgb(var(--panel))] text-[rgb(var(--text))] rounded-lg token-border focus:outline-none focus:ring-2 focus:ring-[rgb(var(--brand))] text-sm"
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                                onKeyPress={(e) => e.key === 'Enter' && handleMapSearch()}
+                            />
+                            <button
+                                onClick={handleMapSearch}
+                                className="absolute right-2 top-1/2 transform -translate-y-1/2 px-3 py-1.5 bg-[rgb(var(--brand))] text-white rounded-md text-xs font-medium hover:bg-[rgb(var(--brand))]/90 transition-colors"
+                            >
+                                Search
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
                 {/* Filter Bar - Full Width */}
                 <FilterBar
                     range={range}
