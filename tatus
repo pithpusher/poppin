@@ -1,0 +1,5 @@
+[33mb049a66[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m Update homepage hero: full-bleed map background, responsive button layout, improved spacing
+[33m0489e31[m Fix search bar width: remove max-width constraints and centering to allow flex-1 expansion
+[33m9658324[m Make header search bar wider on tablet and desktop for better space utilization
+[33m33de4e0[m Remove bottom border from Event Map header on desktop to eliminate extra border when search bar is in header
+[33m12e516d[m Make search bar responsive: header placement on tablet/desktop, mobile placement below filter bar

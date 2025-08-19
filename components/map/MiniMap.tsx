@@ -24,7 +24,12 @@ type Ev = {
   age_restriction?: string | null;
 };
 
-export default function MiniMap() {
+interface MiniMapProps {
+  className?: string;
+  showFullMapButton?: boolean;
+}
+
+export default function MiniMap({ className = "", showFullMapButton = true }: MiniMapProps) {
   const mapEl = useRef<HTMLDivElement>(null);
   const mapRef = useRef<mapboxgl.Map | null>(null);
   const markersRef = useRef<Map<string, mapboxgl.Marker>>(new Map());
@@ -118,22 +123,24 @@ bounds.extend([ev.lng!, ev.lat!]);
   }, [events]);
 
   return (
-    <div className="relative w-full h-[45vh] md:h-[50vh] lg:h-[55vh] rounded-2xl md:rounded-3xl token-border overflow-hidden">
+    <div className={`relative w-full overflow-hidden ${className}`}>
       {error && (
         <div className="absolute top-4 left-4 z-10 bg-yellow-500/90 text-white px-3 py-2 md:px-4 md:py-3 rounded-lg text-sm md:text-base backdrop-blur">
           {error}
         </div>
       )}
       <div ref={mapEl} className="w-full h-full" />
-      <Link
-        href="/map"
-        className="absolute bottom-2 md:bottom-4 left-1/2 transform -translate-x-1/2 rounded-xl md:rounded-2xl px-3 py-2 md:px-4 md:py-3 text-sm md:text-base shadow
-                   token-border
-                   bg-[rgb(var(--panel))]/80 backdrop-blur
-                   hover:bg-[rgb(var(--panel))] transition-all duration-200 hover:scale-105"
-      >
-        View Full Map
-      </Link>
+      {showFullMapButton && (
+        <Link
+          href="/map"
+          className="absolute bottom-2 md:bottom-4 left-1/2 transform -translate-x-1/2 rounded-xl md:rounded-2xl px-3 py-2 md:px-4 md:py-3 text-sm md:text-base shadow
+                     token-border
+                     bg-[rgb(var(--panel))]/80 backdrop-blur
+                     hover:bg-[rgb(var(--panel))] transition-all duration-200 hover:scale-105"
+        >
+          View Full Map
+        </Link>
+      )}
     </div>
   );
 }

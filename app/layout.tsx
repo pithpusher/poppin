@@ -33,7 +33,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 <div className="absolute left-1/2 transform -translate-x-1/2">
                   <LocationSearchBar 
                     placeholder="Search for a location..."
-                    className="w-52"
+                    className="w-64 sm:w-80 md:w-96 lg:w-[28rem] xl:w-[32rem]"
                   />
                 </div>
                 
