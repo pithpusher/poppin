@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { MagnifyingGlassIcon, FunnelIcon, MapPinIcon, CalendarIcon, ClockIcon, FaceSmileIcon, HeartIcon, ShareIcon } from '@heroicons/react/24/outline';
+import { MagnifyingGlassIcon, FunnelIcon, MapPinIcon, CalendarIcon, ClockIcon, FaceSmileIcon, HeartIcon, ShareIcon, MapIcon, PlusIcon } from '@heroicons/react/24/outline';
 import { supabase } from '@/lib/supabaseClient';
 import { tokens } from '@/components/tokens';
 
@@ -20,19 +20,26 @@ type Event = {
   event_type: string | null;
   age_restriction: string | null;
   organizer_name?: string;
+  lat?: number | null;
+  lng?: number | null;
 };
+
+type Range = "today" | "week" | "month" | "all";
 
 export default function EventsPage() {
   const [events, setEvents] = useState<Event[]>([]);
   const [filteredEvents, setFilteredEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedType, setSelectedType] = useState<string>('all');
-  const [selectedDate, setSelectedDate] = useState<string>('all');
+  const [range, setRange] = useState<Range>("all");
+  const [onlyFree, setOnlyFree] = useState(false);
+  const [startDate, setStartDate] = useState<string | null>(null);
+  const [endDate, setEndDate] = useState<string | null>(null);
+  const [eventTypes, setEventTypes] = useState<string[]>([]);
+  const [ageRestriction, setAgeRestriction] = useState<string>("All Ages");
   const [showFilters, setShowFilters] = useState(false);
 
-  const eventTypes = [
-    'all',
+  const eventTypeOptions = [
     'Music',
     'Food & Drink',
     'Nightlife',
@@ -44,11 +51,10 @@ export default function EventsPage() {
     'Shopping & Sales'
   ];
 
-  const dateFilters = [
-    { value: 'all', label: 'All Dates' },
-    { value: 'today', label: 'Today' },
-    { value: 'week', label: 'This Week' },
-    { value: 'month', label: 'This Month' }
+  const ageOptions = [
+    'All Ages',
+    '18+',
+    '21+'
   ];
 
   useEffect(() => {
@@ -57,7 +63,7 @@ export default function EventsPage() {
 
   useEffect(() => {
     filterEvents();
-  }, [events, searchTerm, selectedType, selectedDate]);
+  }, [events, searchTerm, range, onlyFree, startDate, endDate, eventTypes, ageRestriction]);
 
   async function loadEvents() {
     try {
@@ -69,7 +75,7 @@ export default function EventsPage() {
         .select(`
           id, title, description, start_at, end_at, venue_name, venue_address,
           image_url, is_free, price_cents, event_type, age_restriction,
-          organizers(name)
+          organizers(name), lat, lng
         `)
         .eq('status', 'approved')
         .gte('start_at', now)
@@ -98,45 +104,100 @@ export default function EventsPage() {
 
     // Search filter
     if (searchTerm) {
-      filtered = filtered.filter(event =>
-        event.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        event.description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        event.venue_name?.toLowerCase().includes(searchTerm.toLowerCase())
+      const term = searchTerm.toLowerCase();
+      filtered = filtered.filter(event => 
+        event.title.toLowerCase().includes(term) ||
+        event.description.toLowerCase().includes(term) ||
+        event.venue_name?.toLowerCase().includes(term) ||
+        event.event_type?.toLowerCase().includes(term)
       );
     }
 
-    // Type filter
-    if (selectedType !== 'all') {
-      filtered = filtered.filter(event => event.event_type === selectedType);
-    }
-
-    // Date filter
-    if (selectedDate !== 'all') {
+    // Date range filter
+    if (range !== "all") {
       const now = new Date();
       const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-      const weekEnd = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000);
-      const monthEnd = new Date(today.getFullYear(), now.getMonth() + 1, 0);
+      
+      switch (range) {
+        case "today":
+          const tomorrow = new Date(today);
+          tomorrow.setDate(tomorrow.getDate() + 1);
+          filtered = filtered.filter(event => {
+            const eventDate = new Date(event.start_at);
+            return eventDate >= today && eventDate < tomorrow;
+          });
+          break;
+        case "week":
+          const nextWeek = new Date(today);
+          nextWeek.setDate(nextWeek.getDate() + 7);
+          filtered = filtered.filter(event => {
+            const eventDate = new Date(event.start_at);
+            return eventDate >= today && eventDate < nextWeek;
+          });
+          break;
+        case "month":
+          const nextMonth = new Date(today);
+          nextMonth.setMonth(nextMonth.getMonth() + 1);
+          filtered = filtered.filter(event => {
+            const eventDate = new Date(event.start_at);
+            return eventDate >= today && eventDate < nextMonth;
+          });
+          break;
+      }
+    }
 
+    // Custom date range filter
+    if (startDate && endDate) {
       filtered = filtered.filter(event => {
         const eventDate = new Date(event.start_at);
-        switch (selectedDate) {
-          case 'today':
-            return eventDate >= today && eventDate < new Date(today.getTime() + 24 * 60 * 60 * 1000);
-          case 'week':
-            return eventDate >= today && eventDate < weekEnd;
-          case 'month':
-            return eventDate >= today && eventDate < monthEnd;
-          default:
-            return true;
-        }
+        const start = new Date(startDate);
+        const end = new Date(endDate);
+        return eventDate >= start && eventDate <= end;
       });
+    }
+
+    // Free events filter
+    if (onlyFree) {
+      filtered = filtered.filter(event => event.is_free);
+    }
+
+    // Event type filter
+    if (eventTypes.length > 0) {
+      filtered = filtered.filter(event => 
+        event.event_type && eventTypes.includes(event.event_type)
+      );
+    }
+
+    // Age restriction filter
+    if (ageRestriction !== "All Ages") {
+      filtered = filtered.filter(event => 
+        event.age_restriction === ageRestriction
+      );
     }
 
     setFilteredEvents(filtered);
   }
 
-  function formatDate(dateString: string) {
-    const date = new Date(dateString);
+  function clearFilters() {
+    setSearchTerm('');
+    setRange("all");
+    setOnlyFree(false);
+    setStartDate(null);
+    setEndDate(null);
+    setEventTypes([]);
+    setAgeRestriction("All Ages");
+  }
+
+  function toggleEventType(type: string) {
+    setEventTypes(prev => 
+      prev.includes(type) 
+        ? prev.filter(t => t !== type)
+        : [...prev, type]
+    );
+  }
+
+  function formatDate(isoString: string) {
+    const date = new Date(isoString);
     return date.toLocaleDateString('en-US', {
       weekday: 'short',
       month: 'short',
@@ -150,6 +211,13 @@ export default function EventsPage() {
     if (isFree) return 'Free';
     if (priceCents) return `$${(priceCents / 100).toFixed(2)}`;
     return 'Price TBD';
+  }
+
+  function getMapUrl(event: Event) {
+    if (event.lat && event.lng) {
+      return `/map?lat=${event.lat}&lng=${event.lng}&query=${encodeURIComponent(event.title)}`;
+    }
+    return '/map';
   }
 
   if (loading) {
@@ -174,127 +242,195 @@ export default function EventsPage() {
           <p className={`text-base sm:text-lg ${tokens.muted} max-w-2xl mx-auto`}>Your city's best events, all in one spot.</p>
         </div>
 
-        {/* Search and Filters */}
+        {/* Header with Search and Filters */}
         <div className="mb-8">
-          <div className="flex flex-col sm:flex-row gap-4 mb-4">
-            {/* Search Bar */}
-            <div className="flex-1 relative">
-              <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-[rgb(var(--muted))]" />
-              <input
-                type="text"
-                placeholder="Search events, venues, or descriptions..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 rounded-xl bg-[rgb(var(--panel))] text-[rgb(var(--text))] token-border focus:outline-none focus:ring-2 focus:ring-[rgb(var(--brand))]"
-              />
+          <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
+            <div className="flex-1">
+              <div className="relative">
+                <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-[rgb(var(--muted))]" />
+                <input
+                  type="text"
+                  placeholder="Search events..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="w-full pl-10 pr-4 py-2 border border-[rgb(var(--border-color))] rounded-xl bg-[rgb(var(--bg))] text-[rgb(var(--text))] focus:outline-none focus:ring-2 focus:ring-[rgb(var(--brand))]"
+                />
+              </div>
             </div>
-
-            {/* Post Event Button */}
-            <Link
-              href="/events/new"
-              className="inline-flex items-center gap-2 px-4 py-2 bg-[rgb(var(--brand))] text-white rounded-xl text-sm font-medium hover:bg-[rgb(var(--brand))]/90 transition-colors"
-            >
-              Post Event
-            </Link>
-
-            {/* Filters Toggle */}
-            <button
-              onClick={() => setShowFilters(!showFilters)}
-              className="flex items-center gap-2 px-4 py-2 rounded-xl bg-[rgb(var(--panel))] text-[rgb(var(--text))] token-border hover:bg-[rgb(var(--bg))] transition-colors text-sm"
-            >
-              <FunnelIcon className="w-5 h-5" />
-              Filters
-            </button>
+            
+            <div className="flex gap-2">
+              <button
+                onClick={() => setShowFilters(!showFilters)}
+                className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-colors ${
+                  showFilters 
+                    ? 'bg-[rgb(var(--brand))] text-white' 
+                    : 'bg-[rgb(var(--panel))] text-[rgb(var(--text))] border border-[rgb(var(--border-color))]'
+                }`}
+              >
+                <FunnelIcon className="w-4 h-4" />
+                Filters
+              </button>
+              
+              <Link
+                href="/map"
+                className="flex items-center gap-2 px-4 py-2 bg-[rgb(var(--panel))] text-[rgb(var(--text))] border border-[rgb(var(--border-color))] rounded-xl text-sm font-medium hover:bg-[rgb(var(--bg))] transition-colors"
+              >
+                <MapIcon className="w-4 h-4" />
+                Map View
+              </Link>
+            </div>
           </div>
 
-          {/* Filters Panel */}
+          {/* Advanced Filters */}
           {showFilters && (
-            <div className="bg-[rgb(var(--panel))] token-border rounded-xl p-4 mb-4">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {/* Event Type Filter */}
+            <div className="mt-6 p-6 bg-[rgb(var(--panel))] token-border rounded-xl">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                {/* Date Range */}
                 <div>
-                  <label className="block text-sm font-medium text-[rgb(var(--text))] mb-2">
-                    Event Type
-                  </label>
+                  <label className="block text-sm font-medium text-[rgb(var(--text))] mb-2">Date Range</label>
                   <select
-                    value={selectedType}
-                    onChange={(e) => setSelectedType(e.target.value)}
-                    className="w-full px-3 py-2 rounded-lg bg-[rgb(var(--bg))] text-[rgb(var(--text))] token-border"
+                    value={range}
+                    onChange={(e) => setRange(e.target.value as Range)}
+                    className="w-full px-3 py-2 border border-[rgb(var(--border-color))] rounded-lg bg-[rgb(var(--bg))] text-[rgb(var(--text))] text-sm focus:outline-none focus:ring-2 focus:ring-[rgb(var(--brand))]"
                   >
-                    {eventTypes.map(type => (
-                      <option key={type} value={type}>
-                        {type === 'all' ? 'All Types' : type}
-                      </option>
-                    ))}
+                    <option value="all">All Dates</option>
+                    <option value="today">Today</option>
+                    <option value="week">This Week</option>
+                    <option value="month">This Month</option>
                   </select>
                 </div>
 
-                {/* Date Filter */}
+                {/* Custom Date Range */}
                 <div>
-                  <label className="block text-sm font-medium text-[rgb(var(--text))] mb-2">
-                    Date Range
-                  </label>
-                  <select
-                    value={selectedDate}
-                    onChange={(e) => setSelectedDate(e.target.value)}
-                    className="w-full px-3 py-2 rounded-lg bg-[rgb(var(--bg))] text-[rgb(var(--text))] token-border"
-                  >
-                    {dateFilters.map(filter => (
-                      <option key={filter.value} value={filter.value}>
-                        {filter.label}
-                      </option>
-                    ))}
-                  </select>
+                  <label className="block text-sm font-medium text-[rgb(var(--text))] mb-2">Custom Start Date</label>
+                  <input
+                    type="date"
+                    value={startDate || ''}
+                    onChange={(e) => setStartDate(e.target.value)}
+                    className="w-full px-3 py-2 border border-[rgb(var(--border-color))] rounded-lg bg-[rgb(var(--bg))] text-[rgb(var(--text))] text-sm focus:outline-none focus:ring-2 focus:ring-[rgb(var(--brand))]"
+                  />
                 </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-[rgb(var(--text))] mb-2">Custom End Date</label>
+                  <input
+                    type="date"
+                    value={endDate || ''}
+                    onChange={(e) => setEndDate(e.target.value)}
+                    className="w-full px-3 py-2 border border-[rgb(var(--border-color))] rounded-lg bg-[rgb(var(--bg))] text-[rgb(var(--text))] text-sm focus:outline-none focus:ring-2 focus:ring-[rgb(var(--brand))]"
+                  />
+                </div>
+
+                {/* Free Events Toggle */}
+                <div className="flex items-center">
+                  <label className="flex items-center gap-2 text-sm font-medium text-[rgb(var(--text))] cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={onlyFree}
+                      onChange={(e) => setOnlyFree(e.target.checked)}
+                      className="rounded border-[rgb(var(--border-color))] text-[rgb(var(--brand))] focus:ring-[rgb(var(--brand))]"
+                    />
+                    Free Events Only
+                  </label>
+                </div>
+              </div>
+
+              {/* Event Types */}
+              <div className="mt-4">
+                <label className="block text-sm font-medium text-[rgb(var(--text))] mb-2">Event Types</label>
+                <div className="flex flex-wrap gap-2">
+                  {eventTypeOptions.map(type => (
+                    <button
+                      key={type}
+                      onClick={() => toggleEventType(type)}
+                      className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${
+                        eventTypes.includes(type)
+                          ? 'bg-[rgb(var(--brand))] text-white'
+                          : 'bg-[rgb(var(--bg))] text-[rgb(var(--text))] border border-[rgb(var(--border-color))] hover:bg-[rgb(var(--panel))]'
+                      }`}
+                    >
+                      {type}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Age Restriction */}
+              <div className="mt-4">
+                <label className="block text-sm font-medium text-[rgb(var(--text))] mb-2">Age Restriction</label>
+                <select
+                  value={ageRestriction}
+                  onChange={(e) => setAgeRestriction(e.target.value)}
+                  className="px-3 py-2 border border-[rgb(var(--border-color))] rounded-lg bg-[rgb(var(--bg))] text-[rgb(var(--text))] text-sm focus:outline-none focus:ring-2 focus:ring-[rgb(var(--brand))]"
+                >
+                  {ageOptions.map(age => (
+                    <option key={age} value={age}>{age}</option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Clear Filters */}
+              <div className="mt-4 flex justify-end">
+                <button
+                  onClick={clearFilters}
+                  className="px-4 py-2 text-sm text-[rgb(var(--muted))] hover:text-[rgb(var(--text))] transition-colors"
+                >
+                  Clear All Filters
+                </button>
               </div>
             </div>
           )}
         </div>
 
         {/* Results Count */}
-        <div className="mb-6">
-          <p className="text-[rgb(var(--muted))]">
-            {filteredEvents.length} event{filteredEvents.length !== 1 ? 's' : ''} found
-          </p>
+        <div className="mb-6 flex items-center justify-between">
+          <div className="text-sm text-[rgb(var(--muted))]">
+            {loading ? 'Loading...' : `${filteredEvents.length} event${filteredEvents.length !== 1 ? 's' : ''} found`}
+          </div>
+          
+          {/* Post Event Button */}
+          <Link
+            href="/events/new"
+            className="inline-flex items-center gap-2 px-4 py-2 bg-[rgb(var(--brand))] text-white rounded-xl text-sm font-medium hover:bg-[rgb(var(--brand))]/90 transition-colors"
+          >
+            <PlusIcon className="w-4 h-4" />
+            Post Event
+          </Link>
         </div>
 
         {/* Events Grid */}
-        {filteredEvents.length === 0 && (
+        {loading ? (
           <div className="text-center py-12">
-            <FaceSmileIcon className="w-10 h-10 mx-auto text-[rgb(var(--muted))] mb-4" />
-            <h3 className="text-lg font-semibold mb-2">No events yet.</h3>
-            <p className={`text-base sm:text-lg ${tokens.muted} mb-6`}>Tweak your filters and try again.</p>
-            <Link
-              href="/events/new"
-              className="inline-flex items-center rounded-xl px-4 py-2 bg-brand text-white text-sm font-medium hover:bg-brand/90 transition-colors"
-            >
-              Post Your Event
-            </Link>
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[rgb(var(--brand))] mx-auto mb-4"></div>
+            <p className="text-[rgb(var(--muted))]">Loading events...</p>
           </div>
-        )}
-        {filteredEvents.length === 0 && searchTerm && (
+        ) : filteredEvents.length === 0 ? (
           <div className="text-center py-12">
-            <MagnifyingGlassIcon className="w-10 h-10 mx-auto text-[rgb(var(--muted))] mb-4" />
-            <h3 className="text-lg font-semibold mb-2">No events found</h3>
-            <p className={`text-base sm:text-lg ${tokens.muted} mb-6`}>Try adjusting your search or filters to find more events.</p>
-            <div className="bg-[rgb(var(--panel))] rounded-xl p-6 max-w-md mx-auto">
-              <h4 className="font-semibold mb-2">Hosting something?</h4>
-              <p className={`text-base sm:text-lg ${tokens.muted} mb-4`}>Post it here and get seen by thousands nearby.</p>
+            <FaceSmileIcon className="w-16 h-16 text-[rgb(var(--muted))] mx-auto mb-4" />
+            <h3 className="text-lg font-semibold text-[rgb(var(--text))] mb-2">No events found</h3>
+            <p className={`text-base sm:text-lg ${tokens.muted} mb-6 max-w-2xl mx-auto`}>
+              Try adjusting your filters or search terms to find more events.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-3 justify-center">
+              <button
+                onClick={clearFilters}
+                className="px-4 py-2 bg-[rgb(var(--brand))] text-white rounded-xl text-sm font-medium hover:bg-[rgb(var(--brand))]/90 transition-colors"
+              >
+                Clear Filters
+              </button>
               <Link
                 href="/events/new"
-                className="inline-flex items-center rounded-xl px-4 py-2 bg-brand text-white text-sm font-medium hover:bg-brand/90 transition-colors"
+                className="px-4 py-2 border border-[rgb(var(--border-color))] text-[rgb(var(--text))] rounded-xl text-sm font-medium hover:bg-[rgb(var(--panel))] transition-colors"
               >
-                Post Your Event
+                Post an Event
               </Link>
             </div>
           </div>
-        )}
-        {filteredEvents.length > 0 && (
+        ) : (
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {filteredEvents.map((event) => (
-              <Link
+              <div
                 key={event.id}
-                href={`/e/${event.id}`}
                 className="group block bg-[rgb(var(--panel))] token-border rounded-xl overflow-hidden hover:shadow-lg transition-all duration-200 hover:scale-[1.02]"
               >
                 {/* Event Image */}
@@ -356,17 +492,24 @@ export default function EventsPage() {
 
                   {/* Action Buttons */}
                   <div className="flex gap-2 mt-3 pt-3 border-t border-[rgb(var(--border-color))]/20">
-                    <button className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-[rgb(var(--bg))] text-[rgb(var(--text))] rounded-lg hover:bg-[rgb(var(--bg))]/80 transition-colors text-sm">
-                      <HeartIcon className="w-4 h-4" />
-                      Save
-                    </button>
-                    <button className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-[rgb(var(--bg))] text-[rgb(var(--text))] rounded-lg hover:bg-[rgb(var(--bg))]/80 transition-colors text-sm">
-                      <ShareIcon className="w-4 h-4" />
-                      Share
-                    </button>
+                    <Link
+                      href={`/e/${event.id}`}
+                      className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-[rgb(var(--brand))] text-white rounded-lg hover:bg-[rgb(var(--brand))]/90 transition-colors text-sm font-medium"
+                    >
+                      <CalendarIcon className="w-4 h-4" />
+                      Details
+                    </Link>
+                    
+                    <Link
+                      href={getMapUrl(event)}
+                      className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-[rgb(var(--bg))] text-[rgb(var(--text))] rounded-lg hover:bg-[rgb(var(--panel))] transition-colors text-sm font-medium"
+                    >
+                      <MapIcon className="w-4 h-4" />
+                      Map
+                    </Link>
                   </div>
                 </div>
-              </Link>
+              </div>
             ))}
           </div>
         )}

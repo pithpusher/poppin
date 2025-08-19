@@ -267,12 +267,22 @@ export default function MapPage() {
                             <h1 className="text-2xl md:text-3xl font-bold text-[rgb(var(--text))]">Event Map</h1>
                             <p className={`text-base sm:text-lg ${tokens.muted}`}>Discover events near you</p>
                         </div>
-                        <Link
-                            href="/events/new"
-                            className="inline-flex items-center gap-2 px-4 py-2 bg-[rgb(var(--brand))] text-white rounded-xl text-sm font-medium hover:bg-[rgb(var(--brand))]/90 transition-colors"
-                        >
-                            Post Event
-                        </Link>
+                        
+                        <div className="flex gap-2">
+                            <Link
+                                href="/events/new"
+                                className="inline-flex items-center gap-2 px-4 py-2 bg-[rgb(var(--brand))] text-white rounded-xl text-sm font-medium hover:bg-[rgb(var(--brand))]/90 transition-colors"
+                            >
+                                Post Event
+                            </Link>
+                            
+                            <Link
+                                href="/events"
+                                className="inline-flex items-center gap-2 px-4 py-2 bg-[rgb(var(--panel))] text-[rgb(var(--text))] border border-[rgb(var(--border-color))] rounded-xl text-sm font-medium hover:bg-[rgb(var(--bg))] transition-colors"
+                            >
+                                List View
+                            </Link>
+                        </div>
                     </div>
                 </div>
             </div>
