@@ -414,6 +414,9 @@ export default function MapPage() {
                 )}
               </aside>
             </div>
+
+            {/* Bottom spacing for mobile navigation */}
+            <div className="pb-20 sm:pb-0"></div>
         </div>
     );
 }
