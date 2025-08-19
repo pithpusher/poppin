@@ -270,7 +270,7 @@ export default function MapPage() {
                         </div>
                         
                         {/* Middle Column - Search Bar (Hidden on Mobile) */}
-                        <div className="hidden md:flex flex-1 max-w-lg md:max-w-2xl lg:max-w-3xl mx-auto">
+                        <div className="hidden md:flex flex-1 px-4 md:px-6">
                             <div className="relative w-full">
                                 <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-[rgb(var(--muted))]" />
                                 <input
