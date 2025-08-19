@@ -148,9 +148,9 @@ export default function Pricing() {
         </div>
 
         {/* Plans Grid */}
-        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4 mb-16">
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4 mb-16">
           {plans.map((plan) => (
-            <div key={plan.key} className={`relative bg-[rgb(var(--panel))] token-border rounded-2xl p-6 ${plan.popular ? 'ring-2 ring-[rgb(var(--brand))]' : ''}`}>
+            <div key={plan.key} className={`relative bg-[rgb(var(--panel))] token-border rounded-xl p-5 ${plan.popular ? 'ring-2 ring-[rgb(var(--brand))]' : ''}`}>
               {plan.popular && (
                 <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
                   <span className="bg-[rgb(var(--brand))] text-white px-3 py-1 rounded-full text-xs font-medium">
@@ -166,17 +166,17 @@ export default function Pricing() {
                 </div>
               )}
               
-              <div className="text-center mb-6">
-                <h3 className="text-lg font-bold text-[rgb(var(--text))] mb-2">{plan.name}</h3>
-                <p className={`text-base sm:text-lg ${tokens.muted} mb-4`}>{plan.desc}</p>
-                <div className="text-2xl font-bold text-[rgb(var(--text))] mb-6">{plan.price}</div>
+              <div className="text-center mb-5">
+                <h3 className="text-base font-bold text-[rgb(var(--text))] mb-2">{plan.name}</h3>
+                <p className={`text-sm ${tokens.muted} mb-3`}>{plan.desc}</p>
+                <div className="text-xl font-bold text-[rgb(var(--text))] mb-4">{plan.price}</div>
               </div>
 
-              <ul className="space-y-3 mb-6">
+              <ul className="space-y-2.5 mb-5">
                 {plan.features.map((feature, index) => (
                   <li key={index} className="flex items-start gap-2">
-                    <CheckIcon className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
-                    <span className="text-xs text-[rgb(var(--text))]">{feature}</span>
+                    <CheckIcon className="w-3.5 h-3.5 text-green-500 mt-0.5 flex-shrink-0" />
+                    <span className="text-xs text-[rgb(var(--text))] leading-relaxed">{feature}</span>
                   </li>
                 ))}
               </ul>
@@ -184,7 +184,7 @@ export default function Pricing() {
               <button
                 onClick={() => checkout(plan.priceId, plan.key)}
                 disabled={isLoading === plan.key}
-                className="w-full px-4 py-2 bg-[rgb(var(--brand))] text-white rounded-xl hover:bg-[rgb(var(--brand))]/90 transition-colors text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full px-3 py-2 bg-[rgb(var(--brand))] text-white rounded-lg hover:bg-[rgb(var(--brand))]/90 transition-colors text-xs font-medium disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isLoading === plan.key ? 'Processing...' : plan.cta}
               </button>
@@ -202,58 +202,58 @@ export default function Pricing() {
         {/* Feature Comparison */}
         <div className="mb-12">
           <div className="text-center mb-6">
-            <h2 className="text-xl md:text-2xl font-bold mb-4">Plan Breakdown</h2>
-            <p className={`text-base sm:text-lg ${tokens.muted} max-w-2xl mx-auto`}>
+            <h2 className="text-lg font-bold mb-3">Plan Breakdown</h2>
+            <p className={`text-sm ${tokens.muted} max-w-2xl mx-auto`}>
               Compare features across all plans to find the perfect fit for your needs
             </p>
           </div>
-          <div className="bg-[rgb(var(--panel))] token-border rounded-2xl overflow-hidden">
+          <div className="bg-[rgb(var(--panel))] token-border rounded-xl overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead>
                   <tr className="border-b border-[rgb(var(--border))]">
-                    <th className="text-left p-4 font-semibold">Feature</th>
-                    <th className="text-center p-4 font-semibold">Explorer</th>
-                    <th className="text-center p-4 font-semibold">Host</th>
-                    <th className="text-center p-4 font-semibold">Pro</th>
-                    <th className="text-center p-4 font-semibold">Builder</th>
+                    <th className="text-left p-3 font-semibold text-sm">Feature</th>
+                    <th className="text-center p-3 font-semibold text-sm">Explorer</th>
+                    <th className="text-center p-3 font-semibold text-sm">Host</th>
+                    <th className="text-center p-3 font-semibold text-sm">Pro</th>
+                    <th className="text-center p-3 font-semibold text-sm">Builder</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr className="border-b border-[rgb(var(--border))]">
-                    <td className="p-4 font-medium">Events per month</td>
-                    <td className="text-center p-4">5</td>
-                    <td className="text-center p-4">15</td>
-                    <td className="text-center p-4">50</td>
-                    <td className="text-center p-4">Unlimited</td>
+                    <td className="p-3 font-medium text-sm">Events per month</td>
+                    <td className="text-center p-3 text-sm">5</td>
+                    <td className="text-center p-3 text-sm">15</td>
+                    <td className="text-center p-3 text-sm">50</td>
+                    <td className="text-center p-3 text-sm">Unlimited</td>
                   </tr>
                   <tr className="border-b border-[rgb(var(--border))]">
-                    <td className="p-4 font-medium">Featured credits</td>
-                    <td className="text-center p-4">-</td>
-                    <td className="text-center p-4">-</td>
-                    <td className="text-center p-4">2/month</td>
-                    <td className="text-center p-4">4/month</td>
+                    <td className="p-3 font-medium text-sm">Featured credits</td>
+                    <td className="text-center p-3 text-sm">-</td>
+                    <td className="text-center p-3 text-sm">-</td>
+                    <td className="text-center p-3 text-sm">2/month</td>
+                    <td className="text-center p-3 text-sm">4/month</td>
                   </tr>
                   <tr className="border-b border-[rgb(var(--border))]">
-                    <td className="p-4 font-medium">Analytics level</td>
-                    <td className="text-center p-4">Basic</td>
-                    <td className="text-center p-4">Standard</td>
-                    <td className="text-center p-4">Full</td>
-                    <td className="text-center p-4">Advanced</td>
+                    <td className="p-3 font-medium text-sm">Analytics level</td>
+                    <td className="text-center p-3 text-sm">Basic</td>
+                    <td className="text-center p-3 text-sm">Standard</td>
+                    <td className="text-center p-3 text-sm">Full</td>
+                    <td className="text-center p-3 text-sm">Advanced</td>
                   </tr>
                   <tr className="border-b border-[rgb(var(--border))]">
-                    <td className="p-4 font-medium">Support</td>
-                    <td className="text-center p-4">Email</td>
-                    <td className="text-center p-4">Email</td>
-                    <td className="text-center p-4">Priority</td>
-                    <td className="text-center p-4">Dedicated</td>
+                    <td className="p-3 font-medium text-sm">Support</td>
+                    <td className="text-center p-3 text-sm">Email</td>
+                    <td className="text-center p-3 text-sm">Email</td>
+                    <td className="text-center p-3 text-sm">Priority</td>
+                    <td className="text-center p-3 text-sm">Dedicated</td>
                   </tr>
                   <tr>
-                    <td className="p-4 font-medium">Multi-city</td>
-                    <td className="text-center p-4">-</td>
-                    <td className="text-center p-4">-</td>
-                    <td className="text-center p-4">-</td>
-                    <td className="text-center p-4"><CheckIcon className="w-4 h-4 inline text-green-500" /></td>
+                    <td className="p-3 font-medium text-sm">Multi-city</td>
+                    <td className="text-center p-3 text-sm">-</td>
+                    <td className="text-center p-3 text-sm">-</td>
+                    <td className="text-center p-3 text-sm">-</td>
+                    <td className="text-center p-3 text-sm"><CheckIcon className="w-4 h-4 inline text-green-500" /></td>
                   </tr>
                 </tbody>
               </table>
@@ -263,23 +263,23 @@ export default function Pricing() {
 
         {/* FAQ Section */}
         <div className="text-center mb-16">
-          <h2 className="text-xl md:text-2xl font-bold text-[rgb(var(--text))] mb-8">Got Questions?</h2>
-          <div className="max-w-2xl mx-auto space-y-4">
-            <div className="bg-[rgb(var(--panel))] token-border rounded-xl p-4 text-left">
-              <h3 className="text-base font-semibold text-[rgb(var(--text))] mb-2">What's included in all plans?</h3>
-              <p className={`text-xs ${tokens.muted}`}>
+          <h2 className="text-lg font-bold text-[rgb(var(--text))] mb-6">Got Questions?</h2>
+          <div className="max-w-2xl mx-auto space-y-3">
+            <div className="bg-[rgb(var(--panel))] token-border rounded-lg p-4 text-left">
+              <h3 className="text-sm font-semibold text-[rgb(var(--text))] mb-2">What's included in all plans?</h3>
+              <p className={`text-xs ${tokens.muted} leading-relaxed`}>
                 All plans include event creation, basic analytics, social sharing, and our mobile app. Higher tiers add more events per month, priority placement, and advanced features.
               </p>
             </div>
-            <div className="bg-[rgb(var(--panel))] token-border rounded-xl p-4 text-left">
-              <h3 className="text-base font-semibold text-[rgb(var(--text))] mb-2">Can I change plans later?</h3>
-              <p className={`text-xs ${tokens.muted}`}>
+            <div className="bg-[rgb(var(--panel))] token-border rounded-lg p-4 text-left">
+              <h3 className="text-sm font-semibold text-[rgb(var(--text))] mb-2">Can I change plans later?</h3>
+              <p className={`text-xs ${tokens.muted} leading-relaxed`}>
                 Yes! You can upgrade or downgrade your plan at any time. Changes take effect immediately and we'll prorate any charges.
               </p>
             </div>
-            <div className="bg-[rgb(var(--panel))] token-border rounded-xl p-4 text-left">
-              <h3 className="text-base font-semibold text-[rgb(var(--text))] mb-2">Is there a free trial?</h3>
-              <p className={`text-xs ${tokens.muted}`}>
+            <div className="bg-[rgb(var(--panel))] token-border rounded-lg p-4 text-left">
+              <h3 className="text-sm font-semibold text-[rgb(var(--text))] mb-2">Is there a free trial?</h3>
+              <p className={`text-xs ${tokens.muted} leading-relaxed`}>
                 We offer a 7-day free trial on all paid plans. No credit card required to start.
               </p>
             </div>
@@ -288,8 +288,8 @@ export default function Pricing() {
 
         {/* CTA Section */}
         <div className="text-center">
-          <h2 className="text-xl md:text-2xl font-bold text-[rgb(var(--text))] mb-4">Ready to get started?</h2>
-          <p className={`text-base sm:text-lg ${tokens.muted} max-w-2xl mx-auto mb-6`}>
+          <h2 className="text-lg font-bold text-[rgb(var(--text))] mb-3">Ready to get started?</h2>
+          <p className={`text-sm ${tokens.muted} max-w-2xl mx-auto mb-4`}>
             Join thousands of organizers who are already using Poppin to reach their communities.
           </p>
           <Link

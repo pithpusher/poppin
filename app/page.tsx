@@ -25,7 +25,7 @@ export default function HomePage() {
               href="/map"
               className={`inline-flex items-center rounded-xl px-4 py-2 text-sm bg-brand text-white hover:${tokens.panel}`}
             >
-              Explore Event Map
+              View Events Near You
             </Link>
             <Link
               href="/events/new"
