@@ -200,60 +200,60 @@ export default function Pricing() {
         )}
 
         {/* Feature Comparison */}
-        <div className="mb-12">
-          <div className="text-center mb-6">
-            <h2 className="text-lg font-bold mb-3">Plan Breakdown</h2>
-            <p className={`text-sm ${tokens.muted} max-w-2xl mx-auto`}>
+        <div className="mb-12 md:mb-16 lg:mb-20">
+          <div className="text-center mb-6 md:mb-8">
+            <h2 className="text-xl md:text-2xl lg:text-3xl font-bold mb-3 md:mb-4 text-[rgb(var(--text))]">Plan Breakdown</h2>
+            <p className={`text-base sm:text-lg ${tokens.muted} max-w-2xl mx-auto`}>
               Compare features across all plans to find the perfect fit for your needs
             </p>
           </div>
-          <div className="bg-[rgb(var(--panel))] token-border rounded-xl overflow-hidden">
+          <div className="bg-[rgb(var(--panel))] token-border rounded-xl md:rounded-2xl overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead>
                   <tr className="border-b border-[rgb(var(--border))]">
-                    <th className="text-left p-3 font-semibold text-sm">Feature</th>
-                    <th className="text-center p-3 font-semibold text-sm">Explorer</th>
-                    <th className="text-center p-3 font-semibold text-sm">Host</th>
-                    <th className="text-center p-3 font-semibold text-sm">Pro</th>
-                    <th className="text-center p-3 font-semibold text-sm">Builder</th>
+                    <th className="text-left p-3 md:p-4 font-semibold text-sm md:text-base">Feature</th>
+                    <th className="text-center p-3 md:p-4 font-semibold text-sm md:text-base">Explorer</th>
+                    <th className="text-center p-3 md:p-4 font-semibold text-sm md:text-base">Host</th>
+                    <th className="text-center p-3 md:p-4 font-semibold text-sm md:text-base">Pro</th>
+                    <th className="text-center p-3 md:p-4 font-semibold text-sm md:text-base">Builder</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr className="border-b border-[rgb(var(--border))]">
-                    <td className="p-3 font-medium text-sm">Events per month</td>
-                    <td className="text-center p-3 text-sm">5</td>
-                    <td className="text-center p-3 text-sm">15</td>
-                    <td className="text-center p-3 text-sm">50</td>
-                    <td className="text-center p-3 text-sm">Unlimited</td>
+                    <td className="p-3 md:p-4 font-medium text-sm md:text-base">Events per month</td>
+                    <td className="text-center p-3 md:p-4 text-sm md:text-base">5</td>
+                    <td className="text-center p-3 md:p-4 text-sm md:text-base">15</td>
+                    <td className="text-center p-3 md:p-4 text-sm md:text-base">50</td>
+                    <td className="text-center p-3 md:p-4 text-sm md:text-base">Unlimited</td>
                   </tr>
                   <tr className="border-b border-[rgb(var(--border))]">
-                    <td className="p-3 font-medium text-sm">Featured credits</td>
-                    <td className="text-center p-3 text-sm">-</td>
-                    <td className="text-center p-3 text-sm">-</td>
-                    <td className="text-center p-3 text-sm">2/month</td>
-                    <td className="text-center p-3 text-sm">4/month</td>
+                    <td className="p-3 md:p-4 font-medium text-sm md:text-base">Featured credits</td>
+                    <td className="text-center p-3 md:p-4 text-sm md:text-base">-</td>
+                    <td className="text-center p-3 md:p-4 text-sm md:text-base">-</td>
+                    <td className="text-center p-3 md:p-4 text-sm md:text-base">2/month</td>
+                    <td className="text-center p-3 md:p-4 text-sm md:text-base">4/month</td>
                   </tr>
                   <tr className="border-b border-[rgb(var(--border))]">
-                    <td className="p-3 font-medium text-sm">Analytics level</td>
-                    <td className="text-center p-3 text-sm">Basic</td>
-                    <td className="text-center p-3 text-sm">Standard</td>
-                    <td className="text-center p-3 text-sm">Full</td>
-                    <td className="text-center p-3 text-sm">Advanced</td>
+                    <td className="p-3 md:p-4 font-medium text-sm md:text-base">Analytics level</td>
+                    <td className="text-center p-3 md:p-4 text-sm md:text-base">Basic</td>
+                    <td className="text-center p-3 md:p-4 text-sm md:text-base">Standard</td>
+                    <td className="text-center p-3 md:p-4 text-sm md:text-base">Full</td>
+                    <td className="text-center p-3 md:p-4 text-sm md:text-base">Advanced</td>
                   </tr>
                   <tr className="border-b border-[rgb(var(--border))]">
-                    <td className="p-3 font-medium text-sm">Support</td>
-                    <td className="text-center p-3 text-sm">Email</td>
-                    <td className="text-center p-3 text-sm">Email</td>
-                    <td className="text-center p-3 text-sm">Priority</td>
-                    <td className="text-center p-3 text-sm">Dedicated</td>
+                    <td className="p-3 md:p-4 font-medium text-sm md:text-base">Support</td>
+                    <td className="text-center p-3 md:p-4 text-sm md:text-base">Email</td>
+                    <td className="text-center p-3 md:p-4 text-sm md:text-base">Email</td>
+                    <td className="text-center p-3 md:p-4 text-sm md:text-base">Priority</td>
+                    <td className="text-center p-3 md:p-4 text-sm md:text-base">Dedicated</td>
                   </tr>
                   <tr>
-                    <td className="p-3 font-medium text-sm">Multi-city</td>
-                    <td className="text-center p-3 text-sm">-</td>
-                    <td className="text-center p-3 text-sm">-</td>
-                    <td className="text-center p-3 text-sm">-</td>
-                    <td className="text-center p-3 text-sm"><CheckIcon className="w-4 h-4 inline text-green-500" /></td>
+                    <td className="p-3 md:p-4 font-medium text-sm md:text-base">Multi-city</td>
+                    <td className="text-center p-3 md:p-4 text-sm md:text-base">-</td>
+                    <td className="text-center p-3 md:p-4 text-sm md:text-base">-</td>
+                    <td className="text-center p-3 md:p-4 text-sm md:text-base">-</td>
+                    <td className="text-center p-3 md:p-4 text-sm md:text-base"><CheckIcon className="w-4 h-4 md:w-5 md:h-5 inline text-green-500" /></td>
                   </tr>
                 </tbody>
               </table>
@@ -262,24 +262,24 @@ export default function Pricing() {
         </div>
 
         {/* FAQ Section */}
-        <div className="text-center mb-16">
-          <h2 className="text-lg font-bold text-[rgb(var(--text))] mb-6">Got Questions?</h2>
-          <div className="max-w-2xl mx-auto space-y-3">
-            <div className="bg-[rgb(var(--panel))] token-border rounded-lg p-4 text-left">
-              <h3 className="text-sm font-semibold text-[rgb(var(--text))] mb-2">What's included in all plans?</h3>
-              <p className={`text-xs ${tokens.muted} leading-relaxed`}>
+        <div className="text-center mb-16 md:mb-20 lg:mb-24">
+          <h2 className="text-xl md:text-2xl lg:text-3xl font-bold text-[rgb(var(--text))] mb-6 md:mb-8">Got Questions?</h2>
+          <div className="max-w-4xl mx-auto space-y-4 md:space-y-6">
+            <div className="bg-[rgb(var(--panel))] token-border rounded-lg md:rounded-xl p-4 md:p-6 text-left">
+              <h3 className="text-base md:text-lg font-semibold text-[rgb(var(--text))] mb-2 md:mb-3">What's included in all plans?</h3>
+              <p className={`text-sm md:text-base ${tokens.muted} leading-relaxed`}>
                 All plans include event creation, basic analytics, social sharing, and our mobile app. Higher tiers add more events per month, priority placement, and advanced features.
               </p>
             </div>
-            <div className="bg-[rgb(var(--panel))] token-border rounded-lg p-4 text-left">
-              <h3 className="text-sm font-semibold text-[rgb(var(--text))] mb-2">Can I change plans later?</h3>
-              <p className={`text-xs ${tokens.muted} leading-relaxed`}>
+            <div className="bg-[rgb(var(--panel))] token-border rounded-lg md:rounded-xl p-4 md:p-6 text-left">
+              <h3 className="text-base md:text-lg font-semibold text-[rgb(var(--text))] mb-2 md:mb-3">Can I change plans later?</h3>
+              <p className={`text-sm md:text-base ${tokens.muted} leading-relaxed`}>
                 Yes! You can upgrade or downgrade your plan at any time. Changes take effect immediately and we'll prorate any charges.
               </p>
             </div>
-            <div className="bg-[rgb(var(--panel))] token-border rounded-lg p-4 text-left">
-              <h3 className="text-sm font-semibold text-[rgb(var(--text))] mb-2">Is there a free trial?</h3>
-              <p className={`text-xs ${tokens.muted} leading-relaxed`}>
+            <div className="bg-[rgb(var(--panel))] token-border rounded-lg md:rounded-xl p-4 md:p-6 text-left">
+              <h3 className="text-base md:text-lg font-semibold text-[rgb(var(--text))] mb-2 md:mb-3">Is there a free trial?</h3>
+              <p className={`text-sm md:text-base ${tokens.muted} leading-relaxed`}>
                 We offer a 7-day free trial on all paid plans. No credit card required to start.
               </p>
             </div>
@@ -288,13 +288,13 @@ export default function Pricing() {
 
         {/* CTA Section */}
         <div className="text-center">
-          <h2 className="text-lg font-bold text-[rgb(var(--text))] mb-3">Ready to get started?</h2>
-          <p className={`text-sm ${tokens.muted} max-w-2xl mx-auto mb-4`}>
+          <h2 className="text-xl md:text-2xl lg:text-3xl font-bold text-[rgb(var(--text))] mb-3 md:mb-4">Ready to get started?</h2>
+          <p className={`text-base sm:text-lg ${tokens.muted} max-w-2xl mx-auto mb-4 md:mb-6`}>
             Join thousands of organizers who are already using Poppin to reach their communities.
           </p>
           <Link
             href="/auth"
-            className="px-4 py-2 bg-[rgb(var(--brand))] text-white rounded-xl hover:bg-[rgb(var(--brand))]/90 transition-colors text-sm font-medium"
+            className="px-4 py-2 md:px-6 md:py-3 bg-[rgb(var(--brand))] text-white rounded-xl md:rounded-2xl hover:bg-[rgb(var(--brand))]/90 transition-colors text-sm md:text-base font-medium"
           >
             Get Started
           </Link>
