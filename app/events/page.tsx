@@ -2,8 +2,9 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { MagnifyingGlassIcon, FunnelIcon, MapPinIcon, CalendarIcon, ClockIcon } from '@heroicons/react/24/outline';
+import { MagnifyingGlassIcon, FunnelIcon, MapPinIcon, CalendarIcon, ClockIcon, FaceSmileIcon, HeartIcon, ShareIcon } from '@heroicons/react/24/outline';
 import { supabase } from '@/lib/supabaseClient';
+import { tokens } from '@/components/tokens';
 
 type Event = {
   id: string;
@@ -79,7 +80,9 @@ export default function EventsPage() {
 
       const eventsWithOrganizer = (data || []).map(event => ({
         ...event,
-        organizer_name: event.organizers?.name
+        organizer_name: event.organizers && Array.isArray(event.organizers) && event.organizers.length > 0 
+          ? event.organizers[0].name 
+          : event.organizers?.name || 'Unknown'
       }));
 
       setEvents(eventsWithOrganizer);
@@ -166,8 +169,9 @@ export default function EventsPage() {
     <div className="min-h-screen bg-[rgb(var(--bg))] py-8 px-4">
       <div className="max-w-6xl mx-auto px-4 py-8">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold mb-2">Discover What's Happening</h1>
-          <p className="text-lg text-[rgb(var(--muted))]">Your city's best events, all in one spot.</p>
+          <FaceSmileIcon className="w-16 h-16 text-[rgb(var(--brand))] mx-auto mb-4" />
+          <h1 className="text-2xl md:text-3xl font-bold mb-4">Discover What&apos;s Happening</h1>
+          <p className={`text-base sm:text-lg ${tokens.muted} max-w-2xl mx-auto`}>Your city's best events, all in one spot.</p>
         </div>
 
         {/* Search and Filters */}
@@ -185,10 +189,18 @@ export default function EventsPage() {
               />
             </div>
 
+            {/* Post Event Button */}
+            <Link
+              href="/events/new"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-[rgb(var(--brand))] text-white rounded-xl text-sm font-medium hover:bg-[rgb(var(--brand))]/90 transition-colors"
+            >
+              Post Event
+            </Link>
+
             {/* Filters Toggle */}
             <button
               onClick={() => setShowFilters(!showFilters)}
-              className="flex items-center gap-2 px-4 py-3 rounded-xl bg-[rgb(var(--panel))] text-[rgb(var(--text))] token-border hover:bg-[rgb(var(--bg))] transition-colors"
+              className="flex items-center gap-2 px-4 py-2 rounded-xl bg-[rgb(var(--panel))] text-[rgb(var(--text))] token-border hover:bg-[rgb(var(--bg))] transition-colors text-sm"
             >
               <FunnelIcon className="w-5 h-5" />
               Filters
@@ -249,12 +261,12 @@ export default function EventsPage() {
         {/* Events Grid */}
         {filteredEvents.length === 0 && (
           <div className="text-center py-12">
-            <div className="text-4xl mb-4">🎉</div>
-            <h3 className="text-xl font-semibold mb-2">No events yet.</h3>
-            <p className="text-[rgb(var(--muted))] mb-6">Tweak your filters and try again.</p>
+            <FaceSmileIcon className="w-10 h-10 mx-auto text-[rgb(var(--muted))] mb-4" />
+            <h3 className="text-lg font-semibold mb-2">No events yet.</h3>
+            <p className={`text-base sm:text-lg ${tokens.muted} mb-6`}>Tweak your filters and try again.</p>
             <Link
               href="/events/new"
-              className="inline-flex items-center rounded-xl px-6 py-3 bg-brand text-white font-medium hover:bg-brand/90 transition-colors"
+              className="inline-flex items-center rounded-xl px-4 py-2 bg-brand text-white text-sm font-medium hover:bg-brand/90 transition-colors"
             >
               Post Your Event
             </Link>
@@ -262,12 +274,12 @@ export default function EventsPage() {
         )}
         {filteredEvents.length === 0 && searchTerm && (
           <div className="text-center py-12">
-            <div className="text-4xl mb-4">🔍</div>
-            <h3 className="text-xl font-semibold mb-2">No events found</h3>
-            <p className="text-[rgb(var(--muted))] mb-6">Try adjusting your search or filters to find more events.</p>
+            <MagnifyingGlassIcon className="w-10 h-10 mx-auto text-[rgb(var(--muted))] mb-4" />
+            <h3 className="text-lg font-semibold mb-2">No events found</h3>
+            <p className={`text-base sm:text-lg ${tokens.muted} mb-6`}>Try adjusting your search or filters to find more events.</p>
             <div className="bg-[rgb(var(--panel))] rounded-xl p-6 max-w-md mx-auto">
               <h4 className="font-semibold mb-2">Hosting something?</h4>
-              <p className="text-[rgb(var(--muted))] mb-4">Post it here and get seen by thousands nearby.</p>
+              <p className={`text-base sm:text-lg ${tokens.muted} mb-4`}>Post it here and get seen by thousands nearby.</p>
               <Link
                 href="/events/new"
                 className="inline-flex items-center rounded-xl px-4 py-2 bg-brand text-white text-sm font-medium hover:bg-brand/90 transition-colors"
@@ -341,6 +353,18 @@ export default function EventsPage() {
                       {formatPrice(event.is_free, event.price_cents)}
                     </span>
                   </div>
+
+                  {/* Action Buttons */}
+                  <div className="flex gap-2 mt-3 pt-3 border-t border-[rgb(var(--border-color))]/20">
+                    <button className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-[rgb(var(--bg))] text-[rgb(var(--text))] rounded-lg hover:bg-[rgb(var(--bg))]/80 transition-colors text-sm">
+                      <HeartIcon className="w-4 h-4" />
+                      Save
+                    </button>
+                    <button className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-[rgb(var(--bg))] text-[rgb(var(--text))] rounded-lg hover:bg-[rgb(var(--bg))]/80 transition-colors text-sm">
+                      <ShareIcon className="w-4 h-4" />
+                      Share
+                    </button>
+                  </div>
                 </div>
               </Link>
             ))}
@@ -349,20 +373,16 @@ export default function EventsPage() {
 
         {/* Post Event CTA */}
         <div className="text-center mt-16">
-          <div className="bg-[rgb(var(--panel))] token-border rounded-2xl p-8 max-w-2xl mx-auto">
-            <h3 className="text-2xl font-bold text-[rgb(var(--text))] mb-4">
-              Have an event to share?
-            </h3>
-            <p className="text-[rgb(var(--muted))] mb-6">
-              Post your event and reach thousands of people in your area.
-            </p>
-            <Link
-              href="/events/new"
-              className="inline-flex items-center px-6 py-3 bg-[rgb(var(--brand))] text-white rounded-xl font-medium hover:bg-[rgb(var(--brand))]/90 transition-colors"
-            >
-              Post an Event
-            </Link>
-          </div>
+          <h2 className="text-xl md:text-2xl font-bold text-[rgb(var(--text))] mb-4">Have events to share?</h2>
+          <p className={`text-base sm:text-lg ${tokens.muted} mb-6 max-w-2xl mx-auto`}>
+            Post it here and get seen by thousands nearby.
+          </p>
+          <Link
+            href="/events/new"
+            className="inline-flex items-center px-4 py-2 bg-[rgb(var(--brand))] text-white rounded-xl text-sm font-medium hover:bg-[rgb(var(--brand))]/90 transition-colors"
+          >
+            Post an Event
+          </Link>
         </div>
       </div>
 

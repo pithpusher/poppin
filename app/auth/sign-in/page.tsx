@@ -8,9 +8,13 @@ import {
   EnvelopeIcon, 
   LockClosedIcon,
   ArrowRightIcon,
-  SparklesIcon
+  SparklesIcon,
+  MagnifyingGlassIcon,
+  CalendarIcon,
+  UserGroupIcon
 } from '@heroicons/react/24/outline';
 import { supabase } from '@/lib/supabaseClient';
+import { tokens } from '@/components/tokens';
 
 export default function SignInPage() {
   const [email, setEmail] = useState('');
@@ -87,11 +91,9 @@ export default function SignInPage() {
       <div className="w-full max-w-md">
         {/* Logo/Brand */}
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold mb-2">
-            {isSignUp ? 'Welcome back' : 'Welcome back'}
-          </h1>
-          <p className="text-[rgb(var(--muted))]">
-            {isSignUp ? 'Create your account and dive in' : 'Log in and keep the plans flowing'}
+          <h1 className="text-3xl md:text-4xl font-bold mb-4">Welcome back</h1>
+          <p className={`text-lg sm:text-xl ${tokens.muted}`}>
+            Log in and keep the plans flowing
           </p>
         </div>
 
@@ -162,7 +164,7 @@ export default function SignInPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-4 px-6 bg-gradient-to-r from-[rgb(var(--brand))] to-[rgb(var(--brand))]/90 text-white rounded-xl font-semibold hover:from-[rgb(var(--brand))]/90 hover:to-[rgb(var(--brand))] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.98]"
+              className="w-full py-2 px-4 bg-gradient-to-r from-[rgb(var(--brand))] to-[rgb(var(--brand))]/90 text-white rounded-xl text-sm font-medium hover:from-[rgb(var(--brand))]/90 hover:to-[rgb(var(--brand))] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.98]"
             >
               {loading ? (
                 <div className="flex items-center justify-center gap-2">
@@ -193,7 +195,7 @@ export default function SignInPage() {
           {/* Google Sign In */}
           <button
             onClick={handleGoogleSignIn}
-            className="w-full py-4 px-6 bg-[rgb(var(--bg))] text-[rgb(var(--text))] rounded-xl font-medium hover:bg-[rgb(var(--bg))]/80 transition-all duration-200 border border-[rgb(var(--border-color))]/20 hover:border-[rgb(var(--border-color))]/40 flex items-center justify-center gap-3 group"
+            className="w-full py-2 px-4 bg-[rgb(var(--bg))] text-[rgb(var(--text))] rounded-xl text-sm font-medium hover:bg-[rgb(var(--bg))]/80 transition-all duration-200 border border-[rgb(var(--border-color))]/20 hover:border-[rgb(var(--border-color))]/40 flex items-center justify-center gap-3 group"
           >
             <svg className="w-5 h-5 group-hover:scale-110 transition-transform" viewBox="0 0 24 24">
               <path
@@ -263,17 +265,17 @@ export default function SignInPage() {
           <h3 className="text-lg font-semibold mb-4">Why join Poppin?</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="text-center">
-              <div className="text-2xl mb-2">👀</div>
+              <MagnifyingGlassIcon className="w-6 h-6 mx-auto text-[rgb(var(--muted))] mb-2" />
               <div className="font-medium text-[rgb(var(--text))]">Discover</div>
               <div className="text-[rgb(var(--muted))]">See the real happenings around town.</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl mb-2">📅</div>
+              <CalendarIcon className="w-6 h-6 mx-auto text-[rgb(var(--muted))] mb-2" />
               <div className="font-medium text-[rgb(var(--text))]">Create</div>
               <div className="text-[rgb(var(--muted))]">Post your own and get noticed.</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl mb-2">🤝</div>
+              <UserGroupIcon className="w-6 h-6 mx-auto text-[rgb(var(--muted))] mb-2" />
               <div className="font-medium text-[rgb(var(--text))]">Connect</div>
               <div className="text-[rgb(var(--muted))]">Link up with people who match your vibe.</div>
             </div>

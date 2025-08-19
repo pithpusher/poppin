@@ -120,8 +120,8 @@ export default function FilterBar({
   return (
     <>
       {/* Quick Filters Bar */}
-      <div className="bg-[rgb(var(--panel))] token-border-b">
-        <div className="max-w-6xl mx-auto px-3 py-2 flex justify-center">
+      <div className="w-full bg-[rgb(var(--panel))] border-t border-[rgb(var(--border-color))]/20">
+        <div className="w-full py-2 flex justify-center">
           <div className="flex items-center gap-2 flex-wrap">
             {/* Date Range Quick Filters */}
             <div className="flex items-center gap-1">

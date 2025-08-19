@@ -20,6 +20,10 @@ import {
 } from "@/lib/supabaseClient";
 import FilterBar, { Range } from "@/components/map/FilterBar";
 import { useLocation } from "@/components/map/useLocation";
+import { BellIcon } from "@heroicons/react/24/outline";
+import Link from "next/link";
+import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
+import { tokens } from "@/components/tokens";
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN || "";
 type Ev = {
     id: string;
@@ -48,8 +52,40 @@ export default function MapPage() {
     const [searchLocation, setSearchLocation] = useState<{ lat: number; lng: number; formatted: string } | null>(null);
     const [eventTypes, setEventTypes] = useState<string[]>([]);
     const [ageRestriction, setAgeRestriction] = useState<string>("All Ages");
+    const [searchTerm, setSearchTerm] = useState("");
     const { location, isLoading, error } = useLocation();
 
+    // Handle map search functionality
+    const handleMapSearch = async () => {
+        if (!searchTerm.trim() || !mapRef.current) return;
+        
+        try {
+            // Use Google Places API to search for the location
+            const searchBox = new google.maps.places.SearchBox(searchTerm);
+            
+            // For now, we'll simulate a search by updating the search location
+            // In a real implementation, you'd use Google Places API or similar
+            const mockSearchResult = {
+                lat: location.lat + (Math.random() - 0.5) * 0.1, // Small random offset
+                lng: location.lng + (Math.random() - 0.5) * 0.1,
+                formatted: searchTerm
+            };
+            
+            setSearchLocation(mockSearchResult);
+            
+            // Update map center and zoom
+            mapRef.current.flyTo({
+                center: [mockSearchResult.lng, mockSearchResult.lat],
+                zoom: 13
+            });
+            
+            // Clear search term
+            setSearchTerm("");
+            
+        } catch (error) {
+            console.error('Search error:', error);
+        }
+    };
     // Handle URL search parameters
     useEffect(() => {
         const urlParams = new URLSearchParams(window.location.search);
@@ -222,105 +258,153 @@ export default function MapPage() {
     // This component will automatically respond to URL parameter changes
 
     return (
-      <div className="min-h-screen">
-        <FilterBar
-          range={range}
-          setRange={setRange}
-          onlyFree={onlyFree}
-          setOnlyFree={setOnlyFree}
-          startDate={startDate}
-          endDate={endDate}
-          setStartDate={setStartDate}
-          setEndDate={setEndDate}
-          onApplyCustom={() => setRange("custom")}
-          eventTypes={eventTypes}
-          setEventTypes={setEventTypes}
-          ageRestriction={ageRestriction}
-          setAgeRestriction={setAgeRestriction}
-        />
-
-        <div className="grid md:grid-cols-[2fr,1fr] gap-6 max-w-6xl mx-auto px-4 py-6">
-          <div className="relative w-full h-[52.5vh] rounded-2xl token-border overflow-hidden">
-            {error && (
-              <div className="absolute top-4 left-4 z-10 text-yellow-400 px-3 py-2 text-sm font-bold">
-                {error}
-              </div>
-            )}
-            {searchLocation && (
-              <div className="absolute top-2 left-0 right-0 z-10 text-center">
-                <div className="text-xs text-[rgb(var(--text))] font-normal">
-                  Showing events near:
+        <div className="min-h-screen bg-[rgb(var(--bg))]">
+            {/* Header with Post Event Button */}
+            <div className="relative z-10 bg-[rgb(var(--bg))] border-b border-[rgb(var(--border-color))]/20">
+                <div className="max-w-6xl mx-auto px-4 py-4">
+                    <div className="flex items-center justify-between">
+                        <div>
+                            <h1 className="text-2xl md:text-3xl font-bold text-[rgb(var(--text))]">Event Map</h1>
+                            <p className={`text-base sm:text-lg ${tokens.muted}`}>Discover events near you</p>
+                        </div>
+                        <Link
+                            href="/events/new"
+                            className="inline-flex items-center gap-2 px-4 py-2 bg-[rgb(var(--brand))] text-white rounded-xl text-sm font-medium hover:bg-[rgb(var(--brand))]/90 transition-colors"
+                        >
+                            Post Event
+                        </Link>
+                    </div>
                 </div>
-                <div className="text-lg text-[rgb(var(--text))] font-bold -mt-1">
-                  {searchLocation.formatted.split(',').slice(0, 2).join(', ')}
-                </div>
-              </div>
-            )}
-            <div ref={mapEl} className="w-full h-full" />
-          </div>
-
-          <aside className="space-y-3 pb-6">
-            <div className="text-sm text-[rgb(var(--muted))] text-center">{uniqueEvents.length} upcoming at this location</div>
-
-            <div className="grid gap-3">
-              {uniqueEvents.map((ev) => (
-                <button
-                  key={ev.id}
-                  onClick={() => {
-                    setSelectedId(ev.id);
-                    const m = markersRef.current.get(ev.id);
-                    if (m && mapRef.current) {
-                      m.togglePopup();
-                      mapRef.current.flyTo({ center: [ev.lng!, ev.lat!], zoom: 13 });
-                    }
-                  }}
-                  className={`text-left rounded-lg token-border p-3 bg-[rgb(var(--panel))] hover:border-[color:var(--border-color)] ${selectedId===ev.id ? "outline outline-1 outline-blue-500" : ""}`}
-                >
-                  <div className="flex items-center justify-between">
-                    <div className="font-medium text-sm">{ev.title}</div>
-                    <span
-                      className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-medium ${
-                        ev.is_free
-                          ? "bg-green-50 border-green-200 text-green-700"
-                          : "bg-amber-50 border-amber-200 text-amber-700"
-                      }`}
-                    >
-                      {ev.is_free ? "Free" : "Paid"}
-                    </span>
-                  </div>
-                  <div className="text-xs text-[rgb(var(--muted))]">
-                    {fmt(ev.start_at)}
-                    {ev.venue_name ? " · " + ev.venue_name : ""}
-                    {ev.event_type ? ` · ${ev.event_type}` : ""}
-                  </div>
-                </button>
-              ))}
-
-              {uniqueEvents.length === 0 && (
-                <div className="rounded-lg token-border p-3 bg-[rgb(var(--panel))] text-sm text-[rgb(var(--text))]">
-                  No events match these filters.
-                </div>
-              )}
             </div>
 
-            {selected && (
-              <div className="rounded-lg token-border p-3 bg-[rgb(var(--panel))]">
-                <div className="text-sm font-semibold">{selected.title}</div>
-                <div className="text-xs text-zinc-600 mt-1">
-                  {fmt(selected.start_at)}
-                  {selected.venue_name ? " · " + selected.venue_name : ""}
-                  {selected.event_type ? ` · ${selected.event_type}` : ""}
+            {/* Filter Bar */}
+            <div className="sticky top-0 z-10 bg-[rgb(var(--bg))] border-b border-[rgb(var(--border-color))]/20">
+                {/* Search Section */}
+                <div className="px-4 py-4">
+                    <div className="max-w-md mx-auto">
+                        <div className="relative">
+                            <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-[rgb(var(--muted))]" />
+                            <input
+                                type="text"
+                                placeholder="Search events, venues, or locations..."
+                                className="w-full pl-10 pr-4 py-3 bg-[rgb(var(--panel))] text-[rgb(var(--text))] rounded-lg token-border focus:outline-none focus:ring-2 focus:ring-[rgb(var(--brand))] text-sm"
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                                onKeyPress={(e) => {
+                                    if (e.key === 'Enter') {
+                                        handleMapSearch();
+                                    }
+                                }}
+                            />
+                        </div>
+                        <button
+                            onClick={handleMapSearch}
+                            className="w-full mt-3 px-4 py-2 bg-[rgb(var(--brand))] text-white rounded-xl hover:bg-[rgb(var(--brand))]/90 transition-colors text-sm font-medium"
+                        >
+                            Search Map
+                        </button>
+                    </div>
                 </div>
-                {selected.age_restriction && selected.age_restriction !== "All Ages" && (
-                  <div className="text-xs text-zinc-500 mt-1">
-                    Age: {selected.age_restriction}
+                
+                {/* Filter Bar - Full Width */}
+                <FilterBar
+                    range={range}
+                    setRange={setRange}
+                    onlyFree={onlyFree}
+                    setOnlyFree={setOnlyFree}
+                    startDate={startDate}
+                    setStartDate={setStartDate}
+                    endDate={endDate}
+                    setEndDate={setEndDate}
+                    eventTypes={eventTypes}
+                    setEventTypes={setEventTypes}
+                    ageRestriction={ageRestriction}
+                    setAgeRestriction={setAgeRestriction}
+                />
+            </div>
+
+            <div className="grid md:grid-cols-[2fr,1fr] gap-6 max-w-6xl mx-auto px-4 py-6">
+              <div className="relative w-full h-[52.5vh] rounded-2xl token-border overflow-hidden">
+                {error && (
+                  <div className="absolute top-4 left-4 z-10 text-yellow-400 px-3 py-2 text-sm font-bold">
+                    {error}
                   </div>
                 )}
+                {searchLocation && (
+                  <div className="absolute top-2 left-0 right-0 z-10 text-center">
+                    <div className="text-xs text-[rgb(var(--text))] font-normal">
+                      Showing events near:
+                    </div>
+                    <div className="text-lg text-[rgb(var(--text))] font-bold -mt-1">
+                      {searchLocation.formatted.split(',').slice(0, 2).join(', ')}
+                    </div>
+                  </div>
+                )}
+                <div ref={mapEl} className="w-full h-full" />
               </div>
-            )}
-          </aside>
+
+              <aside className="space-y-3 pb-6">
+                <div className="text-sm text-[rgb(var(--muted))] text-center">{uniqueEvents.length} upcoming at this location</div>
+
+                <div className="grid gap-3">
+                  {uniqueEvents.map((ev) => (
+                    <button
+                      key={ev.id}
+                      onClick={() => {
+                        setSelectedId(ev.id);
+                        const m = markersRef.current.get(ev.id);
+                        if (m && mapRef.current) {
+                          m.togglePopup();
+                          mapRef.current.flyTo({ center: [ev.lng!, ev.lat!], zoom: 13 });
+                        }
+                      }}
+                      className={`text-left rounded-lg token-border p-3 bg-[rgb(var(--panel))] hover:border-[color:var(--border-color)] ${selectedId===ev.id ? "outline outline-1 outline-blue-500" : ""}`}
+                    >
+                      <div className="flex items-center justify-between">
+                        <div className="font-medium text-sm">{ev.title}</div>
+                        <span
+                          className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-medium ${
+                            ev.is_free
+                              ? "bg-green-50 border-green-200 text-green-700"
+                              : "bg-amber-50 border-amber-200 text-amber-700"
+                          }`}
+                        >
+                          {ev.is_free ? "Free" : "Paid"}
+                        </span>
+                      </div>
+                      <div className="text-xs text-[rgb(var(--muted))]">
+                        {fmt(ev.start_at)}
+                        {ev.venue_name ? " · " + ev.venue_name : ""}
+                        {ev.event_type ? ` · ${ev.event_type}` : ""}
+                      </div>
+                    </button>
+                  ))}
+
+                  {uniqueEvents.length === 0 && (
+                    <div className="rounded-lg token-border p-3 bg-[rgb(var(--panel))] text-sm text-[rgb(var(--text))]">
+                      No events match these filters.
+                    </div>
+                  )}
+                </div>
+
+                {selected && (
+                  <div className="rounded-lg token-border p-3 bg-[rgb(var(--panel))]">
+                    <div className="text-sm font-semibold">{selected.title}</div>
+                    <div className="text-xs text-zinc-600 mt-1">
+                      {fmt(selected.start_at)}
+                      {selected.venue_name ? " · " + selected.venue_name : ""}
+                      {selected.event_type ? ` · ${selected.event_type}` : ""}
+                    </div>
+                    {selected.age_restriction && selected.age_restriction !== "All Ages" && (
+                      <div className="text-xs text-zinc-500 mt-1">
+                        Age: {selected.age_restriction}
+                      </div>
+                    )}
+                  </div>
+                )}
+              </aside>
+            </div>
         </div>
-      </div>
     );
 }
 // --- paste this ABOVE popupHtml() ---

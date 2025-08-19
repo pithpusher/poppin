@@ -1,7 +1,8 @@
 'use client';
 
 import Link from 'next/link';
-import { XCircleIcon, ArrowLeftIcon, QuestionMarkCircleIcon } from '@heroicons/react/24/outline';
+import { XCircleIcon, ArrowLeftIcon, QuestionMarkCircleIcon, CreditCardIcon } from '@heroicons/react/24/outline';
+import { tokens } from '@/components/tokens';
 
 export default function CheckoutCancelledPage() {
   return (
@@ -10,24 +11,24 @@ export default function CheckoutCancelledPage() {
         <div className="inline-flex items-center justify-center w-20 h-20 bg-red-100 rounded-full mb-6">
           <XCircleIcon className="w-10 h-10 text-red-600" />
         </div>
-        <h1 className="text-4xl font-bold mb-4">Payment Cancelled</h1>
-        <p className="text-xl text-[rgb(var(--muted))]">
+        <h1 className="text-xl md:text-2xl font-bold mb-4">Payment Cancelled</h1>
+        <p className={`text-base sm:text-lg ${tokens.muted}`}>
           Looks like it didn't go through.
         </p>
       </div>
 
       <div className="bg-[rgb(var(--panel))] rounded-2xl p-8 max-w-2xl mx-auto mb-8">
         <div className="text-center">
-          <div className="text-2xl mb-2">💳</div>
-          <h2 className="text-2xl font-bold mb-2">No charges made.</h2>
-          <p className="text-[rgb(var(--muted))]">
+          <CreditCardIcon className="w-6 h-6 mx-auto text-[rgb(var(--muted))] mb-2" />
+          <h2 className="text-lg font-bold mb-2">No charges made.</h2>
+          <p className={`text-base sm:text-lg ${tokens.muted}`}>
             You're good—nothing was processed. Try again anytime or hit us up if you need help.
           </p>
         </div>
       </div>
 
       <div className="bg-[rgb(var(--panel))] rounded-2xl p-8 max-w-2xl mx-auto mb-8">
-        <h3 className="text-xl font-semibold mb-4 text-center">Common reasons for cancellation:</h3>
+        <h3 className="text-base font-semibold mb-4 text-center">Common reasons for cancellation:</h3>
         <div className="space-y-3 text-left">
           <div className="flex items-start gap-3">
             <div className="text-red-500 mt-1">•</div>
@@ -58,13 +59,13 @@ export default function CheckoutCancelledPage() {
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
           <Link
             href="/pricing"
-            className="inline-flex items-center justify-center rounded-xl px-6 py-3 bg-brand text-white font-medium hover:bg-brand/90 transition-colors"
+            className="inline-flex items-center justify-center rounded-xl px-4 py-2 bg-brand text-white text-sm font-medium hover:bg-brand/90 transition-colors"
           >
             View Plans Again
           </Link>
           <Link
             href="/"
-            className="inline-flex items-center justify-center rounded-xl px-6 py-3 border border-[rgb(var(--border))] text-[rgb(var(--text))] font-medium hover:bg-[rgb(var(--panel))] transition-colors"
+            className="inline-flex items-center justify-center rounded-xl px-4 py-2 border border-[rgb(var(--border))] text-[rgb(var(--text))] text-sm font-medium hover:bg-[rgb(var(--panel))] transition-colors"
           >
             Back to Home
           </Link>

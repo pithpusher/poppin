@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { UserIcon, CalendarIcon, MapPinIcon, CogIcon, BellIcon, ShieldCheckIcon } from '@heroicons/react/24/outline';
 import { supabase } from '@/lib/supabaseClient';
+import { tokens } from '@/components/tokens';
 
 type User = {
   id: string;
@@ -134,8 +135,8 @@ export default function AccountPage() {
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold mb-2">My Account</h1>
-          <p className="text-[rgb(var(--muted))]">Your events, your settings, your crew.</p>
+          <h1 className="text-3xl md:text-4xl font-bold mb-4">My Account</h1>
+          <p className={`text-lg sm:text-xl ${tokens.muted}`}>Your events, your settings, your crew.</p>
         </div>
 
         {/* Profile Summary Card */}
@@ -220,13 +221,18 @@ export default function AccountPage() {
                       type="email"
                       value={user.email}
                       disabled
-                      className="w-full px-3 py-2 rounded-lg bg-[rgb(var(--bg))] text-[rgb(var(--muted))] token-border cursor-not-allowed"
+                      className="w-full px-3 py-2 rounded-lg bg-[rgb(var(--bg))] text-[rgb(var(--text))] token-border cursor-not-allowed"
                     />
                   </div>
                 </div>
-                <button className="mt-4 px-4 py-2 bg-[rgb(var(--brand))] text-white rounded-lg hover:bg-[rgb(var(--brand))]/90 transition-colors">
-                  Update Profile
-                </button>
+                <div className="flex gap-3 mt-4">
+                  <button className="px-4 py-2 bg-[rgb(var(--brand))] text-white rounded-xl hover:bg-[rgb(var(--brand))]/90 transition-colors text-sm font-medium">
+                    Update Profile
+                  </button>
+                  <button className="px-4 py-2 bg-[rgb(var(--bg))] text-[rgb(var(--text))] rounded-xl hover:bg-[rgb(var(--bg))]/80 transition-colors token-border text-sm font-medium">
+                    Complete Profile
+                  </button>
+                </div>
               </div>
 
               <div className="bg-[rgb(var(--panel))] token-border rounded-xl p-6">
@@ -266,7 +272,7 @@ export default function AccountPage() {
                 </h3>
                 <Link
                   href="/events/new"
-                  className="px-4 py-2 bg-[rgb(var(--brand))] text-white rounded-lg hover:bg-[rgb(var(--brand))]/90 transition-colors"
+                  className="px-4 py-2 bg-[rgb(var(--brand))] text-white rounded-xl hover:bg-[rgb(var(--brand))]/90 transition-colors text-sm font-medium"
                 >
                   Create New Event
                 </Link>
@@ -274,12 +280,12 @@ export default function AccountPage() {
 
               {userEvents.length === 0 && (
                 <div className="text-center py-12">
-                  <div className="text-4xl mb-4">📅</div>
+                  <CalendarIcon className="w-10 h-10 mx-auto text-[rgb(var(--muted))] mb-4" />
                   <h3 className="text-xl font-semibold mb-2">No events yet.</h3>
                   <p className="text-[rgb(var(--muted))] mb-6">Post your first one and start building your reach.</p>
                   <Link
                     href="/events/new"
-                    className="inline-flex items-center rounded-xl px-6 py-3 bg-brand text-white font-medium hover:bg-brand/90 transition-colors"
+                    className="inline-flex items-center rounded-xl px-4 py-2 bg-brand text-white text-sm font-medium hover:bg-brand/90 transition-colors"
                   >
                     Create an Event
                   </Link>
@@ -370,6 +376,22 @@ export default function AccountPage() {
                       Enable
                     </button>
                   </div>
+
+                  <div className="flex items-center justify-between p-4 bg-[rgb(var(--bg))] rounded-lg">
+                    <div className="flex items-center gap-3">
+                      <CalendarIcon className="w-5 h-5 text-[rgb(var(--muted))]" />
+                      <div>
+                        <div className="font-medium text-[rgb(var(--text))]">Event Plan</div>
+                        <div className="text-sm text-[rgb(var(--muted))]">Upgrade your plan for more events</div>
+                      </div>
+                    </div>
+                    <Link
+                      href="/pricing"
+                      className="px-3 py-1 text-sm bg-[rgb(var(--brand))] text-white rounded-xl hover:bg-[rgb(var(--brand))]/90 transition-colors font-medium"
+                    >
+                      Upgrade Plan
+                    </Link>
+                  </div>
                 </div>
               </div>
 
@@ -383,7 +405,7 @@ export default function AccountPage() {
                     <p className="text-sm text-red-600/80 mb-3">
                       Once you delete your account, there is no going back. Please be certain.
                     </p>
-                    <button className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors">
+                    <button className="px-4 py-2 bg-red-600 text-white rounded-xl hover:bg-red-700 transition-colors text-sm font-medium">
                       Delete Account
                     </button>
                   </div>
@@ -397,7 +419,7 @@ export default function AccountPage() {
         <div className="text-center mt-12">
           <button
             onClick={signOut}
-            className="px-6 py-3 text-[rgb(var(--muted))] hover:text-[rgb(var(--text))] transition-colors"
+            className="px-4 py-2 text-[rgb(var(--muted))] hover:text-[rgb(var(--text))] transition-colors text-sm font-medium"
           >
             Sign Out
           </button>

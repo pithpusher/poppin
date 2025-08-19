@@ -10,6 +10,7 @@ import {
   CheckCircleIcon,
   ArrowRightIcon
 } from '@heroicons/react/24/outline';
+import { tokens } from '@/components/tokens';
 
 type FormData = {
   name: string;
@@ -68,8 +69,7 @@ export default function OrganizerApplyPage() {
   const steps = [
     { number: 1, title: 'Basic Information' },
     { number: 2, title: 'Organization Details' },
-    { number: 3, title: 'Experience & References' },
-    { number: 4, title: 'Review & Submit' }
+    { number: 3, title: 'Review & Submit' }
   ];
 
   function handleInputChange(field: keyof FormData, value: any) {
@@ -93,7 +93,7 @@ export default function OrganizerApplyPage() {
   }
 
   function nextStep() {
-    if (currentStep < 4) {
+    if (currentStep < 3) {
       setCurrentStep(currentStep + 1);
     }
   }
@@ -290,40 +290,6 @@ export default function OrganizerApplyPage() {
       case 3:
         return (
           <div className="space-y-6">
-            <div>
-              <label htmlFor="experience" className="block text-sm font-medium text-[rgb(var(--text))] mb-2">
-                Event Hosting Experience *
-              </label>
-              <textarea
-                id="experience"
-                value={formData.experience}
-                onChange={(e) => handleInputChange('experience', e.target.value)}
-                required
-                rows={4}
-                className="w-full px-4 py-3 rounded-lg bg-[rgb(var(--bg))] text-[rgb(var(--text))] token-border focus:outline-none focus:ring-2 focus:ring-[rgb(var(--brand))]"
-                placeholder="Describe your experience hosting events, including types of events, attendance numbers, and any notable achievements..."
-              />
-            </div>
-
-            <div>
-              <label htmlFor="references" className="block text-sm font-medium text-[rgb(var(--text))] mb-2">
-                References
-              </label>
-              <textarea
-                id="references"
-                value={formData.references}
-                onChange={(e) => handleInputChange('references', e.target.value)}
-                rows={3}
-                className="w-full px-4 py-3 rounded-lg bg-[rgb(var(--bg))] text-[rgb(var(--text))] token-border focus:outline-none focus:ring-2 focus:ring-[rgb(var(--brand))]"
-                placeholder="Please provide contact information for 2-3 references who can vouch for your event hosting capabilities..."
-              />
-            </div>
-          </div>
-        );
-
-      case 4:
-        return (
-          <div className="space-y-6">
             <div className="bg-[rgb(var(--bg))] rounded-lg p-4">
               <h3 className="font-medium text-[rgb(var(--text))] mb-3">Application Summary</h3>
               <div className="space-y-2 text-sm">
@@ -366,47 +332,44 @@ export default function OrganizerApplyPage() {
     <div className="min-h-screen bg-[rgb(var(--bg))] py-8 px-4">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold mb-4">Host With Poppin</h1>
-          <p className="text-xl text-[rgb(var(--muted))] max-w-3xl mx-auto">
-            Throw events. Build your name. Bring people together.
+        <div className="text-center mb-8">
+          <h1 className="text-3xl md:text-4xl font-bold mb-4">Become an Organizer</h1>
+          <p className={`text-lg sm:text-xl ${tokens.muted}`}>
+            Join our community of event organizers and reach thousands of people in your area
           </p>
         </div>
 
         {/* Progress Steps */}
         <div className="mb-8">
-          <div className="flex items-center justify-between">
+          <div className="flex items-start justify-center">
             {steps.map((step, index) => (
-              <div key={step.number} className="flex items-center">
-                <div className={`flex items-center justify-center w-10 h-10 rounded-full border-2 ${
-                  currentStep >= step.number
-                    ? 'border-[rgb(var(--brand))] bg-[rgb(var(--brand))] text-white'
-                    : 'border-[rgb(var(--muted))] text-[rgb(var(--muted))]'
-                }`}>
-                  {currentStep > step.number ? (
-                    <CheckCircleIcon className="w-6 h-6" />
-                  ) : (
-                    <span className="font-semibold">{step.number}</span>
-                  )}
+              <div key={step.number} className="flex items-start">
+                <div className="flex flex-col items-center">
+                  <div className={`flex items-center justify-center w-9 h-9 rounded-full border-2 ${
+                    currentStep >= step.number
+                      ? 'border-[rgb(var(--brand))] bg-[rgb(var(--brand))] text-white'
+                      : 'border-[rgb(var(--muted))] text-[rgb(var(--muted))]'
+                  }`}>
+                    {currentStep > step.number ? (
+                      <CheckCircleIcon className="w-5 h-5" />
+                    ) : (
+                      <span className="text-sm font-semibold">{step.number}</span>
+                    )}
+                  </div>
+                  <span
+                    className={`text-xs text-center mt-2 max-w-24 ${
+                      currentStep === step.number ? 'text-[rgb(var(--brand))] font-medium' : 'text-[rgb(var(--muted))]'
+                    }`}
+                  >
+                    {step.title}
+                  </span>
                 </div>
                 {index < steps.length - 1 && (
-                  <div className={`w-16 h-0.5 mx-4 ${
+                  <div className={`w-10 h-0.5 mx-3 self-center ${
                     currentStep > step.number ? 'bg-[rgb(var(--brand))]' : 'bg-[rgb(var(--muted))]'
                   }`} />
                 )}
               </div>
-            ))}
-          </div>
-          <div className="flex justify-between mt-2">
-            {steps.map((step) => (
-              <span
-                key={step.number}
-                className={`text-sm ${
-                  currentStep === step.number ? 'text-[rgb(var(--brand))] font-medium' : 'text-[rgb(var(--muted))]'
-                }`}
-              >
-                {step.title}
-              </span>
             ))}
           </div>
         </div>
@@ -430,17 +393,16 @@ export default function OrganizerApplyPage() {
           <div className="flex justify-between mt-8">
             <button
               onClick={prevStep}
-              disabled={currentStep === 1}
-              className="px-6 py-3 bg-[rgb(var(--bg))] text-[rgb(var(--text))] rounded-lg hover:bg-[rgb(var(--bg))]/80 transition-colors token-border disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-4 py-2 border border-[rgb(var(--border))] text-[rgb(var(--text))] rounded-xl hover:bg-[rgb(var(--panel))] transition-colors text-sm"
             >
               Previous
             </button>
 
             <div className="flex gap-3">
-              {currentStep < 4 ? (
+              {currentStep < 3 ? (
                 <button
                   onClick={nextStep}
-                  className="px-6 py-3 bg-[rgb(var(--brand))] text-white rounded-lg hover:bg-[rgb(var(--brand))]/90 transition-colors flex items-center gap-2"
+                  className="px-4 py-2 bg-[rgb(var(--brand))] text-white rounded-xl hover:bg-[rgb(var(--brand))]/90 transition-colors flex items-center gap-2 text-sm font-medium"
                 >
                   Next
                   <ArrowRightIcon className="w-4 h-4" />
@@ -449,7 +411,7 @@ export default function OrganizerApplyPage() {
                 <button
                   onClick={handleSubmit}
                   disabled={loading || !formData.agreeToTerms}
-                  className="px-6 py-3 bg-[rgb(var(--brand))] text-white rounded-lg hover:bg-[rgb(var(--brand))]/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                  className="px-4 py-2 bg-[rgb(var(--brand))] text-white rounded-xl hover:bg-[rgb(var(--brand))]/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 text-sm font-medium"
                 >
                   {loading ? 'Submitting...' : 'Submit Application'}
                   <ArrowRightIcon className="w-4 h-4" />
@@ -460,20 +422,18 @@ export default function OrganizerApplyPage() {
         </div>
 
         {/* Benefits Section */}
-        <div className="mt-16">
-          <h2 className="text-3xl font-bold text-[rgb(var(--text))] text-center mb-12">
-            Benefits of Being an Organizer
-          </h2>
+        <div className="mb-12">
+          <h2 className="text-2xl md:text-3xl font-bold text-[rgb(var(--text))] text-center mb-8">Benefits of Being an Organizer</h2>
           
           <div className="grid gap-6 md:grid-cols-3">
             <div className="text-center p-6 bg-[rgb(var(--panel))] token-border rounded-xl">
               <div className="w-16 h-16 bg-[rgb(var(--brand))] rounded-full flex items-center justify-center mx-auto mb-4">
                 <UserIcon className="w-8 h-8 text-white" />
               </div>
-              <h3 className="text-xl font-semibold text-[rgb(var(--text))] mb-2">
+              <h3 className="text-lg font-semibold text-[rgb(var(--text))] mb-2">
                 Reach More People
               </h3>
-              <p className="text-[rgb(var(--muted))]">
+              <p className={`text-base sm:text-lg ${tokens.muted}`}>
                 Get your events in front of thousands of people actively looking for things to do in your area.
               </p>
             </div>
@@ -482,10 +442,10 @@ export default function OrganizerApplyPage() {
               <div className="w-16 h-16 bg-[rgb(var(--brand))] rounded-full flex items-center justify-center mx-auto mb-4">
                 <BuildingOfficeIcon className="w-8 h-8 text-white" />
               </div>
-              <h3 className="text-xl font-semibold text-[rgb(var(--text))] mb-2">
+              <h3 className="text-lg font-semibold text-[rgb(var(--text))] mb-2">
                 Professional Tools
               </h3>
-              <p className="text-[rgb(var(--muted))]">
+              <p className={`text-base sm:text-lg ${tokens.muted}`}>
                 Access to analytics, event management tools, and professional support to help your events succeed.
               </p>
             </div>
@@ -494,10 +454,10 @@ export default function OrganizerApplyPage() {
               <div className="w-16 h-16 bg-[rgb(var(--brand))] rounded-full flex items-center justify-center mx-auto mb-4">
                 <GlobeAltIcon className="w-8 h-8 text-white" />
               </div>
-              <h3 className="text-xl font-semibold text-[rgb(var(--text))] mb-2">
+              <h3 className="text-lg font-semibold text-[rgb(var(--text))] mb-2">
                 Build Your Brand
               </h3>
-              <p className="text-[rgb(var(--muted))]">
+              <p className={`text-base sm:text-lg ${tokens.muted}`}>
                 Establish your organization as a trusted event host and build lasting relationships with your community.
               </p>
             </div>
@@ -506,20 +466,20 @@ export default function OrganizerApplyPage() {
 
         {/* Contact Info */}
         <div className="text-center mt-12">
-          <h3 className="text-xl font-semibold mb-4">Questions About Becoming an Organizer?</h3>
-          <p className="text-[rgb(var(--muted))] mb-6">
+          <h2 className="text-xl md:text-2xl font-bold text-[rgb(var(--text))] mb-4">Questions About Becoming an Organizer?</h2>
+          <p className={`text-base sm:text-lg ${tokens.muted} mb-6`}>
             We'll help you get rolling.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link
               href="mailto:hello@poppin.com"
-              className="inline-flex items-center justify-center rounded-xl px-6 py-3 bg-brand text-white font-medium hover:bg-brand/90 transition-colors"
+              className="inline-flex items-center justify-center rounded-xl px-4 py-2 bg-brand text-white text-sm font-medium hover:bg-brand/90 transition-colors"
             >
               Contact Us
             </Link>
             <Link
               href="/pricing"
-              className="inline-flex items-center justify-center rounded-xl px-6 py-3 border border-[rgb(var(--border))] text-[rgb(var(--text))] font-medium hover:bg-[rgb(var(--panel))] transition-colors"
+              className="inline-flex items-center justify-center rounded-xl px-4 py-2 border border-[rgb(var(--border))] text-[rgb(var(--text))] text-sm font-medium hover:bg-[rgb(var(--panel))] transition-colors"
             >
               View Pricing
             </Link>

@@ -12,7 +12,11 @@ import {
   ShareIcon,
   HeartIcon,
   PhoneIcon,
-  EnvelopeIcon
+  EnvelopeIcon,
+  CurrencyDollarIcon,
+  UserGroupIcon,
+  FaceFrownIcon,
+  BookmarkIcon
 } from '@heroicons/react/24/outline';
 import { supabase } from '@/lib/supabaseClient';
 
@@ -141,7 +145,7 @@ export default function EventDetailPage() {
     return (
       <div className="min-h-screen bg-[rgb(var(--bg))] py-12 px-4">
         <div className="max-w-4xl mx-auto text-center">
-          <div className="text-6xl mb-4">😕</div>
+          <FaceFrownIcon className="w-12 h-12 mx-auto text-[rgb(var(--muted))] mb-4" />
           <h1 className="text-2xl font-bold text-[rgb(var(--text))] mb-4">
             {error || 'Event not found'}
           </h1>
@@ -150,7 +154,7 @@ export default function EventDetailPage() {
           </p>
           <Link
             href="/events"
-            className="inline-flex items-center px-6 py-3 bg-[rgb(var(--brand))] text-white rounded-xl font-medium hover:bg-[rgb(var(--brand))]/90 transition-colors"
+            className="inline-flex items-center px-4 py-2 bg-[rgb(var(--brand))] text-white rounded-xl text-sm font-medium hover:bg-[rgb(var(--brand))]/90 transition-colors"
           >
             Browse Events
           </Link>
@@ -182,7 +186,7 @@ export default function EventDetailPage() {
           )}
 
           {/* Event Title */}
-          <h1 className="text-4xl md:text-5xl font-bold text-[rgb(var(--text))] mb-4">
+          <h1 className="text-xl md:text-2xl font-bold text-[rgb(var(--text))] mb-4">
             {event.title}
           </h1>
 
@@ -216,7 +220,7 @@ export default function EventDetailPage() {
           <div className="flex flex-wrap gap-3">
             <button
               onClick={() => setIsLiked(!isLiked)}
-              className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${
+              className={`flex items-center gap-2 px-4 py-2 rounded-xl transition-colors text-sm font-medium ${
                 isLiked
                   ? 'bg-red-500 text-white'
                   : 'bg-[rgb(var(--panel))] text-[rgb(var(--text))] hover:bg-[rgb(var(--bg))] token-border'
@@ -228,10 +232,18 @@ export default function EventDetailPage() {
 
             <button
               onClick={shareEvent}
-              className="flex items-center gap-2 px-4 py-2 bg-[rgb(var(--panel))] text-[rgb(var(--text))] rounded-lg hover:bg-[rgb(var(--bg))] token-border transition-colors"
+              className="flex items-center gap-2 px-4 py-2 bg-[rgb(var(--panel))] text-[rgb(var(--text))] rounded-xl hover:bg-[rgb(var(--bg))] token-border transition-colors text-sm font-medium"
             >
               <ShareIcon className="w-5 h-5" />
               Share
+            </button>
+
+            <button
+              onClick={() => {/* TODO: Implement save functionality */}}
+              className="flex items-center gap-2 px-4 py-2 bg-[rgb(var(--panel))] text-[rgb(var(--text))] rounded-xl hover:bg-[rgb(var(--bg))] token-border transition-colors text-sm font-medium"
+            >
+              <BookmarkIcon className="w-5 h-5" />
+              Save Event
             </button>
 
             {event.registration_url && (
@@ -239,7 +251,7 @@ export default function EventDetailPage() {
                 href={event.registration_url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 px-6 py-2 bg-[rgb(var(--brand))] text-white rounded-lg hover:bg-[rgb(var(--brand))]/90 transition-colors"
+                className="inline-flex items-center gap-2 px-4 py-2 bg-[rgb(var(--brand))] text-white rounded-xl hover:bg-[rgb(var(--brand))]/90 transition-colors text-sm font-medium"
               >
                 Register Now
               </a>
@@ -264,7 +276,7 @@ export default function EventDetailPage() {
           <div className="lg:col-span-2 space-y-6">
             {/* Description */}
             <div className="bg-[rgb(var(--panel))] token-border rounded-xl p-6">
-              <h2 className="text-2xl font-semibold text-[rgb(var(--text))] mb-4">
+              <h2 className="text-lg font-semibold text-[rgb(var(--text))] mb-4">
                 About This Event
               </h2>
               <div className="prose prose-invert max-w-none">
@@ -276,7 +288,7 @@ export default function EventDetailPage() {
 
             {/* Event Details */}
             <div className="bg-[rgb(var(--panel))] token-border rounded-xl p-6">
-              <h2 className="text-2xl font-semibold text-[rgb(var(--text))] mb-4">
+              <h2 className="text-lg font-semibold text-[rgb(var(--text))] mb-4">
                 Event Details
               </h2>
               <div className="space-y-4">
@@ -307,7 +319,7 @@ export default function EventDetailPage() {
                 )}
 
                 <div className="flex items-start gap-3">
-                  <div className="w-5 h-5 text-[rgb(var(--muted))] mt-0.5">💰</div>
+                  <CurrencyDollarIcon className="w-5 h-5 text-[rgb(var(--muted))] mt-0.5" />
                   <div>
                     <div className="font-medium text-[rgb(var(--text))]">Price</div>
                     <div className="text-[rgb(var(--brand))] font-semibold">
@@ -318,12 +330,51 @@ export default function EventDetailPage() {
 
                 {event.age_restriction && (
                   <div className="flex items-start gap-3">
-                    <div className="w-5 h-5 text-[rgb(var(--muted))] mt-0.5">👥</div>
+                    <UserGroupIcon className="w-5 h-5 text-[rgb(var(--muted))] mt-0.5" />
                     <div>
                       <div className="font-medium text-[rgb(var(--text))]">Age Restriction</div>
                       <div className="text-[rgb(var(--muted))]">{event.age_restriction}</div>
                     </div>
                   </div>
+                )}
+              </div>
+            </div>
+
+            {/* Contact Organizer */}
+            <div className="bg-[rgb(var(--panel))] token-border rounded-xl p-6">
+              <h2 className="text-2xl font-semibold text-[rgb(var(--text))] mb-4">
+                Contact Organizer
+              </h2>
+              <div className="space-y-3">
+                {event.organizer_name && (
+                  <div className="flex items-center gap-3">
+                    <UserIcon className="w-6 h-6 text-[rgb(var(--muted))] mt-0.5" />
+                    <div>
+                      <div className="font-medium text-[rgb(var(--text))]">
+                        {event.organizer_name}
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {event.organizer_email && (
+                  <a
+                    href={`mailto:${event.organizer_email}`}
+                    className="flex items-center gap-2 text-[rgb(var(--muted))] hover:text-[rgb(var(--text))] transition-colors"
+                  >
+                    <EnvelopeIcon className="w-4 h-4" />
+                    <span className="text-sm">{event.organizer_email}</span>
+                  </a>
+                )}
+
+                {event.organizer_phone && (
+                  <a
+                    href={`tel:${event.organizer_phone}`}
+                    className="flex items-center gap-2 text-[rgb(var(--muted))] hover:text-[rgb(var(--text))] transition-colors"
+                  >
+                    <PhoneIcon className="w-4 h-4" />
+                    <span className="text-sm">{event.organizer_phone}</span>
+                  </a>
                 )}
               </div>
             </div>
@@ -348,6 +399,10 @@ export default function EventDetailPage() {
                       </div>
                     </div>
                   </div>
+
+                  <button className="w-full px-4 py-2 bg-[rgb(var(--brand))] text-white rounded-lg hover:bg-[rgb(var(--brand))]/90 transition-colors text-sm">
+                    Follow Organizer
+                  </button>
 
                   {event.organizer_email && (
                     <a
@@ -460,6 +515,27 @@ export default function EventDetailPage() {
               >
                 Browse More Events
               </Link>
+            </div>
+          </div>
+        </div>
+
+        {/* Browse Similar Events */}
+        <div className="mt-16">
+          <div className="text-center mb-8">
+            <h3 className="text-2xl font-bold text-[rgb(var(--text))] mb-4">
+              Similar Events You Might Like
+            </h3>
+            <p className="text-[rgb(var(--muted))]">
+              Discover more events in your area
+            </p>
+          </div>
+          <div className="grid gap-6 md:grid-cols-3">
+            {/* Placeholder for similar events */}
+            <div className="bg-[rgb(var(--panel))] token-border rounded-xl p-6 text-center">
+              <CalendarIcon className="w-12 h-12 text-[rgb(var(--muted))] mx-auto mb-4" />
+              <p className="text-[rgb(var(--muted))] text-sm">
+                Similar events will appear here
+              </p>
             </div>
           </div>
         </div>

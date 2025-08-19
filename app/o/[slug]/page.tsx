@@ -9,9 +9,15 @@ import {
   CalendarIcon, 
   UserIcon,
   BuildingOfficeIcon,
-  StarIcon
+  StarIcon,
+  FaceFrownIcon,
+  CameraIcon,
+  BookOpenIcon,
+  ChatBubbleLeftRightIcon,
+  BriefcaseIcon
 } from '@heroicons/react/24/outline';
 import { supabase } from '@/lib/supabaseClient';
+import { tokens } from '@/components/tokens';
 
 type Organizer = {
   id: string;
@@ -129,7 +135,7 @@ export default function OrganizerDetailPage() {
     return (
       <div className="min-h-screen bg-[rgb(var(--bg))] py-12 px-4">
         <div className="max-w-6xl mx-auto text-center">
-          <div className="text-6xl mb-4">😕</div>
+          <FaceFrownIcon className="w-12 h-12 mx-auto text-[rgb(var(--muted))] mb-4" />
           <h1 className="text-2xl font-bold text-[rgb(var(--text))] mb-4">
             {error || 'Organizer not found'}
           </h1>
@@ -138,7 +144,7 @@ export default function OrganizerDetailPage() {
           </p>
           <Link
             href="/events"
-            className="inline-flex items-center px-6 py-3 bg-[rgb(var(--brand))] text-white rounded-xl font-medium hover:bg-[rgb(var(--brand))]/90 transition-colors"
+            className="inline-flex items-center px-4 py-2 bg-[rgb(var(--brand))] text-white rounded-xl text-sm font-medium hover:bg-[rgb(var(--brand))]/90 transition-colors"
           >
             Browse Events
           </Link>
@@ -179,7 +185,7 @@ export default function OrganizerDetailPage() {
             {/* Organizer Info */}
             <div className="flex-1">
               <div className="flex items-center gap-3 mb-2">
-                <h1 className="text-3xl font-bold text-[rgb(var(--text))]">
+                <h1 className="text-xl md:text-2xl font-bold text-[rgb(var(--text))]">
                   {organizer.name}
                 </h1>
                 {organizer.verified && (
@@ -191,10 +197,16 @@ export default function OrganizerDetailPage() {
               </div>
 
               {organizer.bio && (
-                <p className="text-[rgb(var(--muted))] mb-4 leading-relaxed">
+                <p className={`text-base sm:text-lg ${tokens.muted} mb-4 leading-relaxed`}>
                   {organizer.bio}
                 </p>
               )}
+
+              {/* Follow Button */}
+              <button className="inline-flex items-center gap-2 px-4 py-2 bg-[rgb(var(--brand))] text-white rounded-xl text-sm font-medium hover:bg-[rgb(var(--brand))]/90 transition-colors mb-4">
+                <UserIcon className="w-5 h-5" />
+                Follow Organizer
+              </button>
 
               {/* Stats */}
               <div className="flex items-center gap-6 text-sm text-[rgb(var(--muted))]">
@@ -214,7 +226,7 @@ export default function OrganizerDetailPage() {
         {/* Social Links & Website */}
         {(organizer.website_url || organizer.socials) && (
           <div className="bg-[rgb(var(--panel))] token-border rounded-xl p-6 mb-8">
-            <h2 className="text-xl font-semibold text-[rgb(var(--text))] mb-4">
+            <h2 className="text-lg font-semibold text-[rgb(var(--text))] mb-4">
               Connect with {organizer.name}
             </h2>
             <div className="flex flex-wrap gap-4">
@@ -223,7 +235,7 @@ export default function OrganizerDetailPage() {
                   href={organizer.website_url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-2 px-4 py-2 bg-[rgb(var(--bg))] text-[rgb(var(--text))] rounded-lg hover:bg-[rgb(var(--bg))]/80 transition-colors token-border"
+                  className="flex items-center gap-2 px-4 py-2 bg-[rgb(var(--bg))] text-[rgb(var(--text))] rounded-xl hover:bg-[rgb(var(--bg))]/80 transition-colors token-border text-sm font-medium"
                 >
                   <GlobeAltIcon className="w-4 h-4" />
                   Website
@@ -235,9 +247,9 @@ export default function OrganizerDetailPage() {
                   href={organizer.socials.instagram}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-2 px-4 py-2 bg-[rgb(var(--bg))] text-[rgb(var(--text))] rounded-lg hover:bg-[rgb(var(--bg))]/80 transition-colors token-border"
+                  className="flex items-center gap-2 px-4 py-2 bg-[rgb(var(--bg))] text-[rgb(var(--text))] rounded-xl hover:bg-[rgb(var(--bg))]/80 transition-colors token-border text-sm font-medium"
                 >
-                  📷 Instagram
+                  <CameraIcon className="w-4 h-4" /> Instagram
                 </a>
               )}
               
@@ -246,9 +258,9 @@ export default function OrganizerDetailPage() {
                   href={organizer.socials.facebook}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-2 px-4 py-2 bg-[rgb(var(--bg))] text-[rgb(var(--text))] rounded-lg hover:bg-[rgb(var(--bg))]/80 transition-colors token-border"
+                  className="flex items-center gap-2 px-4 py-2 bg-[rgb(var(--bg))] text-[rgb(var(--text))] rounded-xl hover:bg-[rgb(var(--bg))]/80 transition-colors token-border text-sm font-medium"
                 >
-                  📘 Facebook
+                  <BookOpenIcon className="w-4 h-4" /> Facebook
                 </a>
               )}
               
@@ -257,9 +269,9 @@ export default function OrganizerDetailPage() {
                   href={organizer.socials.twitter}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-2 px-4 py-2 bg-[rgb(var(--bg))] text-[rgb(var(--text))] rounded-lg hover:bg-[rgb(var(--bg))]/80 transition-colors token-border"
+                  className="flex items-center gap-2 px-4 py-2 bg-[rgb(var(--bg))] text-[rgb(var(--text))] rounded-xl hover:bg-[rgb(var(--bg))]/80 transition-colors token-border text-sm font-medium"
                 >
-                  🐦 Twitter
+                  <ChatBubbleLeftRightIcon className="w-4 h-4" /> Twitter
                 </a>
               )}
               
@@ -268,9 +280,9 @@ export default function OrganizerDetailPage() {
                   href={organizer.socials.linkedin}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-2 px-4 py-2 bg-[rgb(var(--bg))] text-[rgb(var(--text))] rounded-lg hover:bg-[rgb(var(--bg))]/80 transition-colors token-border"
+                  className="flex items-center gap-2 px-4 py-2 bg-[rgb(var(--bg))] text-[rgb(var(--text))] rounded-xl hover:bg-[rgb(var(--bg))]/80 transition-colors token-border text-sm font-medium"
                 >
-                  💼 LinkedIn
+                  <BriefcaseIcon className="w-4 h-4" /> LinkedIn
                 </a>
               )}
             </div>
@@ -280,7 +292,7 @@ export default function OrganizerDetailPage() {
         {/* Events Section */}
         <div className="mb-8">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-bold text-[rgb(var(--text))]">
+            <h2 className="text-lg font-bold text-[rgb(var(--text))]">
               Upcoming Events by {organizer.name}
             </h2>
             <Link
@@ -359,6 +371,11 @@ export default function OrganizerDetailPage() {
                         {formatPrice(event.is_free, event.price_cents)}
                       </span>
                     </div>
+
+                    {/* Get Notified Button */}
+                    <button className="mt-4 px-4 py-2 bg-[rgb(var(--bg))] text-[rgb(var(--text))] rounded-lg hover:bg-[rgb(var(--bg))]/80 transition-colors token-border w-full">
+                      Get Notified
+                    </button>
                   </div>
                 </Link>
               ))}

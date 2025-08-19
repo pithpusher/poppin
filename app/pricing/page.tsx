@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { CheckIcon, XMarkIcon, StarIcon, SparklesIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
+import { tokens } from '@/components/tokens';
 
 type Plan = { 
   key: string; 
@@ -131,76 +132,64 @@ export default function Pricing() {
     <div className="min-h-screen bg-[rgb(var(--bg))] py-12 px-4">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold mb-4">Straight-up pricing. No surprises.</h1>
-          <p className="text-xl text-[rgb(var(--muted))] max-w-3xl mx-auto">
-            Pick your plan, throw your events. That's it.
+        <div className="text-center mb-12">
+          <h1 className="text-3xl md:text-4xl font-bold mb-4">Straight-up pricing, no surprises</h1>
+          <p className={`text-base sm:text-lg ${tokens.muted} max-w-3xl mx-auto`}>
+            Pick your plan and start posting. All plans include our core features.
           </p>
+          <div className="mt-6">
+            <Link
+              href="/auth"
+              className="px-4 py-2 bg-[rgb(var(--brand))] text-white rounded-xl hover:bg-[rgb(var(--brand))]/90 transition-colors text-sm font-medium"
+            >
+              Start Free Trial
+            </Link>
+          </div>
         </div>
 
-        {/* Pricing Cards */}
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4 mb-12">
+        {/* Plans Grid */}
+        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4 mb-16">
           {plans.map((plan) => (
-            <div
-              key={plan.key}
-              className={`relative rounded-xl p-6 transition-all duration-200 hover:scale-105 ${
-                plan.popular 
-                  ? 'ring-2 ring-[rgb(var(--brand))] bg-[rgb(var(--panel))] shadow-lg' 
-                  : 'bg-[rgb(var(--panel))] token-border'
-              }`}
-            >
-              {/* Popular Badge */}
+            <div key={plan.key} className={`relative bg-[rgb(var(--panel))] token-border rounded-2xl p-6 ${plan.popular ? 'ring-2 ring-[rgb(var(--brand))]' : ''}`}>
               {plan.popular && (
                 <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-                  <div className="bg-[rgb(var(--brand))] text-white px-3 py-1 rounded-full text-sm font-medium">
+                  <span className="bg-[rgb(var(--brand))] text-white px-3 py-1 rounded-full text-xs font-medium">
                     Most Popular
-                  </div>
+                  </span>
                 </div>
               )}
-
-              {/* Phase 2 Badge */}
               {plan.badge && (
                 <div className="absolute -top-3 right-4">
-                  <div className="bg-[rgb(var(--muted))] text-white px-2 py-1 rounded-full text-xs font-medium">
+                  <span className="bg-gray-500 text-white px-2 py-1 rounded-full text-xs font-medium">
                     {plan.badge}
-                  </div>
+                  </span>
                 </div>
               )}
-
-              {/* Plan Header */}
-              <div className="text-center mb-4">
-                <h3 className="text-lg font-bold mb-2">{plan.name}</h3>
-                <div className="mb-3">
-                  <span className="text-2xl font-bold">{plan.price}</span>
-                  <span className="text-[rgb(var(--muted))]">/month</span>
-                </div>
-                <p className="text-sm text-[rgb(var(--muted))]">{plan.desc}</p>
+              
+              <div className="text-center mb-6">
+                <h3 className="text-lg font-bold text-[rgb(var(--text))] mb-2">{plan.name}</h3>
+                <p className={`text-base sm:text-lg ${tokens.muted} mb-4`}>{plan.desc}</p>
+                <div className="text-2xl font-bold text-[rgb(var(--text))] mb-6">{plan.price}</div>
               </div>
 
-              {/* Features */}
-              <div className="space-y-2 mb-6">
+              <ul className="space-y-3 mb-6">
                 {plan.features.map((feature, index) => (
-                  <div key={index} className="flex items-start gap-2 text-sm">
+                  <li key={index} className="flex items-start gap-2">
                     <CheckIcon className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
-                    <span>{feature}</span>
-                  </div>
+                    <span className="text-xs text-[rgb(var(--text))]">{feature}</span>
+                  </li>
                 ))}
-              </div>
+              </ul>
 
-              {/* CTA Button */}
-              <button 
+              <button
                 onClick={() => checkout(plan.priceId, plan.key)}
                 disabled={isLoading === plan.key}
-                className={`w-full py-2 px-4 rounded-lg font-medium transition-colors ${
-                  plan.popular
-                    ? 'bg-[rgb(var(--brand))] text-white hover:bg-[rgb(var(--brand))]/90 shadow-lg'
-                    : 'bg-[rgb(var(--bg))] text-[rgb(var(--text))] hover:bg-[rgb(var(--bg))]/80 token-border'
-                }`}
+                className="w-full px-4 py-2 bg-[rgb(var(--brand))] text-white rounded-xl hover:bg-[rgb(var(--brand))]/90 transition-colors text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {isLoading === plan.key ? 'Loading...' : plan.cta}
+                {isLoading === plan.key ? 'Processing...' : plan.cta}
               </button>
-        </div>
-      ))}
+            </div>
+          ))}
         </div>
 
         {/* Message Display */}
@@ -213,8 +202,8 @@ export default function Pricing() {
         {/* Feature Comparison */}
         <div className="mb-12">
           <div className="text-center mb-6">
-            <h2 className="text-3xl font-bold mb-4">Plan Breakdown</h2>
-            <p className="text-[rgb(var(--muted))] max-w-2xl mx-auto">
+            <h2 className="text-xl md:text-2xl font-bold mb-4">Plan Breakdown</h2>
+            <p className={`text-base sm:text-lg ${tokens.muted} max-w-2xl mx-auto`}>
               Compare features across all plans to find the perfect fit for your needs
             </p>
           </div>
@@ -264,7 +253,7 @@ export default function Pricing() {
                     <td className="text-center p-4">-</td>
                     <td className="text-center p-4">-</td>
                     <td className="text-center p-4">-</td>
-                    <td className="text-center p-4">✓</td>
+                    <td className="text-center p-4"><CheckIcon className="w-4 h-4 inline text-green-500" /></td>
                   </tr>
                 </tbody>
               </table>
@@ -273,76 +262,47 @@ export default function Pricing() {
         </div>
 
         {/* FAQ Section */}
-        <div className="max-w-4xl mx-auto mb-12">
-          <div className="text-center mb-6">
-            <h2 className="text-3xl font-bold mb-4">Got Questions?</h2>
-            <p className="text-[rgb(var(--muted))] max-w-2xl mx-auto">
-              Everything you need to know about our pricing and plans
-            </p>
-          </div>
-          
-          <div className="grid gap-4 md:grid-cols-2">
-            <div className="bg-[rgb(var(--panel))] token-border rounded-xl p-5">
-              <h3 className="font-semibold mb-2">Can I change plans anytime?</h3>
-              <p className="text-sm text-[rgb(var(--muted))]">
-                Yes! You can upgrade or downgrade your plan at any time. Changes take effect immediately.
+        <div className="text-center mb-16">
+          <h2 className="text-xl md:text-2xl font-bold text-[rgb(var(--text))] mb-8">Got Questions?</h2>
+          <div className="max-w-2xl mx-auto space-y-4">
+            <div className="bg-[rgb(var(--panel))] token-border rounded-xl p-4 text-left">
+              <h3 className="text-base font-semibold text-[rgb(var(--text))] mb-2">What's included in all plans?</h3>
+              <p className={`text-xs ${tokens.muted}`}>
+                All plans include event creation, basic analytics, social sharing, and our mobile app. Higher tiers add more events per month, priority placement, and advanced features.
               </p>
             </div>
-            
-            <div className="bg-[rgb(var(--panel))] token-border rounded-xl p-5">
-              <h3 className="font-semibold mb-2">What happens if I exceed my event limit?</h3>
-              <p className="text-sm text-[rgb(var(--muted))]">
-                You'll be notified when you're close to your limit. Upgrade anytime to post more events.
+            <div className="bg-[rgb(var(--panel))] token-border rounded-xl p-4 text-left">
+              <h3 className="text-base font-semibold text-[rgb(var(--text))] mb-2">Can I change plans later?</h3>
+              <p className={`text-xs ${tokens.muted}`}>
+                Yes! You can upgrade or downgrade your plan at any time. Changes take effect immediately and we'll prorate any charges.
               </p>
             </div>
-            
-            <div className="bg-[rgb(var(--panel))] token-border rounded-xl p-5">
-              <h3 className="font-semibold mb-2">Do you offer refunds?</h3>
-              <p className="text-sm text-[rgb(var(--muted))]">
-                We offer a 30-day money-back guarantee. If you're not satisfied, we'll refund your subscription.
-              </p>
-            </div>
-            
-            <div className="bg-[rgb(var(--panel))] token-border rounded-xl p-5">
-              <h3 className="font-semibold mb-2">Is there a setup fee?</h3>
-              <p className="text-sm text-[rgb(var(--muted))]">
-                No setup fees! Just pay your monthly subscription and start posting events immediately.
+            <div className="bg-[rgb(var(--panel))] token-border rounded-xl p-4 text-left">
+              <h3 className="text-base font-semibold text-[rgb(var(--text))] mb-2">Is there a free trial?</h3>
+              <p className={`text-xs ${tokens.muted}`}>
+                We offer a 7-day free trial on all paid plans. No credit card required to start.
               </p>
             </div>
           </div>
         </div>
 
-        {/* Bottom CTA */}
-        <div className="text-center mt-12">
-          <div className="bg-[rgb(var(--panel))] rounded-2xl p-6 max-w-2xl mx-auto">
-            <h3 className="text-2xl font-bold mb-4">Need something custom?</h3>
-            <p className="text-[rgb(var(--muted))] mb-6">
-              We've got enterprise setups for bigger crews.
-            </p>
-            <Link
-              href="mailto:hello@poppin.com"
-              className="inline-flex items-center justify-center rounded-xl px-6 py-3 bg-brand text-white font-medium hover:bg-brand/90 transition-colors"
-            >
-              Talk to Us
-            </Link>
-          </div>
-          
-          <div className="mt-6 text-center">
-            <p className="text-[rgb(var(--muted))] mb-4">
-              Just testing the waters? Try our yard sale post.
-            </p>
-            <Link
-              href="/pricing/yard-sale"
-              className="inline-flex items-center justify-center rounded-xl px-4 py-2 border border-[rgb(var(--border))] text-[rgb(var(--text))] font-medium hover:bg-[rgb(var(--panel))] transition-colors"
-            >
-              Check It Out
-            </Link>
-          </div>
+        {/* CTA Section */}
+        <div className="text-center">
+          <h2 className="text-xl md:text-2xl font-bold text-[rgb(var(--text))] mb-4">Ready to get started?</h2>
+          <p className={`text-base sm:text-lg ${tokens.muted} max-w-2xl mx-auto mb-6`}>
+            Join thousands of organizers who are already using Poppin to reach their communities.
+          </p>
+          <Link
+            href="/auth"
+            className="px-4 py-2 bg-[rgb(var(--brand))] text-white rounded-xl hover:bg-[rgb(var(--brand))]/90 transition-colors text-sm font-medium"
+          >
+            Get Started
+          </Link>
         </div>
+
+        {/* Bottom spacing for navigation */}
+        <div className="pb-20"></div>
       </div>
-
-      {/* Bottom spacing for navigation */}
-      <div className="pb-20"></div>
     </div>
   );
 }
