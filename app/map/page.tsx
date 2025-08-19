@@ -287,9 +287,8 @@ export default function MapPage() {
                 </div>
             </div>
 
-            {/* Filter Bar */}
-            <div className="sticky top-0 z-10 bg-[rgb(var(--bg))] border-b border-[rgb(var(--border-color))]/20">
-                {/* Search Section */}
+            {/* Search Section - Moved here for desktop */}
+            <div className="bg-[rgb(var(--bg))] border-b border-[rgb(var(--border-color))]/20">
                 <div className="px-4 py-4 md:py-6 lg:py-8">
                     <div className="max-w-md md:max-w-lg lg:max-w-xl mx-auto">
                         <div className="relative">
@@ -315,7 +314,10 @@ export default function MapPage() {
                         </button>
                     </div>
                 </div>
-                
+            </div>
+
+            {/* Filter Bar */}
+            <div className="sticky top-0 z-10 bg-[rgb(var(--bg))] border-b border-[rgb(var(--border-color))]/20">
                 {/* Filter Bar - Full Width */}
                 <FilterBar
                     range={range}
