@@ -20,7 +20,7 @@ export default function BottomNav(){
           const active = path === it.href || (it.href !== "/" && path.startsWith(it.href));
           return (
             <Link key={it.href} href={it.href} className="flex flex-col items-center justify-center w-20 hover:opacity-80 transition-opacity group h-14 pt-2 pb-1">
-              <it.icon className={`w-4 h-4 mb-1 ${active ? 'text-[rgb(var(--text))]' : 'text-[rgb(var(--muted))] group-hover:text-[rgb(var(--text))]'}`} />
+              <it.icon className={`w-6 h-6 mb-1 ${active ? 'text-[rgb(var(--text))]' : 'text-[rgb(var(--muted))] group-hover:text-[rgb(var(--text))]'}`} />
               <span className={`text-xs font-medium ${active ? 'text-[rgb(var(--text))]' : 'text-[rgb(var(--muted))] group-hover:text-[rgb(var(--text))]'}`}>{it.label}</span>
             </Link>
           );

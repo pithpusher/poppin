@@ -422,7 +422,7 @@ export default function OrganizerApplyPage() {
         </div>
 
         {/* Benefits Section */}
-        <div className="mb-12">
+        <div className="mt-16 mb-12">
           <h2 className="text-2xl md:text-3xl font-bold text-[rgb(var(--text))] text-center mb-8">Benefits of Being an Organizer</h2>
           
           <div className="grid gap-6 md:grid-cols-3">

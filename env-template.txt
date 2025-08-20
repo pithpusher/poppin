@@ -1,0 +1,21 @@
+# Supabase Configuration
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+
+# Stripe Configuration
+STRIPE_SECRET_KEY=sk_test_... # Use sk_live_... for production
+STRIPE_WEBHOOK_SECRET=whsec_... # Your webhook secret
+NEXT_PUBLIC_PRICE_SUB_EXPLORER=price_... # Explorer plan price ID
+NEXT_PUBLIC_PRICE_SUB_HOST=price_... # Host plan price ID
+NEXT_PUBLIC_PRICE_SUB_PRO=price_... # Pro plan price ID
+NEXT_PUBLIC_PRICE_SUB_BUILDER=price_... # Builder plan price ID
+
+# Google Maps API
+NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=your_google_maps_api_key
+
+# App Configuration
+APP_BASE_URL=http://localhost:3000 # Change to your domain for production
+
+# Optional: AI Services
+OPENAI_API_KEY=your_openai_api_key
+ANTHROPIC_API_KEY=your_anthropic_api_key

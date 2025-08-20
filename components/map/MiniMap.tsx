@@ -124,11 +124,6 @@ bounds.extend([ev.lng!, ev.lat!]);
 
   return (
     <div className={`relative w-full overflow-hidden ${className}`}>
-      {error && (
-        <div className="absolute top-4 left-4 z-10 bg-yellow-500/90 text-white px-3 py-2 md:px-4 md:py-3 rounded-lg text-sm md:text-base backdrop-blur">
-          {error}
-        </div>
-      )}
       <div ref={mapEl} className="w-full h-full" />
       {showFullMapButton && (
         <Link

@@ -21,7 +21,8 @@ export async function POST(req: Request) {
 
     if (error) return NextResponse.json({ ok:false, error: error.message }, { status: 400 });
     return NextResponse.json({ ok:true });
-  } catch (e: any) {
-    return NextResponse.json({ ok:false, error: e.message }, { status: 400 });
+  } catch (e: unknown) {
+    const errorMessage = e instanceof Error ? e.message : 'Unknown error';
+    return NextResponse.json({ ok:false, error: errorMessage }, { status: 400 });
   }
 }

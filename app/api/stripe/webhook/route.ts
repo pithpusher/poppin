@@ -26,8 +26,9 @@ export async function POST(req: Request) {
   try {
     const raw = await req.text(); // raw body for signature check
     event = stripe.webhooks.constructEvent(raw, sig as string, whSecret);
-  } catch (err: any) {
-    return NextResponse.json({ error: `Webhook signature verification failed: ${err.message}` }, { status: 400 });
+  } catch (err: unknown) {
+    const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+    return NextResponse.json({ error: `Webhook signature verification failed: ${errorMessage}` }, { status: 400 });
   }
 
   const db = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!);
@@ -86,7 +87,8 @@ export async function POST(req: Request) {
     }
 
     return NextResponse.json({ received: true });
-  } catch (e: any) {
-    return NextResponse.json({ error: e.message }, { status: 400 });
+  } catch (e: unknown) {
+    const errorMessage = e instanceof Error ? e.message : 'Unknown error';
+    return NextResponse.json({ error: errorMessage }, { status: 400 });
   }
 }

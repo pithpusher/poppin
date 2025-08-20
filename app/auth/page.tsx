@@ -195,21 +195,21 @@ export default function AuthPage() {
         {/* Why Choose Poppin? */}
         <div className="mb-12 md:mb-16 lg:mb-20">
           <div className="bg-[rgb(var(--panel))] backdrop-blur-sm border border-[rgb(var(--border-color))]/20 rounded-2xl md:rounded-3xl p-6 md:p-8">
-            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-[rgb(var(--text))] text-center mb-8 md:mb-12">Why Choose Poppin?</h2>
-            <p className={`text-base sm:text-lg md:text-xl ${tokens.muted} mb-6 md:mb-8 text-center`}>Join thousands of users who are already discovering and creating amazing events</p>
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-[rgb(var(--text))] text-center mb-4 md:mb-6">Why Choose Poppin?</h2>
+            <p className={`text-base sm:text-lg md:text-xl ${tokens.muted} mb-8 md:mb-10 text-center`}>Join thousands of users who are already discovering and creating amazing events</p>
             <div className="grid md:grid-cols-3 gap-6 md:gap-8">
               <div className="text-center">
-                <FaceSmileIcon className="w-8 h-8 md:w-10 md:h-10 mx-auto text-[rgb(var(--muted))] mb-3 md:mb-4" />
+                <FaceSmileIcon className="w-8 h-8 md:w-10 md:h-10 mx-auto text-[rgb(var(--brand))] mb-3 md:mb-4" />
                 <div className="font-medium text-[rgb(var(--text))] md:text-lg">Discover Great Events</div>
                 <div className={`text-base sm:text-lg ${tokens.muted} md:text-base`}>Concerts, classes, and hidden gems near you.</div>
               </div>
               <div className="text-center">
-                <CalendarIcon className="w-8 h-8 md:w-10 md:h-10 mx-auto text-[rgb(var(--muted))] mb-3 md:mb-4" />
+                <CalendarIcon className="w-8 h-8 md:w-10 md:h-10 mx-auto text-[rgb(var(--brand))] mb-3 md:mb-4" />
                 <div className="font-medium text-[rgb(var(--text))] md:text-lg">Create & Share</div>
                 <div className={`text-base sm:text-lg ${tokens.muted} md:text-base`}>Post your event and get real turnout.</div>
               </div>
               <div className="text-center">
-                <UserGroupIcon className="w-8 h-8 md:w-10 md:h-10 mx-auto text-[rgb(var(--muted))] mb-3 md:mb-4" />
+                <UserGroupIcon className="w-8 h-8 md:w-10 md:h-10 mx-auto text-[rgb(var(--brand))] mb-3 md:mb-4" />
                 <div className="font-medium text-[rgb(var(--text))] md:text-lg">Connect & Network</div>
                 <div className={`text-base sm:text-lg ${tokens.muted} md:text-base`}>Find your crew, expand your circle.</div>
               </div>
@@ -220,19 +220,19 @@ export default function AuthPage() {
         {/* Safe & Solid */}
         <div className="mb-12 md:mb-16 lg:mb-20">
           <div className="bg-[rgb(var(--panel))] backdrop-blur-sm border border-[rgb(var(--border-color))]/20 rounded-2xl md:rounded-3xl p-6 md:p-8">
-            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-[rgb(var(--text))] text-center mb-8 md:mb-12">Safe & Solid</h2>
-            <p className={`text-base sm:text-lg md:text-xl ${tokens.muted} mb-6 md:mb-8 text-center`}>
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-[rgb(var(--text))] text-center mb-4 md:mb-6">Safe & Solid</h2>
+            <p className={`text-base sm:text-lg md:text-xl ${tokens.muted} mb-8 md:mb-10 text-center`}>
               Your info stays locked down with top-grade security.
             </p>
             <div className="flex flex-col sm:flex-row justify-center gap-4 md:gap-6">
               <span className="inline-flex items-center gap-2 px-3 py-1 md:px-4 md:py-2 rounded-full bg-[rgb(var(--bg))] text-sm md:text-base border border-[rgb(var(--border-color))]/20">
-                <LockClosedIcon className="w-4 h-4 md:w-5 md:h-5" /> Encrypted
+                <LockClosedIcon className="w-4 h-4 md:w-5 md:h-5 text-[rgb(var(--brand))]" /> Encrypted
               </span>
               <span className="inline-flex items-center gap-2 px-3 py-1 md:px-4 md:py-2 rounded-full bg-[rgb(var(--bg))] text-sm md:text-base border border-[rgb(var(--border-color))]/20">
-                <ShieldExclamationIcon className="w-4 h-4 md:w-5 md:h-5" /> Privacy first
+                <ShieldExclamationIcon className="w-4 h-4 md:w-5 md:h-5 text-[rgb(var(--brand))]" /> Privacy first
               </span>
               <span className="inline-flex items-center gap-2 px-3 py-1 md:px-4 md:py-2 rounded-full bg-[rgb(var(--bg))] text-sm md:text-base border border-[rgb(var(--border-color))]/20">
-                <CheckBadgeIcon className="w-4 h-4 md:w-5 md:h-5" /> GDPR ready
+                <CheckBadgeIcon className="w-4 h-4 md:w-5 md:h-5 text-[rgb(var(--brand))]" /> GDPR ready
               </span>
             </div>
           </div>
@@ -241,8 +241,8 @@ export default function AuthPage() {
         {/* Got Questions? */}
         <div className="mb-12 md:mb-16 lg:mb-20">
           <div className="bg-[rgb(var(--panel))] backdrop-blur-sm border border-[rgb(var(--border-color))]/20 rounded-2xl md:rounded-3xl p-6 md:p-8">
-            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-[rgb(var(--text))] text-center mb-8 md:mb-12">Got Questions?</h2>
-            <p className={`text-base sm:text-lg md:text-xl ${tokens.muted} max-w-2xl md:max-w-3xl mx-auto mb-6 md:mb-8 text-center`}>
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-[rgb(var(--text))] text-center mb-4 md:mb-6">Got Questions?</h2>
+            <p className={`text-base sm:text-lg md:text-xl ${tokens.muted} max-w-2xl md:max-w-3xl mx-auto mb-8 md:mb-10 text-center`}>
               Everything you need to know about our pricing and plans
             </p>
             

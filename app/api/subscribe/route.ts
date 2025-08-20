@@ -33,7 +33,8 @@ export async function POST(req: Request){
       await sendVerifyEmail(email, city_slug, data.verify_token);
     }
     return NextResponse.json({ ok:true });
-  }catch(e:any){
-    return NextResponse.json({ ok:false, error:e.message }, { status: 400 });
+  }catch(e: unknown){
+    const errorMessage = e instanceof Error ? e.message : 'Unknown error';
+    return NextResponse.json({ ok:false, error: errorMessage }, { status: 400 });
   }
 }

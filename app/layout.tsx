@@ -11,8 +11,60 @@ import ThemeToggle from "@/components/theme/ThemeToggle";
 import { LocationSearchProvider } from "@/components/context/LocationSearchContext";
 
 export const metadata: Metadata = {
-  title: "Poppin",
-  description: "Find and share local events",
+  title: "Poppin - Find What's Happening Near You",
+  description: "Discover local events, concerts, meetups, and activities in your city. Join Poppin to find what's happening this weekend and connect with your community.",
+  keywords: "local events, concerts, meetups, activities, community events, weekend plans, city events",
+  authors: [{ name: "Poppin" }],
+  creator: "Poppin",
+  publisher: "Poppin",
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
+  metadataBase: new URL(process.env.APP_BASE_URL || 'http://localhost:3000'),
+  alternates: {
+    canonical: '/',
+  },
+  openGraph: {
+    title: "Poppin - Find What's Happening Near You",
+    description: "Discover local events, concerts, meetups, and activities in your city. Join Poppin to find what's happening this weekend and connect with your community.",
+    url: '/',
+    siteName: 'Poppin',
+    locale: 'en_US',
+    type: 'website',
+    images: [
+      {
+        url: '/og-image.png', // You can add this image later
+        width: 1200,
+        height: 630,
+        alt: 'Poppin - Local Events Platform',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: "Poppin - Find What's Happening Near You",
+    description: "Discover local events, concerts, meetups, and activities in your city.",
+    images: ['/og-image.png'], // Same image as Open Graph
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+  verification: {
+    // Add these when you have them
+    // google: 'your-google-verification-code',
+    // yandex: 'your-yandex-verification-code',
+    // yahoo: 'your-yahoo-verification-code',
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

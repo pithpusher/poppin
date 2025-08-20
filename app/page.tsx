@@ -17,26 +17,35 @@ export default function HomePage() {
         {/* Hero Content Overlay */}
         <div className="relative z-10 h-full flex items-center justify-center">
           <div className="max-w-7xl mx-auto px-4 text-center">
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight">
-              Find what&apos;s poppin&apos;.
-            </h1>
-            <p className={`mt-3 md:mt-4 text-lg sm:text-xl md:text-2xl ${tokens.muted} max-w-2xl md:max-w-3xl mx-auto`}>
-            Local happenings, curated just for you.
-            </p>
-            <div className="mt-6 md:mt-8 flex flex-row justify-center gap-3 md:gap-4">
-              <Link
-                href="/map"
-                className={`inline-flex items-center justify-center rounded-xl px-4 py-2 md:px-6 md:py-3 text-sm md:text-base bg-brand text-white hover:${tokens.panel} transition-all duration-200`}
-              >
-                View Events Near You
-              </Link>
-              <Link
-                href="/events/new"
-                className={`inline-flex items-center justify-center rounded-xl px-4 py-2 md:px-6 md:py-3 text-sm md:text-base ${tokens.border} ${tokens.muted} ${tokens.panel}
-                              hover:bg-white/10 html.light:hover:bg-zinc-50 transition-colors duration-200`}
-              >
-                Post Yours
-              </Link>
+            {/* Glass Effect Background */}
+            <div className="relative">
+              {/* Blurred Glass Background */}
+              <div className="absolute inset-0 bg-black/20 backdrop-blur-xl rounded-3xl border border-white/10 shadow-2xl -m-8 md:-m-12"></div>
+              
+              {/* Content Container */}
+              <div className="relative z-10 p-8 md:p-12">
+                <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight">
+                  Find what&apos;s poppin&apos;.
+                </h1>
+                <p className={`mt-3 md:mt-4 text-lg sm:text-xl md:text-2xl ${tokens.muted} max-w-2xl md:max-w-3xl mx-auto`}>
+                Local happenings, curated just for you.
+                </p>
+                <div className="mt-6 md:mt-8 flex flex-row justify-center gap-3 md:gap-4">
+                  <Link
+                    href="/map"
+                    className={`inline-flex items-center justify-center rounded-xl px-4 py-2 md:px-6 md:py-3 text-sm md:text-base bg-brand text-white hover:${tokens.panel} transition-all duration-200`}
+                  >
+                    View Events Near You
+                  </Link>
+                  <Link
+                    href="/events/new"
+                    className={`inline-flex items-center justify-center rounded-xl px-4 py-2 md:px-6 md:py-3 text-sm md:text-base ${tokens.border} ${tokens.muted} ${tokens.panel}
+                                  hover:bg-white/10 html.light:hover:bg-zinc-50 transition-colors duration-200`}
+                  >
+                    Post Yours
+                  </Link>
+                </div>
+              </div>
             </div>
           </div>
         </div>

@@ -140,7 +140,7 @@ export default function MapPage() {
     useEffect(() => {
         const load = async () => {
             try {
-                let q = supabase.from("events").select("id,title,start_at,venue_name,lat,lng,image_url,status,price_cents,is_free,event_type,age_restriction").eq("status", "approved").filter("lat", "not.is", null).filter("lng", "not.is", null).order("start_at", {
+                let q = supabase.from("events").select("id,title,start_at,venue_name,lat,lng,image_url,status,price_cents,is_free,event_type,age_restriction").eq("status", "pending_review").filter("lat", "not.is", null).filter("lng", "not.is", null).order("start_at", {
                     ascending: true
                 }).limit(500);
                 
@@ -354,11 +354,6 @@ export default function MapPage() {
 
             <div className="grid md:grid-cols-[2fr,1fr] gap-6 max-w-7xl mx-auto px-4 py-6">
               <div className="relative w-full h-[60vh] rounded-2xl token-border overflow-hidden">
-                {error && (
-                  <div className="absolute top-4 left-4 z-10 text-yellow-400 px-3 py-2 text-sm font-bold">
-                    {error}
-                  </div>
-                )}
                 {searchLocation && (
                   <div className="absolute top-2 left-0 right-0 z-10 text-center">
                     <div className="text-xs text-[rgb(var(--text))] font-normal">
