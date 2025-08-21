@@ -130,13 +130,150 @@ export default function EventDetailPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[rgb(var(--bg))] py-12 px-4">
+      <div className="min-h-screen bg-[rgb(var(--bg))] py-8 px-4">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[rgb(var(--brand))] mx-auto"></div>
-            <p className="mt-4 text-[rgb(var(--muted))]">Loading event...</p>
+          {/* Back Button Skeleton */}
+          <div className="mb-6">
+            <div className="h-5 w-32 bg-[rgb(var(--muted))]/20 rounded animate-pulse" />
+          </div>
+
+          {/* Event Header Skeleton */}
+          <div className="mb-8 space-y-4">
+            <div className="h-6 w-20 bg-[rgb(var(--muted))]/20 rounded-full animate-pulse" />
+            <div className="h-8 md:h-10 w-3/4 bg-[rgb(var(--muted))]/20 rounded-lg animate-pulse" />
+            
+            {/* Event Meta Skeleton */}
+            <div className="flex flex-wrap items-center gap-4 mb-6">
+              <div className="flex items-center gap-2">
+                <div className="h-5 w-5 bg-[rgb(var(--muted))]/20 rounded animate-pulse" />
+                <div className="h-4 w-32 bg-[rgb(var(--muted))]/20 rounded animate-pulse" />
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="h-5 w-5 bg-[rgb(var(--muted))]/20 rounded animate-pulse" />
+                <div className="h-4 w-24 bg-[rgb(var(--muted))]/20 rounded animate-pulse" />
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="h-5 w-5 bg-[rgb(var(--muted))]/20 rounded animate-pulse" />
+                <div className="h-4 w-28 bg-[rgb(var(--muted))]/20 rounded animate-pulse" />
+              </div>
+            </div>
+
+            {/* Action Buttons Skeleton */}
+            <div className="flex flex-wrap gap-3">
+              <div className="h-10 w-20 bg-[rgb(var(--muted))]/20 rounded-xl animate-pulse" />
+              <div className="h-10 w-24 bg-[rgb(var(--muted))]/20 rounded-xl animate-pulse" />
+              <div className="h-10 w-28 bg-[rgb(var(--muted))]/20 rounded-xl animate-pulse" />
+              <div className="h-10 w-32 bg-[rgb(var(--muted))]/20 rounded-xl animate-pulse" />
+            </div>
+          </div>
+
+          {/* Event Image Skeleton */}
+          <div className="mb-8">
+            <div className="w-full h-64 md:h-96 bg-[rgb(var(--muted))]/20 rounded-2xl animate-pulse" />
+          </div>
+
+          {/* Event Content Grid Skeleton */}
+          <div className="grid gap-8 lg:grid-cols-3">
+            {/* Main Content Skeleton */}
+            <div className="lg:col-span-2 space-y-6">
+              {/* Description Skeleton */}
+              <div className="bg-[rgb(var(--panel))] token-border rounded-xl p-6 space-y-4">
+                <div className="h-6 w-48 bg-[rgb(var(--muted))]/20 rounded animate-pulse" />
+                <div className="space-y-2">
+                  <div className="h-4 w-full bg-[rgb(var(--muted))]/20 rounded animate-pulse" />
+                  <div className="h-4 w-full bg-[rgb(var(--muted))]/20 rounded animate-pulse" />
+                  <div className="h-4 w-3/4 bg-[rgb(var(--muted))]/20 rounded animate-pulse" />
+                </div>
+              </div>
+
+              {/* Event Details Skeleton */}
+              <div className="bg-[rgb(var(--panel))] token-border rounded-xl p-6 space-y-4">
+                <div className="h-6 w-40 bg-[rgb(var(--muted))]/20 rounded animate-pulse" />
+                <div className="space-y-4">
+                  {Array.from({ length: 4 }).map((_, i) => (
+                    <div key={i} className="flex items-start gap-3">
+                      <div className="h-5 w-5 bg-[rgb(var(--muted))]/20 rounded animate-pulse" />
+                      <div className="space-y-1">
+                        <div className="h-4 w-24 bg-[rgb(var(--muted))]/20 rounded animate-pulse" />
+                        <div className="h-4 w-32 bg-[rgb(var(--muted))]/20 rounded animate-pulse" />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Contact Organizer Skeleton */}
+              <div className="bg-[rgb(var(--panel))] token-border rounded-xl p-6 space-y-4">
+                <div className="h-7 w-44 bg-[rgb(var(--muted))]/20 rounded animate-pulse" />
+                <div className="space-y-3">
+                  {Array.from({ length: 3 }).map((_, i) => (
+                    <div key={i} className="flex items-center gap-3">
+                      <div className="h-5 w-5 bg-[rgb(var(--muted))]/20 rounded animate-pulse" />
+                      <div className="h-4 w-40 bg-[rgb(var(--muted))]/20 rounded animate-pulse" />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Sidebar Skeleton */}
+            <div className="space-y-6">
+              {/* Organizer Info Skeleton */}
+              <div className="bg-[rgb(var(--panel))] token-border rounded-xl p-6 space-y-4">
+                <div className="h-6 w-24 bg-[rgb(var(--muted))]/20 rounded animate-pulse" />
+                <div className="space-y-3">
+                  <div className="flex items-center gap-3">
+                    <div className="w-12 h-12 bg-[rgb(var(--muted))]/20 rounded-full animate-pulse" />
+                    <div className="h-5 w-28 bg-[rgb(var(--muted))]/20 rounded animate-pulse" />
+                  </div>
+                  <div className="h-10 w-full bg-[rgb(var(--muted))]/20 rounded-lg animate-pulse" />
+                  <div className="space-y-2">
+                    <div className="h-4 w-36 bg-[rgb(var(--muted))]/20 rounded animate-pulse" />
+                    <div className="h-4 w-32 bg-[rgb(var(--muted))]/20 rounded animate-pulse" />
+                  </div>
+                </div>
+              </div>
+
+              {/* Quick Actions Skeleton */}
+              <div className="bg-[rgb(var(--panel))] token-border rounded-xl p-6 space-y-4">
+                <div className="h-6 w-32 bg-[rgb(var(--muted))]/20 rounded animate-pulse" />
+                <div className="space-y-3">
+                  {Array.from({ length: 3 }).map((_, i) => (
+                    <div key={i} className="h-10 w-full bg-[rgb(var(--muted))]/20 rounded-lg animate-pulse" />
+                  ))}
+                </div>
+              </div>
+
+              {/* Event Tags Skeleton */}
+              <div className="bg-[rgb(var(--panel))] token-border rounded-xl p-6 space-y-4">
+                <div className="h-6 w-28 bg-[rgb(var(--muted))]/20 rounded animate-pulse" />
+                <div className="flex flex-wrap gap-2">
+                  <div className="h-6 w-16 bg-[rgb(var(--muted))]/20 rounded-full animate-pulse" />
+                  <div className="h-6 w-12 bg-[rgb(var(--muted))]/20 rounded-full animate-pulse" />
+                  <div className="h-6 w-14 bg-[rgb(var(--muted))]/20 rounded-full animate-pulse" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Bottom CTA Skeleton */}
+          <div className="text-center mt-16">
+            <div className="bg-[rgb(var(--panel))] token-border rounded-2xl p-8 max-w-2xl mx-auto space-y-4">
+              <div className="h-8 w-64 bg-[rgb(var(--muted))]/20 rounded-lg mx-auto animate-pulse" />
+              <div className="space-y-2">
+                <div className="h-4 w-full bg-[rgb(var(--muted))]/20 rounded animate-pulse" />
+                <div className="h-4 w-3/4 bg-[rgb(var(--muted))]/20 rounded mx-auto animate-pulse" />
+              </div>
+              <div className="flex gap-3 justify-center">
+                <div className="h-12 w-28 bg-[rgb(var(--muted))]/20 rounded-xl animate-pulse" />
+                <div className="h-12 w-40 bg-[rgb(var(--muted))]/20 rounded-xl animate-pulse" />
+              </div>
+            </div>
           </div>
         </div>
+
+        {/* Bottom spacing for navigation */}
+        <div className="pb-20"></div>
       </div>
     );
   }
