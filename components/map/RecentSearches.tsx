@@ -122,7 +122,7 @@ export default function RecentSearches({ onLoadSearch }: RecentSearchesProps) {
     <>
       <button
         onClick={() => setIsModalOpen(true)}
-        className="flex items-center gap-1.5 px-2.5 py-1.5 bg-gradient-to-r from-red-600 to-red-500 text-white rounded-md hover:from-red-500 hover:to-red-400 transition-all shadow-sm hover:shadow-md text-xs"
+        className="flex items-center gap-1.5 px-2.5 py-1.5 bg-[rgb(var(--brand))] text-white rounded-md hover:opacity-90 transition-all shadow-sm hover:shadow-md text-xs"
       >
         <ClockIcon className="w-3.5 h-3.5" />
         <span className="font-medium">Recent</span>
