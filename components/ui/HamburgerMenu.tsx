@@ -113,12 +113,12 @@ export default function HamburgerMenu() {
         <>
           {/* Backdrop */}
           <div 
-            className="fixed inset-0 bg-black/20 z-40"
+            className="fixed inset-0 bg-black/20 z-[70]"
             onClick={() => setIsOpen(false)}
           />
           
           {/* Menu Dropdown */}
-          <div className="absolute top-full right-0 mt-3 w-80 bg-[rgb(var(--panel))] token-border rounded-2xl shadow-2xl z-50 overflow-hidden animate-in slide-in-from-top-2 duration-200">
+          <div className="absolute top-full right-0 mt-3 w-80 bg-[rgb(var(--panel))] token-border rounded-2xl shadow-2xl z-[80] overflow-hidden animate-in slide-in-from-top-2 duration-200">
             {/* Header */}
             <div className="px-6 py-3 border-b border-[rgb(var(--border-color))]/20">
               <h3 className="text-base font-semibold text-[rgb(var(--text))]">Menu</h3>

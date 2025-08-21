@@ -396,7 +396,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <ThemeProvider>
           <LocationSearchProvider>
             {/* Top bar */}
-            <header className="sticky top-0 z-40 token-border-b bg-[rgb(var(--bg))]/80 backdrop-blur light:bg-white/80">
+            <header className="sticky top-0 z-[90] token-border-b bg-[rgb(var(--bg))]/80 backdrop-blur light:bg-white/80">
               <div className="mx-auto max-w-7xl px-4 py-3 flex items-center justify-between">
                 {/* Logo */}
                 <Link href="/" className="flex items-center flex-shrink-0">
