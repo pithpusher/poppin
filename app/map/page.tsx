@@ -20,11 +20,20 @@ import {
     supabase
 } from "@/lib/supabaseClient";
 import FilterBar, { Range } from "@/components/map/FilterBar";
+import SavedSearches from "@/components/map/SavedSearches";
+import RecentSearches, { RecentSearch } from "@/components/map/RecentSearches";
+import PopularEvents from "@/components/map/PopularEvents";
+import PersonalizedRecommendations from "@/components/map/PersonalizedRecommendations";
 import { useLocation } from "@/components/map/useLocation";
 import { BellIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
-import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
+import { MagnifyingGlassIcon, ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 import { tokens } from "@/components/tokens";
+import { useToast } from '@/lib/useToast';
+import { ToastContainer } from '@/components/ui/Toast';
+import { OfflineIndicator } from '@/components/ui/OfflineIndicator';
+import { RetryButton } from '@/components/ui/RetryButton';
+import { ErrorBoundary } from '@/components/ui/ErrorBoundary';
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN || "";
 type Ev = {
     id: string;
@@ -53,18 +62,26 @@ export default function MapPage() {
     const [searchLocation, setSearchLocation] = useState<{ lat: number; lng: number; formatted: string } | null>(null);
     const [eventTypes, setEventTypes] = useState<string[]>([]);
     const [ageRestriction, setAgeRestriction] = useState<string>("All Ages");
+    const [priceRange, setPriceRange] = useState<[number, number]>([0, 100]);
     const [searchTerm, setSearchTerm] = useState("");
     const [searchSuggestions, setSearchSuggestions] = useState<Array<{ label: string; center: [number, number] }>>([]);
     const [showSearchSuggestions, setShowSearchSuggestions] = useState(false);
     const [isSearching, setIsSearching] = useState(false);
+    const [isSearchSuggestionsLoading, setIsSearchSuggestionsLoading] = useState(false);
+    const [isMapLoading, setIsMapLoading] = useState(true);
+    const [isEventsLoading, setIsEventsLoading] = useState(true);
+    const [searchError, setSearchError] = useState<string | null>(null);
+    const [mapError, setMapError] = useState<string | null>(null);
     const { location, isLoading, error } = useLocation();
     const debounceTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+    const { success, error: showError, warning, info } = useToast();
 
     // Handle map search functionality
     const handleMapSearch = async () => {
         if (!searchTerm.trim() || !mapRef.current) return;
 
         setIsSearching(true);
+        setSearchError(null);
         
         try {
             // Use the geocoding API to get real location data
@@ -99,11 +116,60 @@ export default function MapPage() {
                 setSearchTerm("");
                 setShowSearchSuggestions(false);
                 setSearchSuggestions([]);
+                
+                // Clear any previous search errors
+                setSearchError(null);
+                
+                // Show success message
+                success('Location found!', `Showing events near ${result.formatted.split(',').slice(0, 2).join(', ')}`);
+                
+                // Save to recent searches
+                await saveRecentSearch(searchTerm, searchResult);
+            } else {
+                throw new Error('No location found for this search');
             }
         } catch (error) {
             console.error('Search error:', error);
+            const errorMessage = error instanceof Error ? error.message : 'Search failed. Please try again.';
+            setSearchError(errorMessage);
+            showError('Search failed', errorMessage);
         } finally {
             setIsSearching(false);
+        }
+    };
+
+    // Save search to recent searches
+    const saveRecentSearch = async (searchTerm: string, location: { lat: number; lng: number; formatted: string } | null) => {
+        try {
+            const { data: { user } } = await supabase.auth.getUser();
+            if (!user) return;
+
+            // Check if search already exists
+            const { data: existing } = await supabase
+                .from('recent_searches')
+                .select('id')
+                .eq('user_id', user.id)
+                .eq('search_term', searchTerm)
+                .single();
+
+            if (existing) {
+                // Update timestamp
+                await supabase
+                    .from('recent_searches')
+                    .update({ created_at: new Date().toISOString() })
+                    .eq('id', existing.id);
+            } else {
+                // Insert new search
+                await supabase
+                    .from('recent_searches')
+                    .insert({
+                        user_id: user.id,
+                        search_term: searchTerm,
+                        location,
+                    });
+            }
+        } catch (error) {
+            console.error('Error saving recent search:', error);
         }
     };
 
@@ -112,10 +178,13 @@ export default function MapPage() {
         if (!query.trim() || query.length < 2) {
             setSearchSuggestions([]);
             setShowSearchSuggestions(false);
+            setIsSearchSuggestionsLoading(false);
             return;
         }
 
         try {
+            setIsSearchSuggestionsLoading(true);
+            console.log('Fetching suggestions for:', query); // Debug log
             const response = await fetch('/api/geocode', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -127,17 +196,22 @@ export default function MapPage() {
             }
 
             const result = await response.json();
-            setSearchSuggestions(result.suggestions);
+            console.log('Search suggestions result:', result); // Debug log
+            setSearchSuggestions(result.suggestions || []);
             setShowSearchSuggestions(true);
         } catch (error) {
             console.error('Search suggestions error:', error);
             setSearchSuggestions([]);
             setShowSearchSuggestions(false);
+            warning('Search suggestions unavailable', 'Unable to load location suggestions. Please try again.');
+        } finally {
+            setIsSearchSuggestionsLoading(false);
         }
-    }, []);
+    }, [warning]);
 
     // Handle search input changes with debouncing
     const handleSearchInputChange = (value: string) => {
+        console.log('Search input changed:', value); // Debug log
         setSearchTerm(value);
         
         // Clear previous timeout
@@ -147,6 +221,7 @@ export default function MapPage() {
 
         // Set new timeout for debounced search
         debounceTimeoutRef.current = setTimeout(() => {
+            console.log('Debounced search triggered for:', value); // Debug log
             debouncedSearchSuggestions(value);
         }, 300); // 300ms delay
     };
@@ -222,6 +297,10 @@ export default function MapPage() {
         // Use search location if available, otherwise use user location
         const centerLocation = searchLocation || location;
         
+        if (!centerLocation?.lat || !centerLocation?.lng) return;
+        
+        setIsMapLoading(true);
+        
         const map = new mapboxgl.Map({
             container: mapEl.current,
             style: getInitialMapStyle(),
@@ -237,7 +316,14 @@ export default function MapPage() {
             // Disable pinch zoom
             touchPitch: false,
         });
+        
         mapRef.current = map;
+        
+        // Map is ready when it loads
+        map.on('load', () => {
+            setIsMapLoading(false);
+        });
+        
         const off = bindThemeToMap(map);
         return () => {
             off?.();
@@ -249,6 +335,8 @@ export default function MapPage() {
     useEffect(() => {
         const load = async () => {
             try {
+                setIsEventsLoading(true);
+                
                 let q = supabase.from("events").select("id,title,start_at,venue_name,lat,lng,image_url,status,price_cents,is_free,event_type,age_restriction").eq("status", "pending_review").filter("lat", "not.is", null).filter("lng", "not.is", null).order("start_at", {
                     ascending: true
                 }).limit(500);
@@ -278,7 +366,17 @@ export default function MapPage() {
                 }
                 
                 // Pricing filter
-                if (onlyFree) q = q.eq("is_free", true);
+                if (onlyFree) {
+                    q = q.eq("is_free", true);
+                } else if (priceRange[0] > 0 || priceRange[1] < 100) {
+                    // Apply price range filter
+                    if (priceRange[0] > 0) {
+                        q = q.gte("price_cents", priceRange[0] * 100); // Convert dollars to cents
+                    }
+                    if (priceRange[1] < 100) {
+                        q = q.lte("price_cents", priceRange[1] * 100); // Convert dollars to cents
+                    }
+                }
                 
                 // Event type filter
                 if (eventTypes.length > 0) {
@@ -321,10 +419,12 @@ export default function MapPage() {
             } catch (e) {
                 console.error("Fetch crash", e);
                 setEvents([]);
+            } finally {
+                setIsEventsLoading(false);
             }
         };
         load();
-    }, [range, onlyFree, startDate, endDate, eventTypes, ageRestriction]);
+    }, [range, onlyFree, startDate, endDate, eventTypes, ageRestriction, priceRange]);
     // Markers
     useEffect(() => {
         const map = mapRef.current;
@@ -374,9 +474,15 @@ export default function MapPage() {
     // This component will automatically respond to URL parameter changes
 
     return (
-        <div className="min-h-screen bg-[rgb(var(--bg))]">
+        <ErrorBoundary>
+            <div className="min-h-screen bg-[rgb(var(--bg))]">
+                {/* Toast Notifications */}
+                <ToastContainer toasts={[]} onDismiss={() => {}} />
+                
+                {/* Offline Indicator */}
+                <OfflineIndicator />
             {/* Header with Post Event Button */}
-            <div className="relative z-10 bg-[rgb(var(--bg))] border-b md:border-b-0 border-[rgb(var(--border-color))]/20">
+            <div className="relative z-30 bg-[rgb(var(--bg))] border-b md:border-b-0 border-[rgb(var(--border-color))]/20">
                 <div className="max-w-7xl mx-auto px-4 py-4 md:py-6 lg:py-8">
                     <div className="flex items-center justify-between gap-4 md:gap-6">
                         {/* Left Column - Event Map Title */}
@@ -387,7 +493,7 @@ export default function MapPage() {
                         
                         {/* Middle Column - Search Bar (Hidden on Mobile) */}
                         <div className="hidden md:flex flex-1 px-4 md:px-6">
-                            <div className="relative w-full search-container">
+                            <div className="relative w-full search-container overflow-visible">
                                 <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-[rgb(var(--muted))]" />
                                 <input
                                     type="text"
@@ -397,32 +503,66 @@ export default function MapPage() {
                                     onChange={(e) => handleSearchInputChange(e.target.value)}
                                     onKeyPress={(e) => e.key === 'Enter' && handleMapSearch()}
                                 />
-                                <button
-                                    onClick={handleMapSearch}
-                                    className="absolute right-2 top-1/2 transform -translate-y-1/2 px-3 py-1.5 md:px-4 md:py-2 bg-[rgb(var(--brand))] text-white rounded-md text-xs md:text-sm font-medium hover:bg-[rgb(var(--brand))]/90 transition-colors"
-                                >
-                                    {isSearching ? (
-                                        <div className="w-3 h-3 md:w-4 md:h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                                    ) : (
-                                        "Search"
-                                    )}
-                                </button>
-                                
-                                {/* Search Suggestions Dropdown */}
-                                {showSearchSuggestions && searchSuggestions.length > 0 && (
-                                    <div className="absolute top-full left-0 right-0 mt-1 bg-[rgb(var(--panel))] token-border rounded-lg shadow-lg z-50 max-h-60 overflow-y-auto">
-                                        {searchSuggestions.map((suggestion, index) => (
-                                            <button
-                                                key={index}
-                                                onClick={() => handleSuggestionClick(suggestion)}
-                                                className="w-full text-left px-3 py-2 hover:bg-[rgb(var(--bg))] transition-colors text-sm"
-                                            >
-                                                {suggestion.label}
-                                            </button>
-                                        ))}
-                                    </div>
+                                                            <button
+                                onClick={handleMapSearch}
+                                className="absolute right-2 top-1/2 transform -translate-y-1/2 px-3 py-1.5 md:px-4 md:py-2 bg-[rgb(var(--brand))] text-white rounded-md text-xs md:text-sm font-medium hover:bg-[rgb(var(--brand))]/90 transition-colors"
+                            >
+                                {isSearching ? (
+                                    <div className="w-3 h-3 md:w-4 md:h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                                ) : (
+                                    "Search"
                                 )}
+                            </button>
+                        </div>
+                        
+                        {/* Search Error Display */}
+                        {searchError && (
+                            <div className="mt-2 p-3 bg-red-50 border border-red-200 rounded-lg">
+                                <div className="flex items-start gap-2">
+                                    <ExclamationTriangleIcon className="w-4 h-4 text-red-500 flex-shrink-0 mt-0.5" />
+                                    <div className="flex-1">
+                                        <div className="text-sm text-red-800 font-medium">Search Error</div>
+                                        <div className="text-sm text-red-700 mt-1">{searchError}</div>
+                                        <RetryButton 
+                                            onRetry={handleMapSearch} 
+                                            size="sm" 
+                                            variant="outline"
+                                            className="mt-2"
+                                        >
+                                            Try Again
+                                        </RetryButton>
+                                    </div>
+                                </div>
                             </div>
+                        )}
+                        
+                                                    {/* Search Suggestions Dropdown - Positioned outside container */}
+                            {(showSearchSuggestions || isSearchSuggestionsLoading) && (
+                                <div className="absolute left-1/2 transform -translate-x-1/2 top-full mt-0.5 w-full max-w-md bg-[rgb(var(--panel))] token-border rounded-lg shadow-2xl z-50 max-h-60 overflow-y-auto">
+                                    <div className="p-1">
+                                        {isSearchSuggestionsLoading ? (
+                                            <div className="flex items-center justify-center py-4">
+                                                <div className="w-4 h-4 border-2 border-[rgb(var(--brand))] border-t-transparent rounded-full animate-spin"></div>
+                                                <span className="ml-2 text-sm text-[rgb(var(--muted))]">Loading suggestions...</span>
+                                            </div>
+                                        ) : searchSuggestions.length > 0 ? (
+                                            searchSuggestions.map((suggestion, index) => (
+                                                <button
+                                                    key={index}
+                                                    onClick={() => handleSuggestionClick(suggestion)}
+                                                    className="w-full text-left px-3 py-2 hover:bg-[rgb(var(--bg))] transition-colors text-sm rounded-md"
+                                                >
+                                                    {suggestion.label}
+                                                </button>
+                                            ))
+                                        ) : (
+                                            <div className="px-3 py-2 text-sm text-[rgb(var(--muted))]">
+                                                No suggestions found
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+                            )}
                         </div>
                         
                         {/* Right Column - CTA Buttons */}
@@ -446,11 +586,11 @@ export default function MapPage() {
             </div>
 
             {/* Filter Bar */}
-            <div className="sticky top-0 z-10 bg-[rgb(var(--bg))] border-b border-[rgb(var(--border-color))]/20">
+            <div className="sticky top-0 z-40 bg-[rgb(var(--bg))] border-b border-[rgb(var(--border-color))]/20">
                 {/* Search Section - Mobile Only */}
-                <div className="md:hidden px-4 py-4">
+                <div className="md:hidden px-4 py-4 relative">
                     <div className="max-w-md mx-auto">
-                        <div className="relative search-container">
+                        <div className="relative search-container overflow-visible">
                             <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-[rgb(var(--muted))]" />
                             <input
                                 type="text"
@@ -470,23 +610,57 @@ export default function MapPage() {
                                     "Search"
                                 )}
                             </button>
-                            
-                            {/* Search Suggestions Dropdown */}
-                            {showSearchSuggestions && searchSuggestions.length > 0 && (
-                                <div className="absolute top-full left-0 right-0 mt-1 bg-[rgb(var(--panel))] token-border rounded-lg shadow-lg z-50 max-h-60 overflow-y-auto">
-                                    {searchSuggestions.map((suggestion, index) => (
-                                        <button
-                                            key={index}
-                                            onClick={() => handleSuggestionClick(suggestion)}
-                                            className="w-full text-left px-3 py-2 hover:bg-[rgb(var(--bg))] transition-colors text-sm"
+                        </div>
+                        
+                        {/* Search Error Display - Mobile */}
+                        {searchError && (
+                            <div className="mt-2 p-3 bg-red-50 border border-red-200 rounded-lg">
+                                <div className="flex items-start gap-2">
+                                    <ExclamationTriangleIcon className="w-4 h-4 text-red-500 flex-shrink-0 mt-0.5" />
+                                    <div className="flex-1">
+                                        <div className="text-sm text-red-800 font-medium">Search Error</div>
+                                        <div className="text-sm text-red-700 mt-1">{searchError}</div>
+                                        <RetryButton 
+                                            onRetry={handleMapSearch} 
+                                            size="sm" 
+                                            variant="outline"
+                                            className="mt-2"
                                         >
-                                            {suggestion.label}
-                                        </button>
-                                    ))}
+                                            Try Again
+                                        </RetryButton>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                    
+                                                {/* Search Suggestions Dropdown - Positioned outside container */}
+                            {(showSearchSuggestions || isSearchSuggestionsLoading) && (
+                                <div className="absolute left-1/2 transform -translate-x-1/2 top-full mt-0 w-full max-w-md bg-[rgb(var(--panel))] token-border rounded-lg shadow-2xl z-50 max-h-60 overflow-y-auto">
+                                    <div className="p-1">
+                                        {isSearchSuggestionsLoading ? (
+                                            <div className="flex items-center justify-center py-4">
+                                                <div className="w-4 h-4 border-2 border-[rgb(var(--brand))] border-t-transparent rounded-full animate-spin"></div>
+                                                <span className="ml-2 text-sm text-[rgb(var(--muted))]">Loading suggestions...</span>
+                                            </div>
+                                        ) : searchSuggestions.length > 0 ? (
+                                            searchSuggestions.map((suggestion, index) => (
+                                                <button
+                                                    key={index}
+                                                    onClick={() => handleSuggestionClick(suggestion)}
+                                                    className="w-full text-left px-3 py-2 hover:bg-[rgb(var(--brand))] transition-colors text-sm rounded-md"
+                                                >
+                                                    {suggestion.label}
+                                                </button>
+                                            ))
+                                        ) : (
+                                            <div className="px-3 py-2 text-sm text-[rgb(var(--muted))]">
+                                                No suggestions found
+                                            </div>
+                                        )}
+                                    </div>
                                 </div>
                             )}
-                        </div>
-                    </div>
                 </div>
                 
                 {/* Filter Bar - Full Width */}
@@ -504,7 +678,79 @@ export default function MapPage() {
                     setEventTypes={setEventTypes}
                     ageRestriction={ageRestriction}
                     setAgeRestriction={setAgeRestriction}
+                    priceRange={priceRange}
+                    setPriceRange={setPriceRange}
                 />
+
+                {/* Search & Discovery Tools */}
+                <div className="px-4 py-2 bg-[rgb(var(--bg))] border-t border-[rgb(var(--border-color))]/20">
+                    <div className="max-w-7xl mx-auto">
+                        <div className="flex items-center justify-center gap-1.5 overflow-x-auto">
+                            <PopularEvents
+                                onEventClick={(eventId) => {
+                                    setSelectedId(eventId);
+                                    // Scroll to event in sidebar
+                                    const eventElement = document.getElementById(`event-${eventId}`);
+                                    if (eventElement) {
+                                        eventElement.scrollIntoView({ behavior: 'smooth' });
+                                    }
+                                }}
+                                currentLocation={location}
+                            />
+                            
+                            <PersonalizedRecommendations
+                                onEventClick={(eventId) => {
+                                    setSelectedId(eventId);
+                                    // Scroll to event in sidebar
+                                    const eventElement = document.getElementById(`event-${eventId}`);
+                                    if (eventElement) {
+                                        eventElement.scrollIntoView({ behavior: 'smooth' });
+                                    }
+                                }}
+                                currentLocation={location}
+                            />
+                            
+                            <RecentSearches
+                                onLoadSearch={(searchTerm, location) => {
+                                    setSearchTerm(searchTerm);
+                                    if (location) {
+                                        setSearchLocation(location);
+                                        // Update map center
+                                        if (mapRef.current) {
+                                            mapRef.current.flyTo({
+                                                center: [location.lng, location.lat],
+                                                zoom: 13
+                                            });
+                                        }
+                                    }
+                                }}
+                            />
+                            
+                            <SavedSearches
+                                onLoadSearch={(filters) => {
+                                    setRange(filters.range as Range);
+                                    setOnlyFree(filters.onlyFree);
+                                    setStartDate(filters.startDate);
+                                    setEndDate(filters.endDate);
+                                    setEventTypes(filters.eventTypes);
+                                    setAgeRestriction(filters.ageRestriction);
+                                    if (filters.searchLocation) {
+                                        setSearchLocation(filters.searchLocation);
+                                    }
+                                }}
+                                currentFilters={{
+                                    range,
+                                    onlyFree,
+                                    startDate,
+                                    endDate,
+                                    eventTypes,
+                                    ageRestriction,
+                                    searchLocation
+                                }}
+                            />
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div className="grid md:grid-cols-[2fr,1fr] gap-6 max-w-7xl mx-auto px-4 py-6">
@@ -519,55 +765,129 @@ export default function MapPage() {
                     </div>
                   </div>
                 )}
+                
+                {/* Map Loading Overlay */}
+                {isMapLoading && (
+                  <div className="absolute inset-0 bg-[rgb(var(--bg))]/90 backdrop-blur-sm flex items-center justify-center z-20">
+                    <div className="text-center space-y-4">
+                      <div className="w-12 h-12 border-3 border-[rgb(var(--muted))]/30 border-t-[rgb(var(--brand))] rounded-full animate-spin" />
+                      <div className="text-[rgb(var(--text))] font-medium">Loading map...</div>
+                      <div className="text-sm text-[rgb(var(--muted))]">This may take a moment</div>
+                    </div>
+                  </div>
+                )}
+                
+                {/* Map Error Overlay */}
+                {mapError && (
+                  <div className="absolute inset-0 bg-[rgb(var(--bg))]/90 backdrop-blur-sm flex items-center justify-center z-20">
+                    <div className="text-center space-y-4">
+                      <ExclamationTriangleIcon className="w-12 h-12 text-red-500 mx-auto" />
+                      <div className="text-[rgb(var(--text))] font-medium">Map Error</div>
+                      <div className="text-sm text-[rgb(var(--muted))] mb-4">{mapError}</div>
+                      <RetryButton 
+                        onRetry={() => {
+                          setMapError(null);
+                          // Reinitialize map logic here
+                        }} 
+                        size="md"
+                      >
+                        Reload Map
+                      </RetryButton>
+                    </div>
+                  </div>
+                )}
+                
                 <div ref={mapEl} className="w-full h-full" style={{ touchAction: 'pan-x pan-y' }} />
               </div>
 
               <aside className="space-y-3 pb-6 md:block">
                 <div className="text-center">
                   <h3 className="text-lg font-semibold text-[rgb(var(--text))] mb-2">Events Near You</h3>
-                  <div className="text-sm text-[rgb(var(--muted))]">{uniqueEvents.length} upcoming at this location</div>
+                  <div className="text-sm text-[rgb(var(--muted))]">
+                    {isEventsLoading ? 'Loading events...' : `${uniqueEvents.length} upcoming at this location`}
+                  </div>
                 </div>
 
-                <div className="grid gap-3 max-h-[40vh] md:max-h-none overflow-y-auto">
-                  {uniqueEvents.map((ev) => (
-                    <button
-                      key={ev.id}
-                      onClick={() => {
-                        setSelectedId(ev.id);
-                        const m = markersRef.current.get(ev.id);
-                        if (m && mapRef.current) {
-                          m.togglePopup();
-                          mapRef.current.flyTo({ center: [ev.lng!, ev.lat!], zoom: 13 });
-                        }
-                      }}
-                      className={`text-left rounded-lg token-border p-3 bg-[rgb(var(--panel))] hover:border-[color:var(--border-color)] ${selectedId===ev.id ? "outline outline-1 outline-blue-500" : ""}`}
-                    >
-                      <div className="flex items-center justify-between">
-                        <div className="font-medium text-sm">{ev.title}</div>
-                        <span
-                          className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-medium ${
-                            ev.is_free
-                              ? "bg-green-50 border-green-200 text-green-700"
-                              : "bg-amber-50 border-amber-200 text-amber-700"
-                          }`}
-                        >
-                          {ev.is_free ? "Free" : "Paid"}
-                        </span>
+                {/* Events Loading State */}
+                {isEventsLoading && (
+                  <div className="space-y-3">
+                    {Array.from({ length: 3 }).map((_, i) => (
+                      <div key={i} className="animate-in fade-in-0 duration-300" style={{ animationDelay: `${i * 100}ms` }}>
+                        <div className="rounded-lg token-border p-3 bg-[rgb(var(--panel))] space-y-2">
+                          <div className="flex items-center justify-between">
+                            <div className="h-4 bg-[rgb(var(--muted))]/20 rounded w-3/4 animate-pulse" />
+                            <div className="h-3 bg-[rgb(var(--muted))]/20 rounded w-12 animate-pulse" />
+                          </div>
+                          <div className="h-3 bg-[rgb(var(--muted))]/20 rounded w-1/2 animate-pulse" />
+                        </div>
                       </div>
-                      <div className="text-xs text-[rgb(var(--muted))]">
-                        {fmt(ev.start_at)}
-                        {ev.venue_name ? " · " + ev.venue_name : ""}
-                        {ev.event_type ? ` · ${ev.event_type}` : ""}
-                      </div>
-                    </button>
-                  ))}
-
-                  {uniqueEvents.length === 0 && (
-                    <div className="rounded-lg token-border p-3 bg-[rgb(var(--panel))] text-sm text-[rgb(var(--text))]">
-                      No events match these filters.
+                    ))}
+                  </div>
+                )}
+                
+                {/* Events Error State */}
+                {!isEventsLoading && events.length === 0 && searchLocation && (
+                  <div className="text-center p-6">
+                    <ExclamationTriangleIcon className="w-12 h-12 text-[rgb(var(--muted))] mx-auto mb-3" />
+                    <div className="text-[rgb(var(--text))] font-medium mb-2">No events found</div>
+                    <div className="text-sm text-[rgb(var(--muted))] mb-4">
+                      No events match your current filters in this area.
                     </div>
-                  )}
-                </div>
+                    <RetryButton 
+                      onRetry={() => {
+                        // Refetch events logic here
+                      }} 
+                      size="sm"
+                      variant="outline"
+                    >
+                      Refresh Events
+                    </RetryButton>
+                  </div>
+                )}
+
+                {/* Events List */}
+                {!isEventsLoading && (
+                  <div className="grid gap-3 max-h-[40vh] md:max-h-none overflow-y-auto">
+                    {uniqueEvents.map((ev) => (
+                      <button
+                        key={ev.id}
+                        onClick={() => {
+                          setSelectedId(ev.id);
+                          const m = markersRef.current.get(ev.id);
+                          if (m && mapRef.current) {
+                            m.togglePopup();
+                            mapRef.current.flyTo({ center: [ev.lng!, ev.lat!], zoom: 13 });
+                          }
+                        }}
+                        className={`text-left rounded-lg token-border p-3 bg-[rgb(var(--panel))] hover:border-[color:var(--border-color)] ${selectedId===ev.id ? "outline outline-1 outline-blue-500" : ""}`}
+                      >
+                        <div className="flex items-center justify-between">
+                          <div className="font-medium text-sm">{ev.title}</div>
+                          <span
+                            className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-medium ${
+                              ev.is_free
+                                ? "bg-green-50 border-green-200 text-green-700"
+                                : "bg-amber-50 border-amber-200 text-amber-700"
+                            }`}
+                          >
+                            {ev.is_free ? "Free" : "Paid"}
+                          </span>
+                        </div>
+                        <div className="text-xs text-[rgb(var(--muted))]">
+                          {fmt(ev.start_at)}
+                          {ev.venue_name ? " · " + ev.venue_name : ""}
+                          {ev.event_type ? ` · ${ev.event_type}` : ""}
+                        </div>
+                      </button>
+                    ))}
+
+                    {uniqueEvents.length === 0 && (
+                      <div className="rounded-lg token-border p-3 bg-[rgb(var(--panel))] text-sm text-[rgb(var(--text))]">
+                        No events match these filters.
+                      </div>
+                    )}
+                  </div>
+                )}
 
                 {selected && (
                   <div className="rounded-lg token-border p-3 bg-[rgb(var(--panel))]">
@@ -590,6 +910,7 @@ export default function MapPage() {
             {/* Bottom spacing for mobile navigation */}
             <div className="pb-20 sm:pb-0"></div>
         </div>
+        </ErrorBoundary>
     );
 }
 // --- paste this ABOVE popupHtml() ---
@@ -613,8 +934,8 @@ function popupHtml(ev: {
     id: string;
     title: string;
     start_at: string;
-    lat?: number;
-    lng?: number;
+    lat: number | null;
+    lng: number | null;
     image_url?: string | null;
     is_free?: boolean | null;
     venue_name?: string | null;

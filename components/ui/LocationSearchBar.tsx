@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import { useLocationSearch } from '@/components/context/LocationSearchContext';
+import { SearchLoading } from './LoadingOverlay';
 
 interface LocationSearchBarProps {
   onLocationSelect?: (lat: number, lng: number, formatted: string) => void;
@@ -182,7 +183,7 @@ export default function LocationSearchBar({
           className="flex items-center justify-center w-6 h-6 rounded-full hover:bg-[rgb(var(--bg))] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {isSearching ? (
-            <div className="w-4 h-4 border-2 border-[rgb(var(--muted))] border-t-transparent rounded-full animate-spin"></div>
+            <SearchLoading />
           ) : (
             <MagnifyingGlassIcon className="w-4 h-4 text-[rgb(var(--text))]" />
           )}
@@ -200,7 +201,7 @@ export default function LocationSearchBar({
       {showSuggestions && suggestions.length > 0 && (
         <div
           ref={suggestionsRef}
-          className="absolute top-full left-0 right-0 mt-1 bg-[rgb(var(--panel))] token-border rounded-lg shadow-lg z-50 max-h-60 overflow-y-auto"
+          className="absolute top-full left-0 right-0 mt-1 bg-[rgb(var(--panel))] token-border rounded-lg shadow-lg z-[99999999] max-h-60 overflow-y-auto"
         >
           {suggestions.map((suggestion, index) => (
             <button

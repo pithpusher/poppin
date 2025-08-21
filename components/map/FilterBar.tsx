@@ -20,6 +20,9 @@ export interface FilterBarProps {
   setEventTypes: (types: string[]) => void;
   ageRestriction: string;
   setAgeRestriction: (age: string) => void;
+  // Price range filter
+  priceRange: [number, number];
+  setPriceRange: (range: [number, number]) => void;
 }
 
 export default function FilterBar({
@@ -35,7 +38,9 @@ export default function FilterBar({
   eventTypes,
   setEventTypes,
   ageRestriction,
-  setAgeRestriction
+  setAgeRestriction,
+  priceRange,
+  setPriceRange
 }: FilterBarProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -174,7 +179,7 @@ export default function FilterBar({
 
              {/* Filter Modal */}
        {isModalOpen && (
-         <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 md:p-6">
+         <div className="fixed inset-0 bg-black/50 z-[60] flex items-center justify-center p-4 md:p-6">
            <div className="bg-[rgb(var(--panel))] rounded-2xl md:rounded-3xl max-w-2xl md:max-w-4xl w-full max-h-[85vh] flex flex-col mb-16">
              {/* Modal Header */}
              <div className="flex items-center justify-between p-3 md:p-4 border-b border-gray-600">
@@ -232,10 +237,10 @@ export default function FilterBar({
                      {/* Pricing Section */}
                      <div>
                        <h4 className="text-xs md:text-sm font-medium mb-1 md:mb-2 text-[rgb(var(--muted))]">Pricing</h4>
-                       <div className="space-y-1 md:space-y-2">
+                       <div className="space-y-2">
                          <button
                            onClick={() => setOnlyFree(!onlyFree)}
-                           className={`px-3 md:px-4 py-1.5 md:py-2 text-xs md:text-sm rounded-md transition-colors font-medium ${
+                           className={`px-2 md:px-3 py-1 md:py-1.5 text-xs md:text-sm rounded-md transition-colors font-medium ${
                              onlyFree
                                ? "bg-red-800 text-white"
                                : "bg-[rgb(var(--bg))] text-[rgb(var(--text))] hover:bg-red-800 hover:text-white"
