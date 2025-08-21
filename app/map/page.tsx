@@ -11,7 +11,8 @@ import {
     useEffect,
     useMemo,
     useRef,
-    useState
+    useState,
+    useCallback
 } from "react";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
@@ -53,37 +54,124 @@ export default function MapPage() {
     const [eventTypes, setEventTypes] = useState<string[]>([]);
     const [ageRestriction, setAgeRestriction] = useState<string>("All Ages");
     const [searchTerm, setSearchTerm] = useState("");
+    const [searchSuggestions, setSearchSuggestions] = useState<Array<{ label: string; center: [number, number] }>>([]);
+    const [showSearchSuggestions, setShowSearchSuggestions] = useState(false);
+    const [isSearching, setIsSearching] = useState(false);
     const { location, isLoading, error } = useLocation();
+    const debounceTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
     // Handle map search functionality
     const handleMapSearch = async () => {
         if (!searchTerm.trim() || !mapRef.current) return;
+
+        setIsSearching(true);
         
         try {
-            // Use Google Places API to search for the location
-            const searchBox = new google.maps.places.SearchBox(searchTerm);
-            
-            // For now, we'll simulate a search by updating the search location
-            // In a real implementation, you'd use Google Places API or similar
-            const mockSearchResult = {
-                lat: location.lat + (Math.random() - 0.5) * 0.1, // Small random offset
-                lng: location.lng + (Math.random() - 0.5) * 0.1,
-                formatted: searchTerm
-            };
-            
-            setSearchLocation(mockSearchResult);
-            
-            // Update map center and zoom
-            mapRef.current.flyTo({
-                center: [mockSearchResult.lng, mockSearchResult.lat],
-                zoom: 13
+            // Use the geocoding API to get real location data
+            const response = await fetch('/api/geocode', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ address: searchTerm })
             });
+
+            if (!response.ok) {
+                throw new Error('Location search failed');
+            }
+
+            const result = await response.json();
             
-            // Clear search term
-            setSearchTerm("");
-            
+            if (result.lat && result.lng) {
+                const searchResult = {
+                    lat: result.lat,
+                    lng: result.lng,
+                    formatted: result.formatted
+                };
+                
+                setSearchLocation(searchResult);
+                
+                // Update map center and zoom
+                mapRef.current.flyTo({
+                    center: [searchResult.lng, searchResult.lat],
+                    zoom: 13
+                });
+                
+                // Clear search term and suggestions
+                setSearchTerm("");
+                setShowSearchSuggestions(false);
+                setSearchSuggestions([]);
+            }
         } catch (error) {
             console.error('Search error:', error);
+        } finally {
+            setIsSearching(false);
+        }
+    };
+
+    // Debounced search suggestions
+    const debouncedSearchSuggestions = useCallback(async (query: string) => {
+        if (!query.trim() || query.length < 2) {
+            setSearchSuggestions([]);
+            setShowSearchSuggestions(false);
+            return;
+        }
+
+        try {
+            const response = await fetch('/api/geocode', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ address: query })
+            });
+
+            if (!response.ok) {
+                throw new Error('Location search failed');
+            }
+
+            const result = await response.json();
+            setSearchSuggestions(result.suggestions);
+            setShowSearchSuggestions(true);
+        } catch (error) {
+            console.error('Search suggestions error:', error);
+            setSearchSuggestions([]);
+            setShowSearchSuggestions(false);
+        }
+    }, []);
+
+    // Handle search input changes with debouncing
+    const handleSearchInputChange = (value: string) => {
+        setSearchTerm(value);
+        
+        // Clear previous timeout
+        if (debounceTimeoutRef.current) {
+            clearTimeout(debounceTimeoutRef.current);
+        }
+
+        // Set new timeout for debounced search
+        debounceTimeoutRef.current = setTimeout(() => {
+            debouncedSearchSuggestions(value);
+        }, 300); // 300ms delay
+    };
+
+    // Handle suggestion click
+    const handleSuggestionClick = (suggestion: { label: string; center: [number, number] }) => {
+        const [lng, lat] = suggestion.center;
+        setSearchTerm(suggestion.label);
+        setShowSearchSuggestions(false);
+        setSearchSuggestions([]);
+        
+        // Set search location and update map
+        const searchResult = {
+            lat,
+            lng,
+            formatted: suggestion.label
+        };
+        
+        setSearchLocation(searchResult);
+        
+        if (mapRef.current) {
+            mapRef.current.flyTo({
+                center: [lng, lat],
+                zoom: 13
+            });
         }
     };
     // Handle URL search parameters
@@ -100,6 +188,28 @@ export default function MapPage() {
                 formatted: query
             });
         }
+    }, []);
+
+    // Cleanup timeout on unmount
+    useEffect(() => {
+        return () => {
+            if (debounceTimeoutRef.current) {
+                clearTimeout(debounceTimeoutRef.current);
+            }
+        };
+    }, []);
+
+    // Close search suggestions when clicking outside
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            const target = event.target as Element;
+            if (!target.closest('.search-container')) {
+                setShowSearchSuggestions(false);
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
     }, []);
     // Deduplicate rows (prevents dupes from re-mounts)
     const uniqueEvents = useMemo(
@@ -126,7 +236,6 @@ export default function MapPage() {
             touchZoomRotate: false,
             // Disable pinch zoom
             touchPitch: false,
-            touchZoomRotate: false,
         });
         mapRef.current = map;
         const off = bindThemeToMap(map);
@@ -155,14 +264,14 @@ export default function MapPage() {
                 in30.setDate(now.getDate() + 30);
                 
                 // Date constraints
-                if (range !== "all" && range !== "custom") {
+                if (range !== "all") {
                     q = q.gte("start_at", startOfDay.toISOString());
                     if (range === "today") q = q.lte("start_at", endOfDay.toISOString());
                     if (range === "week") q = q.lte("start_at", in7.toISOString());
                     if (range === "month") q = q.lte("start_at", in30.toISOString());
                 }
                 
-                if (range === "custom" && startDate && endDate) {
+                if (startDate && endDate) {
                     const startIso = new Date(startDate + "T00:00:00").toISOString();
                     const endIso = new Date(endDate + "T23:59:59").toISOString();
                     q = q.gte("start_at", startIso).lte("start_at", endIso);
@@ -194,12 +303,19 @@ export default function MapPage() {
                     setEvents([]);
                     return;
                 }
-                const rows: Ev[] = (data ?? []).map((r: unknown) => ({
-                    ...(r as Record<string, unknown>),
-                    lat: (r as { lat: number | null }).lat != null ? Number((r as { lat: number | null }).lat) : null,
-                    lng: (r as { lng: number | null }).lng != null ? Number((r as { lng: number | null }).lng) : null,
-                    image_url: (r as { image_url: string | null }).image_url ?? null,
-                    venue_name: (r as { venue_name: string | null }).venue_name ?? null,
+                const rows: Ev[] = (data ?? []).map((r: any) => ({
+                    id: r.id,
+                    title: r.title,
+                    start_at: r.start_at,
+                    status: r.status,
+                    venue_name: r.venue_name,
+                    lat: r.lat != null ? Number(r.lat) : null,
+                    lng: r.lng != null ? Number(r.lng) : null,
+                    image_url: r.image_url,
+                    is_free: r.is_free,
+                    price_cents: r.price_cents,
+                    event_type: r.event_type,
+                    age_restriction: r.age_restriction,
                 })) || [];
                 setEvents(rows);
             } catch (e) {
@@ -271,22 +387,41 @@ export default function MapPage() {
                         
                         {/* Middle Column - Search Bar (Hidden on Mobile) */}
                         <div className="hidden md:flex flex-1 px-4 md:px-6">
-                            <div className="relative w-full">
+                            <div className="relative w-full search-container">
                                 <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-[rgb(var(--muted))]" />
                                 <input
                                     type="text"
                                     placeholder="Search events, venues, or locations..."
                                     className="w-full pl-10 pr-4 py-3 md:py-4 bg-[rgb(var(--panel))] text-[rgb(var(--text))] rounded-lg token-border focus:outline-none focus:ring-2 focus:ring-[rgb(var(--brand))] text-sm md:text-base"
                                     value={searchTerm}
-                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                    onChange={(e) => handleSearchInputChange(e.target.value)}
                                     onKeyPress={(e) => e.key === 'Enter' && handleMapSearch()}
                                 />
                                 <button
                                     onClick={handleMapSearch}
                                     className="absolute right-2 top-1/2 transform -translate-y-1/2 px-3 py-1.5 md:px-4 md:py-2 bg-[rgb(var(--brand))] text-white rounded-md text-xs md:text-sm font-medium hover:bg-[rgb(var(--brand))]/90 transition-colors"
                                 >
-                                    Search
+                                    {isSearching ? (
+                                        <div className="w-3 h-3 md:w-4 md:h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                                    ) : (
+                                        "Search"
+                                    )}
                                 </button>
+                                
+                                {/* Search Suggestions Dropdown */}
+                                {showSearchSuggestions && searchSuggestions.length > 0 && (
+                                    <div className="absolute top-full left-0 right-0 mt-1 bg-[rgb(var(--panel))] token-border rounded-lg shadow-lg z-50 max-h-60 overflow-y-auto">
+                                        {searchSuggestions.map((suggestion, index) => (
+                                            <button
+                                                key={index}
+                                                onClick={() => handleSuggestionClick(suggestion)}
+                                                className="w-full text-left px-3 py-2 hover:bg-[rgb(var(--bg))] transition-colors text-sm"
+                                            >
+                                                {suggestion.label}
+                                            </button>
+                                        ))}
+                                    </div>
+                                )}
                             </div>
                         </div>
                         
@@ -315,22 +450,41 @@ export default function MapPage() {
                 {/* Search Section - Mobile Only */}
                 <div className="md:hidden px-4 py-4">
                     <div className="max-w-md mx-auto">
-                        <div className="relative">
+                        <div className="relative search-container">
                             <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-[rgb(var(--muted))]" />
                             <input
                                 type="text"
                                 placeholder="Search events, venues, or locations..."
                                 className="w-full pl-10 pr-4 py-3 bg-[rgb(var(--panel))] text-[rgb(var(--text))] rounded-lg token-border focus:outline-none focus:ring-2 focus:ring-[rgb(var(--brand))] text-sm"
                                 value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
+                                onChange={(e) => handleSearchInputChange(e.target.value)}
                                 onKeyPress={(e) => e.key === 'Enter' && handleMapSearch()}
                             />
                             <button
                                 onClick={handleMapSearch}
                                 className="absolute right-2 top-1/2 transform -translate-y-1/2 px-3 py-1.5 bg-[rgb(var(--brand))] text-white rounded-md text-xs font-medium hover:bg-[rgb(var(--brand))]/90 transition-colors"
                             >
-                                Search
+                                {isSearching ? (
+                                    <div className="w-3 h-3 md:w-4 md:h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                                ) : (
+                                    "Search"
+                                )}
                             </button>
+                            
+                            {/* Search Suggestions Dropdown */}
+                            {showSearchSuggestions && searchSuggestions.length > 0 && (
+                                <div className="absolute top-full left-0 right-0 mt-1 bg-[rgb(var(--panel))] token-border rounded-lg shadow-lg z-50 max-h-60 overflow-y-auto">
+                                    {searchSuggestions.map((suggestion, index) => (
+                                        <button
+                                            key={index}
+                                            onClick={() => handleSuggestionClick(suggestion)}
+                                            className="w-full text-left px-3 py-2 hover:bg-[rgb(var(--bg))] transition-colors text-sm"
+                                        >
+                                            {suggestion.label}
+                                        </button>
+                                    ))}
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>
@@ -345,6 +499,7 @@ export default function MapPage() {
                     setStartDate={setStartDate}
                     endDate={endDate}
                     setEndDate={setEndDate}
+                    onApplyCustom={() => {}}
                     eventTypes={eventTypes}
                     setEventTypes={setEventTypes}
                     ageRestriction={ageRestriction}
@@ -353,7 +508,7 @@ export default function MapPage() {
             </div>
 
             <div className="grid md:grid-cols-[2fr,1fr] gap-6 max-w-7xl mx-auto px-4 py-6">
-              <div className="relative w-full h-[60vh] rounded-2xl token-border overflow-hidden">
+              <div className="relative w-full h-[50vh] md:h-[60vh] rounded-2xl token-border overflow-hidden" style={{ touchAction: 'pan-x pan-y' }}>
                 {searchLocation && (
                   <div className="absolute top-2 left-0 right-0 z-10 text-center">
                     <div className="text-xs text-[rgb(var(--text))] font-normal">
@@ -364,16 +519,16 @@ export default function MapPage() {
                     </div>
                   </div>
                 )}
-                <div ref={mapEl} className="w-full h-full" />
+                <div ref={mapEl} className="w-full h-full" style={{ touchAction: 'pan-x pan-y' }} />
               </div>
 
-              <aside className="space-y-3 pb-6">
+              <aside className="space-y-3 pb-6 md:block">
                 <div className="text-center">
                   <h3 className="text-lg font-semibold text-[rgb(var(--text))] mb-2">Events Near You</h3>
                   <div className="text-sm text-[rgb(var(--muted))]">{uniqueEvents.length} upcoming at this location</div>
                 </div>
 
-                <div className="grid gap-3">
+                <div className="grid gap-3 max-h-[40vh] md:max-h-none overflow-y-auto">
                   {uniqueEvents.map((ev) => (
                     <button
                       key={ev.id}

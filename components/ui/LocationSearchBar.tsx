@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import { useLocationSearch } from '@/components/context/LocationSearchContext';
 
@@ -30,6 +30,7 @@ export default function LocationSearchBar({
   const inputRef = useRef<HTMLInputElement>(null);
   const suggestionsRef = useRef<HTMLDivElement>(null);
   const { handleLocationSearch } = useLocationSearch();
+  const debounceTimeoutRef = useRef<NodeJS.Timeout>();
 
   // Close suggestions when clicking outside
   useEffect(() => {
@@ -42,6 +43,56 @@ export default function LocationSearchBar({
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
+
+  // Debounced search function
+  const debouncedSearch = useCallback(async (searchQuery: string) => {
+    if (!searchQuery.trim() || searchQuery.length < 2) {
+      setSuggestions([]);
+      setShowSuggestions(false);
+      return;
+    }
+
+    setIsSearching(true);
+    setError(null);
+
+    try {
+      const response = await fetch('/api/geocode', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ address: searchQuery })
+      });
+
+      if (!response.ok) {
+        throw new Error('Location search failed');
+      }
+
+      const result: GeocodeResult = await response.json();
+      setSuggestions(result.suggestions);
+      setShowSuggestions(true);
+    } catch (err) {
+      setError('Location search failed. Please try again.');
+      console.error('Geocoding error:', err);
+      setSuggestions([]);
+      setShowSuggestions(false);
+    } finally {
+      setIsSearching(false);
+    }
+  }, []);
+
+  // Handle input changes with debouncing
+  const handleInputChange = (value: string) => {
+    setQuery(value);
+    
+    // Clear previous timeout
+    if (debounceTimeoutRef.current) {
+      clearTimeout(debounceTimeoutRef.current);
+    }
+
+    // Set new timeout for debounced search
+    debounceTimeoutRef.current = setTimeout(() => {
+      debouncedSearch(value);
+    }, 300); // 300ms delay
+  };
 
   const searchLocation = async () => {
     if (!query.trim()) return;
@@ -61,9 +112,7 @@ export default function LocationSearchBar({
       }
 
       const result: GeocodeResult = await response.json();
-      setSuggestions(result.suggestions);
-      setShowSuggestions(true);
-
+      
       // Always use the first result when searching
       if (result.lat && result.lng) {
         // Use context handler for navigation
@@ -106,6 +155,15 @@ export default function LocationSearchBar({
     }
   };
 
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (debounceTimeoutRef.current) {
+        clearTimeout(debounceTimeoutRef.current);
+      }
+    };
+  }, []);
+
   return (
     <div className={`relative ${className}`}>
       <div className="flex items-center h-10 rounded-full token-border bg-[rgb(var(--panel))] px-3">
@@ -113,7 +171,7 @@ export default function LocationSearchBar({
           ref={inputRef}
           type="text"
           value={query}
-          onChange={(e) => setQuery(e.target.value)}
+          onChange={(e) => handleInputChange(e.target.value)}
           onKeyPress={handleKeyPress}
           placeholder={placeholder}
           className="bg-transparent outline-none flex-1 text-sm placeholder:text-[rgb(var(--muted))] text-[rgb(var(--text))] pr-2"
@@ -123,7 +181,11 @@ export default function LocationSearchBar({
           disabled={isSearching || !query.trim()}
           className="flex items-center justify-center w-6 h-6 rounded-full hover:bg-[rgb(var(--bg))] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          <MagnifyingGlassIcon className="w-4 h-4 text-[rgb(var(--text))]" />
+          {isSearching ? (
+            <div className="w-4 h-4 border-2 border-[rgb(var(--muted))] border-t-transparent rounded-full animate-spin"></div>
+          ) : (
+            <MagnifyingGlassIcon className="w-4 h-4 text-[rgb(var(--text))]" />
+          )}
         </button>
       </div>
 

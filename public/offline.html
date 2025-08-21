@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Poppin - Offline</title>
+    <style>
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: rgb(17, 18, 19);
+            color: rgb(232, 232, 235);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+        .offline-container {
+            text-align: center;
+            max-width: 400px;
+        }
+        .offline-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+        h1 {
+            margin-bottom: 16px;
+            font-size: 24px;
+        }
+        p {
+            color: rgb(154, 154, 163);
+            margin-bottom: 24px;
+            line-height: 1.5;
+        }
+        .retry-btn {
+            background: rgb(155, 7, 14);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-size: 16px;
+            cursor: pointer;
+            font-family: inherit;
+        }
+        .retry-btn:hover {
+            background: rgb(185, 28, 28);
+        }
+    </style>
+</head>
+<body>
+    <div class="offline-container">
+        <div class="offline-icon">📱</div>
+        <h1>You're Offline</h1>
+        <p>Don't worry! You can still browse events you've already loaded. Check your connection and try again.</p>
+        <button class="retry-btn" onclick="window.location.reload()">Try Again</button>
+    </div>
+</body>
+</html>

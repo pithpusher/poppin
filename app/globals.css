@@ -88,6 +88,71 @@ body {
   color: rgb(var(--text));
 }
 
+/* ==================================================
+   TEXT SELECTION FIXES
+   ================================================== */
+/* Ensure text selection works everywhere */
+* {
+  -webkit-user-select: auto;
+  -moz-user-select: auto;
+  -ms-user-select: auto;
+  user-select: auto;
+}
+
+/* Allow text selection in inputs and textareas */
+input, textarea, [contenteditable] {
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
+}
+
+/* Ensure text selection works in the main content area */
+main, p, h1, h2, h3, h4, h5, h6, span, div {
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
+}
+
+/* Override any potential interference from other libraries */
+.mapboxgl-canvas-container,
+.mapboxgl-popup,
+.mapboxgl-popup-content {
+  -webkit-user-select: text !important;
+  -moz-user-select: text !important;
+  -ms-user-select: text !important;
+  user-select: text !important;
+}
+
+/* Ensure text selection works in search suggestions */
+.search-container,
+.search-container * {
+  -webkit-user-select: text !important;
+  -moz-user-select: text !important;
+  -ms-user-select: text !important;
+  user-select: text !important;
+}
+
+/* Force text selection to work in all areas */
+body, html, #__next, .app {
+  -webkit-user-select: text !important;
+  -moz-user-select: text !important;
+  -ms-user-select: text !important;
+  user-select: text !important;
+}
+
+/* Debug: Add a visual indicator when text selection is working */
+::selection {
+  background: rgba(var(--brand), 0.35) !important;
+  color: rgb(var(--text)) !important;
+}
+
+::-moz-selection {
+  background: rgba(var(--brand), 0.35) !important;
+  color: rgb(var(--text)) !important;
+}
+
 /* Links inherit theme */
 a { color: inherit; text-decoration: none; }
 
@@ -278,3 +343,13 @@ body {
     height: -webkit-fill-available;
   }
 }
+
+/* Hide Mapbox logos and attribution on mobile */
+@media (max-width: 768px) {
+  .mapboxgl-ctrl-logo,
+  .mapboxgl-ctrl-attrib {
+    display: none !important;
+  }
+}
+
+/* Custom scrollbar for webkit browsers */

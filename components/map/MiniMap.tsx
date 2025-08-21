@@ -43,8 +43,15 @@ export default function MiniMap({ className = "", showFullMapButton = true }: Mi
       style: getInitialMapStyle(),
       center: [location.lng, location.lat],
       zoom: 10,
+      attributionControl: false,
     });
     mapRef.current = map;
+
+    // Hide Mapbox logo and attribution on mobile
+    const mapboxLogo = map.getContainer().querySelector('.mapboxgl-ctrl-logo');
+    const mapboxAttrib = map.getContainer().querySelector('.mapboxgl-ctrl-attrib');
+    if (mapboxLogo) mapboxLogo.remove();
+    if (mapboxAttrib) mapboxAttrib.remove();
 
     const off = bindThemeToMap(map); // live theme switching
     return () => {

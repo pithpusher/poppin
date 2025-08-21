@@ -20,10 +20,10 @@ export default function HomePage() {
             {/* Glass Effect Background */}
             <div className="relative">
               {/* Blurred Glass Background */}
-              <div className="absolute inset-0 bg-black/20 backdrop-blur-xl rounded-3xl border border-white/10 shadow-2xl -m-8 md:-m-12"></div>
+              <div className="absolute inset-0 bg-black/20 backdrop-blur-xl rounded-3xl border border-white/10 shadow-2xl -m-4 md:-m-8 lg:-m-12"></div>
               
               {/* Content Container */}
-              <div className="relative z-10 p-8 md:p-12">
+              <div className="relative z-10 p-4 md:p-8 lg:p-12">
                 <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight">
                   Find what&apos;s poppin&apos;.
                 </h1>
