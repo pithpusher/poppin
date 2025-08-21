@@ -45,11 +45,71 @@ export default function AuthPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-[rgb(var(--bg))] via-[rgb(var(--bg))] to-[rgb(var(--panel))] flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[rgb(var(--brand))] mx-auto"></div>
-          <p className="mt-4 text-[rgb(var(--muted))]">Loading...</p>
+      <div className="min-h-screen bg-gradient-to-br from-[rgb(var(--bg))] via-[rgb(var(--bg))] to-[rgb(var(--panel))] py-12 md:py-16 lg:py-20 px-4">
+        <div className="max-w-4xl mx-auto">
+          {/* Header Skeleton */}
+          <div className="text-center mb-8 md:mb-12">
+            <div className="w-16 h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 bg-[rgb(var(--muted))]/20 rounded-2xl mx-auto mb-4 md:mb-6 animate-pulse" />
+            <div className="h-8 md:h-10 lg:h-12 w-80 bg-[rgb(var(--muted))]/20 rounded-lg mx-auto mb-4 md:mb-6 animate-pulse" />
+            <div className="h-6 md:h-7 w-96 bg-[rgb(var(--muted))]/20 rounded-lg mx-auto animate-pulse" />
+          </div>
+
+          {/* Auth Options Grid Skeleton */}
+          <div className="grid gap-6 md:gap-8 lg:gap-10 md:grid-cols-2 lg:grid-cols-3 mb-12 md:mb-16 lg:mb-20">
+            {Array.from({ length: 3 }).map((_, i) => (
+              <div 
+                key={i} 
+                className="bg-[rgb(var(--panel))] backdrop-blur-sm border border-[rgb(var(--border-color))]/20 rounded-2xl md:rounded-3xl p-6 md:p-8 animate-in fade-in-0 duration-300"
+                style={{ animationDelay: `${i * 100}ms` }}
+              >
+                <div className="w-12 h-12 md:w-16 md:h-16 bg-[rgb(var(--muted))]/20 rounded-xl md:rounded-2xl mb-4 md:mb-6 animate-pulse" />
+                <div className="h-6 md:h-8 w-24 bg-[rgb(var(--muted))]/20 rounded mb-2 md:mb-3 animate-pulse" />
+                <div className="space-y-2 mb-4 md:mb-6">
+                  <div className="h-4 md:h-5 w-full bg-[rgb(var(--muted))]/20 rounded animate-pulse" />
+                  <div className="h-4 md:h-5 w-3/4 bg-[rgb(var(--muted))]/20 rounded animate-pulse" />
+                </div>
+                <div className="h-5 md:h-6 w-28 bg-[rgb(var(--muted))]/20 rounded animate-pulse" />
+              </div>
+            ))}
+          </div>
+
+          {/* Why Choose Poppin Skeleton */}
+          <div className="mb-12 md:mb-16 lg:mb-20">
+            <div className="bg-[rgb(var(--panel))] backdrop-blur-sm border border-[rgb(var(--border-color))]/20 rounded-2xl md:rounded-3xl p-6 md:p-8">
+              <div className="h-8 md:h-10 lg:h-12 w-64 bg-[rgb(var(--muted))]/20 rounded-lg mx-auto mb-4 md:mb-6 animate-pulse" />
+              <div className="h-5 md:h-6 w-96 bg-[rgb(var(--muted))]/20 rounded-lg mx-auto mb-8 md:mb-10 animate-pulse" />
+              <div className="grid md:grid-cols-3 gap-6 md:gap-8">
+                {Array.from({ length: 3 }).map((_, i) => (
+                  <div key={i} className="text-center space-y-3 md:space-y-4">
+                    <div className="w-8 h-8 md:w-10 md:h-10 bg-[rgb(var(--muted))]/20 rounded mx-auto animate-pulse" />
+                    <div className="h-5 md:h-6 w-32 bg-[rgb(var(--muted))]/20 rounded mx-auto animate-pulse" />
+                    <div className="space-y-1">
+                      <div className="h-4 w-full bg-[rgb(var(--muted))]/20 rounded animate-pulse" />
+                      <div className="h-4 w-3/4 bg-[rgb(var(--muted))]/20 rounded animate-pulse" />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Additional sections skeleton */}
+          {Array.from({ length: 3 }).map((_, i) => (
+            <div key={i} className="mb-12 md:mb-16 lg:mb-20">
+              <div className="bg-[rgb(var(--panel))] backdrop-blur-sm border border-[rgb(var(--border-color))]/20 rounded-2xl md:rounded-3xl p-6 md:p-8">
+                <div className="h-8 md:h-10 lg:h-12 w-48 bg-[rgb(var(--muted))]/20 rounded-lg mx-auto mb-4 md:mb-6 animate-pulse" />
+                <div className="h-5 md:h-6 w-80 bg-[rgb(var(--muted))]/20 rounded-lg mx-auto mb-8 md:mb-10 animate-pulse" />
+                <div className="space-y-4 md:space-y-6">
+                  <div className="h-20 bg-[rgb(var(--muted))]/20 rounded-xl animate-pulse" />
+                  <div className="h-16 bg-[rgb(var(--muted))]/20 rounded-xl animate-pulse" />
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
+
+        {/* Bottom spacing for navigation */}
+        <div className="pb-20"></div>
       </div>
     );
   }

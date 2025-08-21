@@ -101,13 +101,122 @@ export default function AccountPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[rgb(var(--bg))] py-12 px-4">
+      <div className="min-h-screen bg-[rgb(var(--bg))] py-8 md:py-12 px-4">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[rgb(var(--brand))] mx-auto"></div>
-            <p className="mt-4 text-[rgb(var(--muted))]">Loading account...</p>
+          {/* Header Skeleton */}
+          <div className="text-center mb-8 md:mb-12">
+            <UserIcon className="w-16 h-16 md:w-20 md:h-20 text-[rgb(var(--muted))]/30 mx-auto mb-4 md:mb-6" />
+            <div className="h-8 md:h-10 w-64 bg-[rgb(var(--muted))]/20 rounded-lg mx-auto mb-4 animate-pulse" />
+            <div className="h-5 w-48 bg-[rgb(var(--muted))]/20 rounded mx-auto animate-pulse" />
+          </div>
+
+          {/* Navigation Tabs Skeleton */}
+          <div className="border-b border-[rgb(var(--border-color))]/20 mb-8">
+            <div className="flex justify-center space-x-8">
+              {Array.from({ length: 3 }).map((_, i) => (
+                <div key={i} className="h-10 w-20 bg-[rgb(var(--muted))]/20 rounded animate-pulse" />
+              ))}
+            </div>
+          </div>
+
+          {/* Main Content Area */}
+          <div className="grid gap-8 lg:grid-cols-3">
+            {/* Profile Section Skeleton */}
+            <div className="lg:col-span-2">
+              <div className="bg-[rgb(var(--panel))] token-border rounded-xl p-6 md:p-8 space-y-6">
+                <div className="h-7 w-32 bg-[rgb(var(--muted))]/20 rounded animate-pulse" />
+                
+                {/* User Info Skeleton */}
+                <div className="flex items-center space-x-4">
+                  <div className="w-16 h-16 md:w-20 md:h-20 bg-[rgb(var(--muted))]/20 rounded-full animate-pulse" />
+                  <div className="space-y-2">
+                    <div className="h-6 w-48 bg-[rgb(var(--muted))]/20 rounded animate-pulse" />
+                    <div className="h-4 w-32 bg-[rgb(var(--muted))]/20 rounded animate-pulse" />
+                    <div className="h-4 w-24 bg-[rgb(var(--muted))]/20 rounded animate-pulse" />
+                  </div>
+                </div>
+
+                {/* Profile Form Skeleton */}
+                <div className="space-y-4">
+                  {Array.from({ length: 4 }).map((_, i) => (
+                    <div key={i} className="space-y-2">
+                      <div className="h-4 w-20 bg-[rgb(var(--muted))]/20 rounded animate-pulse" />
+                      <div className="h-10 w-full bg-[rgb(var(--muted))]/20 rounded-lg animate-pulse" />
+                    </div>
+                  ))}
+                </div>
+
+                {/* Action Buttons Skeleton */}
+                <div className="flex gap-3 pt-4">
+                  <div className="h-10 w-24 bg-[rgb(var(--muted))]/20 rounded-xl animate-pulse" />
+                  <div className="h-10 w-20 bg-[rgb(var(--muted))]/20 rounded-xl animate-pulse" />
+                </div>
+              </div>
+
+              {/* Events Section Skeleton */}
+              <div className="mt-8 bg-[rgb(var(--panel))] token-border rounded-xl p-6 md:p-8 space-y-6">
+                <div className="h-7 w-32 bg-[rgb(var(--muted))]/20 rounded animate-pulse" />
+                
+                <div className="grid gap-4 md:grid-cols-2">
+                  {Array.from({ length: 4 }).map((_, i) => (
+                    <div key={i} className="bg-[rgb(var(--bg))] token-border rounded-lg p-4 space-y-3">
+                      <div className="aspect-video bg-[rgb(var(--muted))]/20 rounded animate-pulse" />
+                      <div className="space-y-2">
+                        <div className="flex justify-between items-center">
+                          <div className="h-5 w-3/4 bg-[rgb(var(--muted))]/20 rounded animate-pulse" />
+                          <div className="h-5 w-16 bg-[rgb(var(--muted))]/20 rounded-full animate-pulse" />
+                        </div>
+                        <div className="h-4 w-1/2 bg-[rgb(var(--muted))]/20 rounded animate-pulse" />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Sidebar Skeleton */}
+            <div className="space-y-6">
+              {/* Quick Stats Skeleton */}
+              <div className="bg-[rgb(var(--panel))] token-border rounded-xl p-6 space-y-4">
+                <div className="h-6 w-28 bg-[rgb(var(--muted))]/20 rounded animate-pulse" />
+                <div className="grid grid-cols-2 gap-4">
+                  {Array.from({ length: 4 }).map((_, i) => (
+                    <div key={i} className="text-center space-y-2">
+                      <div className="h-8 w-12 bg-[rgb(var(--muted))]/20 rounded mx-auto animate-pulse" />
+                      <div className="h-4 w-16 bg-[rgb(var(--muted))]/20 rounded mx-auto animate-pulse" />
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Quick Actions Skeleton */}
+              <div className="bg-[rgb(var(--panel))] token-border rounded-xl p-6 space-y-4">
+                <div className="h-6 w-32 bg-[rgb(var(--muted))]/20 rounded animate-pulse" />
+                <div className="space-y-3">
+                  {Array.from({ length: 4 }).map((_, i) => (
+                    <div key={i} className="h-10 w-full bg-[rgb(var(--muted))]/20 rounded-lg animate-pulse" />
+                  ))}
+                </div>
+              </div>
+
+              {/* Account Settings Skeleton */}
+              <div className="bg-[rgb(var(--panel))] token-border rounded-xl p-6 space-y-4">
+                <div className="h-6 w-36 bg-[rgb(var(--muted))]/20 rounded animate-pulse" />
+                <div className="space-y-3">
+                  {Array.from({ length: 3 }).map((_, i) => (
+                    <div key={i} className="flex items-center justify-between">
+                      <div className="h-4 w-32 bg-[rgb(var(--muted))]/20 rounded animate-pulse" />
+                      <div className="h-6 w-12 bg-[rgb(var(--muted))]/20 rounded-full animate-pulse" />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
+
+        {/* Bottom spacing for navigation */}
+        <div className="pb-20"></div>
       </div>
     );
   }

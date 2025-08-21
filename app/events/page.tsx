@@ -222,13 +222,79 @@ export default function EventsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[rgb(var(--bg))] py-12 px-4">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[rgb(var(--brand))] mx-auto"></div>
-            <p className="mt-4 text-[rgb(var(--muted))]">Loading events...</p>
+      <div className="min-h-screen bg-[rgb(var(--bg))] py-8 md:py-12 lg:py-16 px-4">
+        <div className="max-w-7xl mx-auto px-4 py-8 md:py-12">
+          <div className="text-center mb-8 md:mb-12">
+            <FaceSmileIcon className="w-16 h-16 md:w-20 md:h-20 text-[rgb(var(--brand))] mx-auto mb-4 md:mb-6" />
+            <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-4 md:mb-6">Discover What&apos;s Happening</h1>
+            <p className={`text-base sm:text-lg md:text-xl ${tokens.muted} max-w-2xl md:max-w-3xl mx-auto`}>Your city's best events, all in one spot.</p>
+          </div>
+
+          {/* Header with Search and Filters Skeleton */}
+          <div className="mb-8 md:mb-12">
+            <div className="flex flex-col sm:flex-row gap-4 md:gap-6 items-start sm:items-center justify-between">
+              <div className="flex-1">
+                <div className="relative">
+                  <div className="w-full h-12 md:h-14 bg-[rgb(var(--muted))]/20 rounded-lg animate-pulse"></div>
+                </div>
+              </div>
+              
+              <div className="flex gap-3 md:gap-4">
+                <div className="h-10 md:h-12 w-32 bg-[rgb(var(--muted))]/20 rounded-xl animate-pulse"></div>
+                <div className="h-10 md:h-12 w-24 bg-[rgb(var(--muted))]/20 rounded-xl animate-pulse"></div>
+                <div className="h-10 md:h-12 w-28 bg-[rgb(var(--muted))]/20 rounded-xl animate-pulse"></div>
+              </div>
+            </div>
+          </div>
+
+          {/* Results Count Skeleton */}
+          <div className="mb-6 flex items-center justify-between">
+            <div className="h-4 w-32 bg-[rgb(var(--muted))]/20 rounded animate-pulse"></div>
+            <div className="h-10 w-32 bg-[rgb(var(--muted))]/20 rounded-xl animate-pulse"></div>
+          </div>
+
+          {/* Events Grid Skeleton */}
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <div
+                key={i}
+                className="animate-in fade-in-0 duration-300"
+                style={{ animationDelay: `${i * 100}ms` }}
+              >
+                <div className="bg-[rgb(var(--panel))] token-border rounded-xl overflow-hidden space-y-4">
+                  {/* Image skeleton */}
+                  <div className="aspect-video bg-[rgb(var(--muted))]/20 animate-pulse" />
+                  
+                  {/* Content skeleton */}
+                  <div className="p-4 space-y-3">
+                    <div className="h-4 w-16 bg-[rgb(var(--muted))]/20 rounded-full animate-pulse" />
+                    <div className="h-6 w-4/5 bg-[rgb(var(--muted))]/20 rounded animate-pulse" />
+                    <div className="space-y-2">
+                      <div className="flex items-center gap-2">
+                        <div className="h-4 w-4 bg-[rgb(var(--muted))]/20 rounded animate-pulse" />
+                        <div className="h-4 w-32 bg-[rgb(var(--muted))]/20 rounded animate-pulse" />
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <div className="h-4 w-4 bg-[rgb(var(--muted))]/20 rounded animate-pulse" />
+                        <div className="h-4 w-24 bg-[rgb(var(--muted))]/20 rounded animate-pulse" />
+                      </div>
+                    </div>
+                    <div className="pt-2 border-t border-[rgb(var(--border-color))]/20">
+                      <div className="h-6 w-16 bg-[rgb(var(--muted))]/20 rounded animate-pulse" />
+                    </div>
+                    <div className="flex gap-2 pt-2 border-t border-[rgb(var(--border-color))]/20">
+                      <div className="flex-1 h-10 bg-[rgb(var(--muted))]/20 rounded-lg animate-pulse" />
+                      <div className="flex-1 h-10 bg-[rgb(var(--muted))]/20 rounded-lg animate-pulse" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
+
+        {/* Bottom spacing for navigation */}
+        <div className="pb-20"></div>
       </div>
     );
   }
