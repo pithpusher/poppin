@@ -469,6 +469,9 @@ export default function AdvancedMobileFeaturesDemo() {
           </div>
         </div>
       </div>
+
+      {/* Bottom spacing for navigation */}
+      <div className="pb-16"></div>
     </div>
   );
 }

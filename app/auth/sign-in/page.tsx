@@ -1,7 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import { 
   EyeIcon, 
   EyeSlashIcon, 
@@ -23,6 +24,18 @@ export default function SignInPage() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
   const [isSignUp, setIsSignUp] = useState(false);
+  const searchParams = useSearchParams();
+
+  // Check for error messages from auth callback
+  useEffect(() => {
+    const error = searchParams.get('error');
+    if (error) {
+      setMessage({
+        type: 'error',
+        text: decodeURIComponent(error)
+      });
+    }
+  }, [searchParams]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -87,18 +100,21 @@ export default function SignInPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[rgb(var(--bg))] via-[rgb(var(--bg))] to-[rgb(var(--panel))] flex items-center justify-center py-12 px-4">
-      <div className="w-full max-w-md">
+    <div className="min-h-screen bg-[rgb(var(--bg))] py-12 px-4">
+      <div className="w-full max-w-md mx-auto">
         {/* Logo/Brand */}
         <div className="text-center mb-8">
-          <h1 className="text-3xl md:text-4xl font-bold mb-4">Welcome back</h1>
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-[rgb(var(--brand))] rounded-2xl mb-4">
+            <SparklesIcon className="w-8 h-8 text-white" />
+          </div>
+          <h1 className="text-3xl md:text-4xl font-bold text-[rgb(var(--text))] mb-4">Welcome back</h1>
           <p className={`text-lg sm:text-xl ${tokens.muted}`}>
             Log in and keep the plans flowing
           </p>
         </div>
 
         {/* Auth Form */}
-        <div className="bg-[rgb(var(--panel))] backdrop-blur-sm border border-[rgb(var(--border-color))]/20 rounded-3xl p-8 shadow-2xl">
+        <div className="bg-[rgb(var(--panel))] token-border rounded-3xl p-8 shadow-2xl">
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Email Field */}
             <div className="space-y-2">
@@ -106,14 +122,14 @@ export default function SignInPage() {
                 Email Address
               </label>
               <div className="relative group">
-                <EnvelopeIcon className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-[rgb(var(--muted))] group-focus-within:text-[rgb(var(--brand))] transition-colors" />
+                <EnvelopeIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-[rgb(var(--muted))] group-focus-within:text-[rgb(var(--brand))] transition-colors" />
                 <input
                   id="email"
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="w-full pl-12 pr-4 py-4 rounded-xl bg-[rgb(var(--bg))] text-[rgb(var(--text))] border border-[rgb(var(--border-color))]/20 focus:outline-none focus:ring-2 focus:ring-[rgb(var(--brand))] focus:border-transparent transition-all duration-200"
+                  className="w-full pl-12 pr-4 py-4 rounded-xl bg-[rgb(var(--bg))] text-[rgb(var(--text))] token-border focus:outline-none focus:ring-2 focus:ring-[rgb(var(--brand))] focus:border-transparent transition-all duration-200"
                   placeholder="Enter your email"
                 />
               </div>
@@ -125,14 +141,14 @@ export default function SignInPage() {
                 Password
               </label>
               <div className="relative group">
-                <LockClosedIcon className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-[rgb(var(--muted))] group-focus-within:text-[rgb(var(--brand))] transition-colors" />
+                <LockClosedIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-[rgb(var(--muted))] group-focus-within:text-[rgb(var(--brand))] transition-colors" />
                 <input
                   id="password"
                   type={showPassword ? 'text' : 'password'}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
-                  className="w-full pl-12 pr-12 py-4 rounded-xl bg-[rgb(var(--bg))] text-[rgb(var(--text))] border border-[rgb(var(--border-color))]/20 focus:outline-none focus:ring-2 focus:ring-[rgb(var(--brand))] focus:border-transparent transition-all duration-200"
+                  className="w-full pl-12 pr-12 py-4 rounded-xl bg-[rgb(var(--bg))] text-[rgb(var(--text))] token-border focus:outline-none focus:ring-2 focus:ring-[rgb(var(--brand))] focus:border-transparent transition-all duration-200"
                   placeholder="Enter your password"
                 />
                 <button
@@ -164,7 +180,7 @@ export default function SignInPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-2 px-4 bg-gradient-to-r from-[rgb(var(--brand))] to-[rgb(var(--brand))]/90 text-white rounded-xl text-sm font-medium hover:from-[rgb(var(--brand))]/90 hover:to-[rgb(var(--brand))] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.98]"
+              className="w-full py-2 px-4 bg-[rgb(var(--brand))] text-white rounded-xl text-sm font-medium hover:bg-[rgb(var(--brand))]/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.98]"
             >
               {loading ? (
                 <div className="flex items-center justify-center gap-2">
@@ -183,7 +199,7 @@ export default function SignInPage() {
           {/* Divider */}
           <div className="relative my-8">
             <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-[rgb(var(--border-color))]/20" />
+              <div className="w-full border-t border-[rgb(var(--border-color))]" />
             </div>
             <div className="relative flex justify-center text-sm">
               <span className="px-4 bg-[rgb(var(--panel))] text-[rgb(var(--muted))]">
@@ -195,7 +211,7 @@ export default function SignInPage() {
           {/* Google Sign In */}
           <button
             onClick={handleGoogleSignIn}
-            className="w-full py-2 px-4 bg-[rgb(var(--bg))] text-[rgb(var(--text))] rounded-xl text-sm font-medium hover:bg-[rgb(var(--bg))]/80 transition-all duration-200 border border-[rgb(var(--border-color))]/20 hover:border-[rgb(var(--border-color))]/40 flex items-center justify-center gap-3 group"
+            className="w-full py-2 px-4 bg-[rgb(var(--bg))] text-[rgb(var(--text))] rounded-xl text-sm font-medium hover:bg-[rgb(var(--panel))] transition-colors border border-[rgb(var(--border-color))] hover:border-[rgb(var(--border-color))]/40 flex items-center justify-center gap-3 group"
           >
             <svg className="w-5 h-5 group-hover:scale-110 transition-transform" viewBox="0 0 24 24">
               <path
@@ -220,7 +236,7 @@ export default function SignInPage() {
 
           {/* Toggle Sign In/Sign Up */}
           <div className="mt-8 text-center">
-            <p className="text-[rgb(var(--muted))]">
+            <p className={`text-[rgb(var(--muted))]`}>
               {isSignUp ? 'Already have an account?' : "Don't have an account?"}{' '}
               <button
                 type="button"
@@ -262,29 +278,30 @@ export default function SignInPage() {
 
         {/* Features */}
         <div className="text-center mt-8">
-          <h3 className="text-lg font-semibold mb-4">Why join Poppin?</h3>
+          <h3 className="text-lg font-semibold text-[rgb(var(--text))] mb-4">Why join Poppin?</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="text-center">
               <MagnifyingGlassIcon className="w-6 h-6 mx-auto text-[rgb(var(--muted))] mb-2" />
               <div className="font-medium text-[rgb(var(--text))]">Discover</div>
-              <div className="text-[rgb(var(--muted))]">See the real happenings around town.</div>
+              <div className={`text-[rgb(var(--muted))] text-sm`}>See the real happenings around town.</div>
             </div>
             <div className="text-center">
               <CalendarIcon className="w-6 h-6 mx-auto text-[rgb(var(--muted))] mb-2" />
               <div className="font-medium text-[rgb(var(--text))]">Create</div>
-              <div className="text-[rgb(var(--muted))]">Post your own and get noticed.</div>
+              <div className={`text-[rgb(var(--muted))] text-sm`}>Post your own and get noticed.</div>
             </div>
             <div className="text-center">
               <UserGroupIcon className="w-6 h-6 mx-auto text-[rgb(var(--muted))] mb-2" />
               <div className="font-medium text-[rgb(var(--text))]">Connect</div>
-              <div className="text-[rgb(var(--muted))]">Link up with people who match your vibe.</div>
+              <div className={`text-[rgb(var(--muted))] text-sm`}>Link up with people who match your vibe.</div>
             </div>
           </div>
         </div>
       </div>
 
       {/* Bottom spacing for navigation */}
-      <div className="pb-20"></div>
+      <div className="h-16 sm:h-0"></div>
+      <div className="pb-12 sm:pb-0"></div>
     </div>
   );
 }

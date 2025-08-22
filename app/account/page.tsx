@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { UserIcon, CalendarIcon, MapPinIcon, CogIcon, BellIcon, ShieldCheckIcon } from '@heroicons/react/24/outline';
+import { UserIcon, CalendarIcon, MapPinIcon, CogIcon, BellIcon, ShieldCheckIcon, WifiIcon } from '@heroicons/react/24/outline';
 import { supabase } from '@/lib/supabaseClient';
 import { tokens } from '@/components/tokens';
 
@@ -101,11 +101,45 @@ export default function AccountPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[rgb(var(--bg))] py-12 px-4">
+      <div className="min-h-screen bg-[rgb(var(--bg))] py-8 px-4">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[rgb(var(--brand))] mx-auto"></div>
-            <p className="mt-4 text-[rgb(var(--muted))]">Loading account...</p>
+          {/* Header Skeleton */}
+          <div className="text-center mb-8">
+            <div className="h-10 md:h-12 w-48 md:w-56 bg-[rgb(var(--muted))]/20 rounded animate-pulse mx-auto mb-4" />
+            <div className="h-6 md:h-7 w-64 md:w-72 bg-[rgb(var(--muted))]/20 rounded animate-pulse mx-auto" />
+          </div>
+
+          {/* Profile Summary Card Skeleton */}
+          <div className="bg-[rgb(var(--panel))] token-border rounded-2xl p-6 mb-8">
+            <div className="flex items-center gap-4">
+              <div className="w-16 h-16 bg-[rgb(var(--muted))]/20 rounded-full animate-pulse" />
+              <div className="flex-1 space-y-3">
+                <div className="h-8 w-48 bg-[rgb(var(--muted))]/20 rounded animate-pulse" />
+                <div className="h-5 w-32 bg-[rgb(var(--muted))]/20 rounded animate-pulse" />
+                <div className="flex items-center gap-2">
+                  <div className="h-6 w-16 bg-[rgb(var(--muted))]/20 rounded-full animate-pulse" />
+                  <div className="h-4 w-24 bg-[rgb(var(--muted))]/20 rounded animate-pulse" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Navigation Tabs Skeleton */}
+          <div className="flex border-b border-[rgb(var(--border-color))]/20 mb-8">
+            {Array.from({ length: 3 }).map((_, i) => (
+              <div key={i} className="flex items-center gap-2 px-6 py-3">
+                <div className="w-5 h-5 bg-[rgb(var(--muted))]/20 rounded animate-pulse" />
+                <div className="h-5 w-16 bg-[rgb(var(--muted))]/20 rounded animate-pulse" />
+              </div>
+            ))}
+          </div>
+
+          {/* Tab Content Skeleton */}
+          <div className="min-h-[400px] space-y-6">
+            <div className="h-6 w-32 bg-[rgb(var(--muted))]/20 rounded animate-pulse" />
+            <div className="h-4 w-64 bg-[rgb(var(--muted))]/20 rounded animate-pulse" />
+            <div className="h-4 w-48 bg-[rgb(var(--muted))]/20 rounded animate-pulse" />
+            <div className="h-4 w-56 bg-[rgb(var(--muted))]/20 rounded animate-pulse" />
           </div>
         </div>
       </div>
@@ -271,7 +305,7 @@ export default function AccountPage() {
                   My Events
                 </h3>
                 <Link
-                  href="/events/new"
+                  href="/post"
                   className="px-4 py-2 bg-[rgb(var(--brand))] text-white rounded-xl hover:bg-[rgb(var(--brand))]/90 transition-colors text-sm font-medium"
                 >
                   Create New Event
@@ -284,7 +318,7 @@ export default function AccountPage() {
                   <h3 className="text-xl font-semibold mb-2">No events yet.</h3>
                   <p className="text-[rgb(var(--muted))] mb-6">Post your first one and start building your reach.</p>
                   <Link
-                    href="/events/new"
+                    href="/post"
                     className="inline-flex items-center rounded-xl px-4 py-2 bg-brand text-white text-sm font-medium hover:bg-brand/90 transition-colors"
                   >
                     Create an Event
@@ -392,6 +426,22 @@ export default function AccountPage() {
                       Upgrade Plan
                     </Link>
                   </div>
+
+                  <div className="flex items-center justify-between p-4 bg-[rgb(var(--bg))] rounded-lg">
+                    <div className="flex items-center gap-3">
+                      <WifiIcon className="w-5 h-5 text-[rgb(var(--muted))]" />
+                      <div>
+                        <div className="font-medium text-[rgb(var(--text))]">Offline Management</div>
+                        <div className="text-sm text-[rgb(var(--muted))]">Manage offline data and sync settings</div>
+                      </div>
+                    </div>
+                    <Link
+                      href="/offline"
+                      className="px-3 py-1 text-sm bg-[rgb(var(--brand))] text-white rounded-xl hover:bg-[rgb(var(--brand))]/90 transition-colors font-medium"
+                    >
+                      Manage
+                    </Link>
+                  </div>
                 </div>
               </div>
 
@@ -427,7 +477,7 @@ export default function AccountPage() {
       </div>
 
       {/* Bottom spacing for navigation */}
-      <div className="pb-20"></div>
+      <div className="pb-16"></div>
     </div>
   );
 }

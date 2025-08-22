@@ -76,6 +76,67 @@ export default function MapPage() {
     const debounceTimeoutRef = useRef<NodeJS.Timeout | null>(null);
     const { success, error: showError, warning, info } = useToast();
 
+    // Update URL and localStorage when filters change
+    const updateFilterURL = useCallback((newFilters: {
+        range?: Range;
+        onlyFree?: boolean;
+        startDate?: string | null;
+        endDate?: string | null;
+        eventTypes?: string[];
+        ageRestriction?: string;
+        priceRange?: [number, number];
+    }) => {
+        const url = new URL(window.location.href);
+        
+        // Update URL parameters
+        if (newFilters.range !== undefined) {
+            url.searchParams.set('range', newFilters.range);
+            localStorage.setItem('poppin_filters_range', newFilters.range);
+        }
+        if (newFilters.onlyFree !== undefined) {
+            url.searchParams.set('onlyFree', newFilters.onlyFree.toString());
+            localStorage.setItem('poppin_filters_onlyFree', newFilters.onlyFree.toString());
+        }
+        if (newFilters.startDate !== undefined) {
+            if (newFilters.startDate) {
+                url.searchParams.set('startDate', newFilters.startDate);
+                localStorage.setItem('poppin_filters_startDate', newFilters.startDate);
+            } else {
+                url.searchParams.delete('startDate');
+                localStorage.removeItem('poppin_filters_startDate');
+            }
+        }
+        if (newFilters.endDate !== undefined) {
+            if (newFilters.endDate) {
+                url.searchParams.set('endDate', newFilters.endDate);
+                localStorage.setItem('poppin_filters_endDate', newFilters.endDate);
+            } else {
+                url.searchParams.delete('endDate');
+                localStorage.removeItem('poppin_filters_endDate');
+            }
+        }
+        if (newFilters.eventTypes !== undefined) {
+            if (newFilters.eventTypes.length > 0) {
+                url.searchParams.set('eventTypes', newFilters.eventTypes.join(','));
+                localStorage.setItem('poppin_filters_eventTypes', JSON.stringify(newFilters.eventTypes));
+            } else {
+                url.searchParams.delete('eventTypes');
+                localStorage.removeItem('poppin_filters_eventTypes');
+            }
+        }
+        if (newFilters.ageRestriction !== undefined) {
+            url.searchParams.set('ageRestriction', newFilters.ageRestriction);
+            localStorage.setItem('poppin_filters_ageRestriction', newFilters.ageRestriction);
+        }
+        if (newFilters.priceRange !== undefined) {
+            url.searchParams.set('priceRange', JSON.stringify(newFilters.priceRange));
+            localStorage.setItem('poppin_filters_priceRange', JSON.stringify(newFilters.priceRange));
+        }
+        
+        // Update URL without page reload
+        window.history.replaceState({}, '', url.toString());
+    }, []);
+
     // Handle map search functionality
     const handleMapSearch = async () => {
         if (!searchTerm.trim() || !mapRef.current) return;
@@ -249,13 +310,14 @@ export default function MapPage() {
             });
         }
     };
-    // Handle URL search parameters
+    // Handle URL search parameters and filter persistence
     useEffect(() => {
         const urlParams = new URLSearchParams(window.location.search);
         const lat = urlParams.get('lat');
         const lng = urlParams.get('lng');
         const query = urlParams.get('query');
         
+        // Load search location from URL
         if (lat && lng && query) {
             setSearchLocation({
                 lat: parseFloat(lat),
@@ -263,6 +325,23 @@ export default function MapPage() {
                 formatted: query
             });
         }
+        
+        // Load filters from URL or localStorage
+        const savedRange = urlParams.get('range') || localStorage.getItem('poppin_filters_range') || 'all';
+        const savedOnlyFree = urlParams.get('onlyFree') === 'true' || localStorage.getItem('poppin_filters_onlyFree') === 'true';
+        const savedStartDate = urlParams.get('startDate') || localStorage.getItem('poppin_filters_startDate') || null;
+        const savedEndDate = urlParams.get('endDate') || localStorage.getItem('poppin_filters_endDate') || null;
+        const savedEventTypes = urlParams.get('eventTypes') ? urlParams.get('eventTypes')!.split(',') : JSON.parse(localStorage.getItem('poppin_filters_eventTypes') || '[]');
+        const savedAgeRestriction = urlParams.get('ageRestriction') || localStorage.getItem('poppin_filters_ageRestriction') || 'All Ages';
+        const savedPriceRange = urlParams.get('priceRange') ? JSON.parse(urlParams.get('priceRange')!) : JSON.parse(localStorage.getItem('poppin_filters_priceRange') || '[0,100]');
+        
+        setRange(savedRange as Range);
+        setOnlyFree(savedOnlyFree);
+        setStartDate(savedStartDate);
+        setEndDate(savedEndDate);
+        setEventTypes(savedEventTypes);
+        setAgeRestriction(savedAgeRestriction);
+        setPriceRange(savedPriceRange);
     }, []);
 
     // Cleanup timeout on unmount
@@ -481,14 +560,14 @@ export default function MapPage() {
                 
                 {/* Offline Indicator */}
                 <OfflineIndicator />
-            {/* Header with Post Event Button */}
-            <div className="relative z-30 bg-[rgb(var(--bg))] border-b md:border-b-0 border-[rgb(var(--border-color))]/20">
+            {/* Header with Post Event Button - Non-sticky */}
+            <div className="relative z-30 bg-[rgb(var(--bg))] border-b border-[rgb(var(--border-color))]/20">
                 <div className="max-w-7xl mx-auto px-4 py-4 md:py-6 lg:py-8">
                     <div className="flex items-center justify-between gap-4 md:gap-6">
                         {/* Left Column - Event Map Title */}
                         <div className="flex-shrink-0">
                             <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-[rgb(var(--text))]">Event Map</h1>
-                            <p className={`text-base sm:text-lg md:text-xl ${tokens.muted}`}>Discover events near you</p>
+                            <p className={`text-base sm:text-lg md:text-xl ${tokens.muted}`}>Explore events on an interactive map</p>
                         </div>
                         
                         {/* Middle Column - Search Bar (Hidden on Mobile) */}
@@ -503,40 +582,40 @@ export default function MapPage() {
                                     onChange={(e) => handleSearchInputChange(e.target.value)}
                                     onKeyPress={(e) => e.key === 'Enter' && handleMapSearch()}
                                 />
-                                                            <button
-                                onClick={handleMapSearch}
-                                className="absolute right-2 top-1/2 transform -translate-y-1/2 px-3 py-1.5 md:px-4 md:py-2 bg-[rgb(var(--brand))] text-white rounded-md text-xs md:text-sm font-medium hover:bg-[rgb(var(--brand))]/90 transition-colors"
-                            >
-                                {isSearching ? (
-                                    <div className="w-3 h-3 md:w-4 md:h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                                ) : (
-                                    "Search"
-                                )}
-                            </button>
-                        </div>
-                        
-                        {/* Search Error Display */}
-                        {searchError && (
-                            <div className="mt-2 p-3 bg-red-50 border border-red-200 rounded-lg">
-                                <div className="flex items-start gap-2">
-                                    <ExclamationTriangleIcon className="w-4 h-4 text-red-500 flex-shrink-0 mt-0.5" />
-                                    <div className="flex-1">
-                                        <div className="text-sm text-red-800 font-medium">Search Error</div>
-                                        <div className="text-sm text-red-700 mt-1">{searchError}</div>
-                                        <RetryButton 
-                                            onRetry={handleMapSearch} 
-                                            size="sm" 
-                                            variant="outline"
-                                            className="mt-2"
-                                        >
-                                            Try Again
-                                        </RetryButton>
+                                <button
+                                    onClick={handleMapSearch}
+                                    className="absolute right-2 top-1/2 transform -translate-y-1/2 px-3 py-1.5 md:px-4 md:py-2 bg-[rgb(var(--brand))] text-white rounded-md text-xs md:text-sm font-medium hover:bg-[rgb(var(--brand))]/90 transition-colors"
+                                >
+                                    {isSearching ? (
+                                        <div className="w-3 h-3 md:w-4 md:h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                                    ) : (
+                                        "Search"
+                                    )}
+                                </button>
+                            </div>
+                            
+                            {/* Search Error Display */}
+                            {searchError && (
+                                <div className="mt-2 p-3 bg-red-50 border border-red-200 rounded-lg">
+                                    <div className="flex items-start gap-2">
+                                        <ExclamationTriangleIcon className="w-4 h-4 text-red-500 flex-shrink-0 mt-0.5" />
+                                        <div className="flex-1">
+                                            <div className="text-sm text-red-800 font-medium">Search Error</div>
+                                            <div className="text-sm text-red-700 mt-1">{searchError}</div>
+                                            <RetryButton 
+                                                onRetry={handleMapSearch} 
+                                                size="sm" 
+                                                variant="outline"
+                                                className="mt-2"
+                                            >
+                                                Try Again
+                                            </RetryButton>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        )}
-                        
-                                                    {/* Search Suggestions Dropdown - Positioned outside container */}
+                            )}
+                            
+                            {/* Search Suggestions Dropdown - Positioned outside container */}
                             {(showSearchSuggestions || isSearchSuggestionsLoading) && (
                                 <div className="absolute left-1/2 transform -translate-x-1/2 top-full mt-0.5 w-full max-w-md bg-[rgb(var(--panel))] token-border rounded-lg shadow-2xl z-50 max-h-60 overflow-y-auto">
                                     <div className="p-1">
@@ -565,168 +644,190 @@ export default function MapPage() {
                             )}
                         </div>
                         
-                        {/* Right Column - CTA Buttons */}
-                        <div className="flex gap-2 md:gap-3 flex-shrink-0">
+                                                    {/* Right Column - CTA Buttons */}
+                            <div className="flex gap-2 md:gap-3 flex-shrink-0 ml-auto">
+
                             <Link
-                                href="/events/new"
-                                className="inline-flex items-center gap-2 px-4 py-2 md:px-6 md:py-3 bg-[rgb(var(--brand))] text-white rounded-xl text-sm md:text-base font-medium hover:bg-[rgb(var(--brand))]/90 transition-colors"
-                            >
-                                Post Event
-                            </Link>
-                            
-                            <Link
-                                href="/events"
-                                className="inline-flex items-center gap-2 px-4 py-2 md:px-6 md:py-3 bg-[rgb(var(--panel))] text-[rgb(var(--text))] border border-[rgb(var(--border-color))] rounded-xl text-sm md:text-base font-medium hover:bg-[rgb(var(--bg))] transition-colors"
+                                href="/list"
+                                className="inline-flex items-center gap-2 px-2.5 py-1.5 md:px-3 md:py-2 bg-[rgb(var(--panel))] text-[rgb(var(--text))] rounded-xl text-xs md:text-sm font-medium hover:bg-[rgb(var(--bg))] transition-colors"
                             >
                                 List View
                             </Link>
+                            
+                                                            <Link
+                                    href="/post"
+                                    className="inline-flex items-center gap-2 px-2.5 py-1.5 md:px-3 md:py-2 bg-[rgb(var(--brand))] text-white rounded-xl text-xs md:text-sm font-medium hover:bg-[rgb(var(--brand))]/90 transition-colors"
+                                >
+                                    Post Event
+                                </Link>
                         </div>
                     </div>
                 </div>
             </div>
 
-            {/* Filter Bar */}
-            <div className="sticky top-0 z-40 bg-[rgb(var(--bg))] border-b border-[rgb(var(--border-color))]/20">
-                {/* Search Section - Mobile Only */}
-                <div className="md:hidden px-4 py-4 relative">
-                    <div className="max-w-md mx-auto">
-                        <div className="relative search-container overflow-visible">
-                            <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-[rgb(var(--muted))]" />
-                            <input
-                                type="text"
-                                placeholder="Search events, venues, or locations..."
-                                className="w-full pl-10 pr-4 py-3 bg-[rgb(var(--panel))] text-[rgb(var(--text))] rounded-lg token-border focus:outline-none focus:ring-2 focus:ring-[rgb(var(--brand))] text-sm"
-                                value={searchTerm}
-                                onChange={(e) => handleSearchInputChange(e.target.value)}
-                                onKeyPress={(e) => e.key === 'Enter' && handleMapSearch()}
-                            />
-                            <button
-                                onClick={handleMapSearch}
-                                className="absolute right-2 top-1/2 transform -translate-y-1/2 px-3 py-1.5 bg-[rgb(var(--brand))] text-white rounded-md text-xs font-medium hover:bg-[rgb(var(--brand))]/90 transition-colors"
-                            >
-                                {isSearching ? (
-                                    <div className="w-3 h-3 md:w-4 md:h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                                ) : (
-                                    "Search"
-                                )}
-                            </button>
-                        </div>
-                        
-                        {/* Search Error Display - Mobile */}
-                        {searchError && (
-                            <div className="mt-2 p-3 bg-red-50 border border-red-200 rounded-lg">
-                                <div className="flex items-start gap-2">
-                                    <ExclamationTriangleIcon className="w-4 h-4 text-red-500 flex-shrink-0 mt-0.5" />
-                                    <div className="flex-1">
-                                        <div className="text-sm text-red-800 font-medium">Search Error</div>
-                                        <div className="text-sm text-red-700 mt-1">{searchError}</div>
-                                        <RetryButton 
-                                            onRetry={handleMapSearch} 
-                                            size="sm" 
-                                            variant="outline"
-                                            className="mt-2"
-                                        >
-                                            Try Again
-                                        </RetryButton>
-                                    </div>
-                                </div>
-                            </div>
-                        )}
+            {/* Mobile Search Section - Non-sticky */}
+            <div className="md:hidden px-4 py-4 relative bg-[rgb(var(--bg))] border-b border-[rgb(var(--border-color))]/20">
+                <div className="max-w-md mx-auto">
+                    <div className="relative search-container overflow-visible">
+                        <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-[rgb(var(--muted))]" />
+                        <input
+                            type="text"
+                            placeholder="Search events, venues, or locations..."
+                            className="w-full pl-10 pr-4 py-3 bg-[rgb(var(--panel))] text-[rgb(var(--text))] rounded-lg token-border focus:outline-none focus:ring-2 focus:ring-[rgb(var(--brand))] text-sm"
+                            value={searchTerm}
+                            onChange={(e) => handleSearchInputChange(e.target.value)}
+                            onKeyPress={(e) => e.key === 'Enter' && handleMapSearch()}
+                        />
+                        <button
+                            onClick={handleMapSearch}
+                            className="absolute right-2 top-1/2 transform -translate-y-1/2 px-3 py-1.5 bg-[rgb(var(--brand))] text-white rounded-md text-xs font-medium hover:bg-[rgb(var(--brand))]/90 transition-colors"
+                        >
+                            {isSearching ? (
+                                <div className="w-3 h-3 md:w-4 md:h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                            ) : (
+                                "Search"
+                            )}
+                        </button>
                     </div>
                     
-                                                {/* Search Suggestions Dropdown - Positioned outside container */}
-                            {(showSearchSuggestions || isSearchSuggestionsLoading) && (
-                                <div className="absolute left-1/2 transform -translate-x-1/2 top-full mt-0 w-full max-w-md bg-[rgb(var(--panel))] token-border rounded-lg shadow-2xl z-50 max-h-60 overflow-y-auto">
-                                    <div className="p-1">
-                                        {isSearchSuggestionsLoading ? (
-                                            <div className="flex items-center justify-center py-4">
-                                                <div className="w-4 h-4 border-2 border-[rgb(var(--brand))] border-t-transparent rounded-full animate-spin"></div>
-                                                <span className="ml-2 text-sm text-[rgb(var(--muted))]">Loading suggestions...</span>
-                                            </div>
-                                        ) : searchSuggestions.length > 0 ? (
-                                            searchSuggestions.map((suggestion, index) => (
-                                                <button
-                                                    key={index}
-                                                    onClick={() => handleSuggestionClick(suggestion)}
-                                                    className="w-full text-left px-3 py-2 hover:bg-[rgb(var(--brand))] transition-colors text-sm rounded-md"
-                                                >
-                                                    {suggestion.label}
-                                                </button>
-                                            ))
-                                        ) : (
-                                            <div className="px-3 py-2 text-sm text-[rgb(var(--muted))]">
-                                                No suggestions found
-                                            </div>
-                                        )}
-                                    </div>
+                    {/* Search Error Display - Mobile */}
+                    {searchError && (
+                        <div className="mt-2 p-3 bg-red-50 border border-red-200 rounded-lg">
+                            <div className="flex items-start gap-2">
+                                <ExclamationTriangleIcon className="w-4 h-4 text-red-500 flex-shrink-0 mt-0.5" />
+                                <div className="flex-1">
+                                    <div className="text-sm text-red-800 font-medium">Search Error</div>
+                                    <div className="text-sm text-red-700 mt-1">{searchError}</div>
+                                    <RetryButton 
+                                        onRetry={handleMapSearch} 
+                                        size="sm" 
+                                        variant="outline"
+                                        className="mt-2"
+                                    >
+                                        Try Again
+                                    </RetryButton>
                                 </div>
-                            )}
+                            </div>
+                        </div>
+                    )}
+                    
+                    {/* Search Suggestions Dropdown - Mobile */}
+                    {(showSearchSuggestions || isSearchSuggestionsLoading) && (
+                        <div className="absolute left-1/2 transform -translate-x-1/2 top-full mt-0 w-full max-w-md bg-[rgb(var(--panel))] token-border rounded-lg shadow-2xl z-50 max-h-60 overflow-y-auto">
+                            <div className="p-1">
+                                {isSearchSuggestionsLoading ? (
+                                    <div className="flex items-center justify-center py-4">
+                                        <div className="w-4 h-4 border-2 border-[rgb(var(--brand))] border-t-transparent rounded-full animate-spin"></div>
+                                        <span className="ml-2 text-sm text-[rgb(var(--muted))]">Loading suggestions...</span>
+                                    </div>
+                                ) : searchSuggestions.length > 0 ? (
+                                    searchSuggestions.map((suggestion, index) => (
+                                        <button
+                                            key={index}
+                                            onClick={() => handleSuggestionClick(suggestion)}
+                                            className="w-full text-left px-3 py-2 hover:bg-[rgb(var(--brand))] transition-colors text-sm rounded-md"
+                                        >
+                                            {suggestion.label}
+                                        </button>
+                                    ))
+                                ) : (
+                                    <div className="px-3 py-2 text-sm text-[rgb(var(--muted))]">
+                                        No suggestions found
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    )}
                 </div>
-                
-                {/* Filter Bar - Full Width */}
+            </div>
+
+            {/* Filter Bar - Sticky */}
+            <div className="sticky top-0 z-40 bg-[rgb(var(--bg))]">
                 <FilterBar
                     range={range}
-                    setRange={setRange}
+                    setRange={(newRange) => {
+                        setRange(newRange);
+                        updateFilterURL({ range: newRange });
+                    }}
                     onlyFree={onlyFree}
-                    setOnlyFree={setOnlyFree}
+                    setOnlyFree={(newOnlyFree) => {
+                        setOnlyFree(newOnlyFree);
+                        updateFilterURL({ onlyFree: newOnlyFree });
+                    }}
                     startDate={startDate}
-                    setStartDate={setStartDate}
+                    setStartDate={(newStartDate) => {
+                        setStartDate(newStartDate);
+                        updateFilterURL({ startDate: newStartDate });
+                    }}
                     endDate={endDate}
-                    setEndDate={setEndDate}
+                    setEndDate={(newEndDate) => {
+                        setEndDate(newEndDate);
+                        updateFilterURL({ endDate: newEndDate });
+                    }}
                     onApplyCustom={() => {}}
                     eventTypes={eventTypes}
-                    setEventTypes={setEventTypes}
+                    setEventTypes={(newEventTypes) => {
+                        setEventTypes(newEventTypes);
+                        updateFilterURL({ eventTypes: newEventTypes });
+                    }}
                     ageRestriction={ageRestriction}
-                    setAgeRestriction={setAgeRestriction}
+                    setAgeRestriction={(newAgeRestriction) => {
+                        setAgeRestriction(newAgeRestriction);
+                        updateFilterURL({ ageRestriction: newAgeRestriction });
+                    }}
                     priceRange={priceRange}
-                    setPriceRange={setPriceRange}
+                    setPriceRange={(newPriceRange) => {
+                        setPriceRange(newPriceRange);
+                        updateFilterURL({ priceRange: newPriceRange });
+                    }}
                 />
+            </div>
 
-                {/* Search & Discovery Tools */}
-                <div className="px-4 py-2 bg-[rgb(var(--bg))] border-t border-[rgb(var(--border-color))]/20">
-                    <div className="max-w-7xl mx-auto">
-                        <div className="flex items-center justify-center gap-1.5 overflow-x-auto">
-                            <PopularEvents
-                                onEventClick={(eventId) => {
-                                    setSelectedId(eventId);
-                                    // Scroll to event in sidebar
-                                    const eventElement = document.getElementById(`event-${eventId}`);
-                                    if (eventElement) {
-                                        eventElement.scrollIntoView({ behavior: 'smooth' });
+            {/* Search & Discovery Tools - Non-sticky */}
+            <div className="px-4 py-2 bg-[rgb(var(--bg))] border-t border-[rgb(var(--border-color))]/20 border-b border-[rgb(var(--border-color))]/20">
+                <div className="max-w-7xl mx-auto">
+                    <div className="flex items-center justify-center gap-1.5 overflow-x-auto">
+                        <PopularEvents
+                            onEventClick={(eventId) => {
+                                setSelectedId(eventId);
+                                // Scroll to event in sidebar
+                                const eventElement = document.getElementById(`event-${eventId}`);
+                                if (eventElement) {
+                                    eventElement.scrollIntoView({ behavior: 'smooth' });
+                                }
+                            }}
+                            currentLocation={location}
+                        />
+                        
+                        <PersonalizedRecommendations
+                            onEventClick={(eventId) => {
+                                setSelectedId(eventId);
+                                // Scroll to event in sidebar
+                                const eventElement = document.getElementById(`event-${eventId}`);
+                                if (eventElement) {
+                                    eventElement.scrollIntoView({ behavior: 'smooth' });
+                                }
+                            }}
+                            currentLocation={location}
+                        />
+                        
+                        <RecentSearches
+                            onLoadSearch={(searchTerm, location) => {
+                                setSearchTerm(searchTerm);
+                                if (location) {
+                                    setSearchLocation(location);
+                                    // Update map center
+                                    if (mapRef.current) {
+                                        mapRef.current.flyTo({
+                                            center: [location.lng, location.lat],
+                                            zoom: 13
+                                        });
                                     }
-                                }}
-                                currentLocation={location}
-                            />
-                            
-                            <PersonalizedRecommendations
-                                onEventClick={(eventId) => {
-                                    setSelectedId(eventId);
-                                    // Scroll to event in sidebar
-                                    const eventElement = document.getElementById(`event-${eventId}`);
-                                    if (eventElement) {
-                                        eventElement.scrollIntoView({ behavior: 'smooth' });
-                                    }
-                                }}
-                                currentLocation={location}
-                            />
-                            
-                            <RecentSearches
-                                onLoadSearch={(searchTerm, location) => {
-                                    setSearchTerm(searchTerm);
-                                    if (location) {
-                                        setSearchLocation(location);
-                                        // Update map center
-                                        if (mapRef.current) {
-                                            mapRef.current.flyTo({
-                                                center: [location.lng, location.lat],
-                                                zoom: 13
-                                            });
-                                        }
-                                    }
-                                }}
-                            />
-                            
-                            <SavedSearches
+                                }
+                            }}
+                        />
+                        
+                                                    <SavedSearches
                                 onLoadSearch={(filters) => {
                                     setRange(filters.range as Range);
                                     setOnlyFree(filters.onlyFree);
@@ -737,6 +838,16 @@ export default function MapPage() {
                                     if (filters.searchLocation) {
                                         setSearchLocation(filters.searchLocation);
                                     }
+                                    
+                                    // Update URL and localStorage with loaded filters
+                                    updateFilterURL({
+                                        range: filters.range as Range,
+                                        onlyFree: filters.onlyFree,
+                                        startDate: filters.startDate,
+                                        endDate: filters.endDate,
+                                        eventTypes: filters.eventTypes,
+                                        ageRestriction: filters.ageRestriction
+                                    });
                                 }}
                                 currentFilters={{
                                     range,
@@ -748,13 +859,12 @@ export default function MapPage() {
                                     searchLocation
                                 }}
                             />
-                        </div>
                     </div>
                 </div>
             </div>
 
             <div className="grid md:grid-cols-[2fr,1fr] gap-6 max-w-7xl mx-auto px-4 py-6">
-              <div className="relative w-full h-[50vh] md:h-[60vh] rounded-2xl token-border overflow-hidden" style={{ touchAction: 'pan-x pan-y' }}>
+              <div className="relative w-full h-[40vh] md:h-[50vh] rounded-2xl token-border overflow-hidden" style={{ touchAction: 'pan-x pan-y' }}>
                 {searchLocation && (
                   <div className="absolute top-2 left-0 right-0 z-10 text-center">
                     <div className="text-xs text-[rgb(var(--text))] font-normal">
@@ -908,7 +1018,7 @@ export default function MapPage() {
             </div>
 
             {/* Bottom spacing for mobile navigation */}
-            <div className="pb-20 sm:pb-0"></div>
+                            <div className="pb-16 sm:pb-0"></div>
         </div>
         </ErrorBoundary>
     );

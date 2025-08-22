@@ -231,6 +231,9 @@ export default function EventManagementDemo() {
           </div>
         </div>
       </div>
+
+      {/* Bottom spacing for navigation */}
+      <div className="pb-16"></div>
     </div>
   );
 }

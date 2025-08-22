@@ -16,7 +16,8 @@ import {
   CurrencyDollarIcon,
   UserGroupIcon,
   FaceFrownIcon,
-  BookmarkIcon
+  BookmarkIcon,
+  BuildingOfficeIcon
 } from '@heroicons/react/24/outline';
 import { supabase } from '@/lib/supabaseClient';
 
@@ -47,12 +48,29 @@ export default function EventDetailPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isLiked, setIsLiked] = useState(false);
+  const [user, setUser] = useState<any>(null);
+  const [authLoading, setAuthLoading] = useState(true);
 
   useEffect(() => {
     if (params.id) {
       loadEvent(params.id);
     }
   }, [params.id]);
+
+  useEffect(() => {
+    checkUser();
+  }, []);
+
+  async function checkUser() {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      setUser(user);
+    } catch (error) {
+      console.error('Error checking user:', error);
+    } finally {
+      setAuthLoading(false);
+    }
+  }
 
   async function loadEvent(eventId: string) {
     try {
@@ -128,13 +146,87 @@ export default function EventDetailPage() {
     }
   }
 
+  function requireAuth(action: string) {
+    if (!user) {
+      // Show auth prompt
+      if (confirm(`Please sign in to ${action}. Would you like to sign in now?`)) {
+        window.location.href = '/auth';
+      }
+      return false;
+    }
+    return true;
+  }
+
   if (loading) {
     return (
-      <div className="min-h-screen bg-[rgb(var(--bg))] py-12 px-4">
+      <div className="min-h-screen bg-[rgb(var(--bg))] py-8 px-4">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[rgb(var(--brand))] mx-auto"></div>
-            <p className="mt-4 text-[rgb(var(--muted))]">Loading event...</p>
+          {/* Back Button Skeleton */}
+          <div className="mb-6">
+            <div className="h-5 w-24 bg-[rgb(var(--muted))]/20 rounded animate-pulse" />
+          </div>
+
+          {/* Event Header Skeleton */}
+          <div className="mb-8">
+            <div className="h-6 w-20 bg-[rgb(var(--muted))]/20 rounded-full animate-pulse mb-4" />
+            <div className="h-8 md:h-10 w-3/4 bg-[rgb(var(--muted))]/20 rounded animate-pulse mb-4" />
+            
+            {/* Event Meta Skeleton */}
+            <div className="flex flex-wrap items-center gap-4 mb-6">
+              {Array.from({ length: 3 }).map((_, i) => (
+                <div key={i} className="flex items-center gap-2">
+                  <div className="w-5 h-5 bg-[rgb(var(--muted))]/20 rounded animate-pulse" />
+                  <div className="h-5 w-24 bg-[rgb(var(--muted))]/20 rounded animate-pulse" />
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Event Image Skeleton */}
+          <div className="mb-8">
+            <div className="aspect-video w-full bg-[rgb(var(--muted))]/20 rounded-2xl animate-pulse" />
+          </div>
+
+          {/* Event Content Skeleton */}
+          <div className="grid gap-8 md:grid-cols-[2fr,1fr]">
+            <div className="space-y-6">
+              <div className="space-y-3">
+                <div className="h-6 w-32 bg-[rgb(var(--muted))]/20 rounded animate-pulse" />
+                <div className="space-y-2">
+                  <div className="h-4 w-full bg-[rgb(var(--muted))]/20 rounded animate-pulse" />
+                  <div className="h-4 w-3/4 bg-[rgb(var(--muted))]/20 rounded animate-pulse" />
+                  <div className="h-4 w-1/2 bg-[rgb(var(--muted))]/20 rounded animate-pulse" />
+                </div>
+              </div>
+              
+              <div className="space-y-3">
+                <div className="h-6 w-24 bg-[rgb(var(--muted))]/20 rounded animate-pulse" />
+                <div className="space-y-2">
+                  <div className="h-4 w-full bg-[rgb(var(--muted))]/20 rounded animate-pulse" />
+                  <div className="h-4 w-2/3 bg-[rgb(var(--muted))]/20 rounded animate-pulse" />
+                </div>
+              </div>
+            </div>
+
+            {/* Sidebar Skeleton */}
+            <div className="space-y-6">
+              <div className="bg-[rgb(var(--panel))] token-border rounded-xl p-6 space-y-4">
+                <div className="h-6 w-32 bg-[rgb(var(--muted))]/20 rounded animate-pulse" />
+                <div className="space-y-3">
+                  <div className="h-5 w-24 bg-[rgb(var(--muted))]/20 rounded animate-pulse" />
+                  <div className="h-5 w-28 bg-[rgb(var(--muted))]/20 rounded animate-pulse" />
+                  <div className="h-5 w-20 bg-[rgb(var(--muted))]/20 rounded animate-pulse" />
+                </div>
+              </div>
+              
+              <div className="bg-[rgb(var(--panel))] token-border rounded-xl p-6 space-y-4">
+                <div className="h-6 w-28 bg-[rgb(var(--muted))]/20 rounded animate-pulse" />
+                <div className="space-y-3">
+                  <div className="h-5 w-32 bg-[rgb(var(--muted))]/20 rounded animate-pulse" />
+                  <div className="h-5 w-36 bg-[rgb(var(--muted))]/20 rounded animate-pulse" />
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -153,7 +245,7 @@ export default function EventDetailPage() {
             The event you're looking for doesn't exist or has been removed.
           </p>
           <Link
-            href="/events"
+            href="/list"
             className="inline-flex items-center px-4 py-2 bg-[rgb(var(--brand))] text-white rounded-xl text-sm font-medium hover:bg-[rgb(var(--brand))]/90 transition-colors"
           >
             Browse Events
@@ -169,7 +261,7 @@ export default function EventDetailPage() {
         {/* Back Button */}
         <div className="mb-6">
           <Link
-            href="/events"
+            href="/list"
             className="inline-flex items-center gap-2 text-[rgb(var(--muted))] hover:text-[rgb(var(--text))] transition-colors"
           >
             ← Back to Events
@@ -219,7 +311,11 @@ export default function EventDetailPage() {
           {/* Action Buttons */}
           <div className="flex flex-wrap gap-3">
             <button
-              onClick={() => setIsLiked(!isLiked)}
+              onClick={() => {
+                if (requireAuth('like this event')) {
+                  setIsLiked(!isLiked);
+                }
+              }}
               className={`flex items-center gap-2 px-4 py-2 rounded-xl transition-colors text-sm font-medium ${
                 isLiked
                   ? 'bg-red-500 text-white'
@@ -239,7 +335,12 @@ export default function EventDetailPage() {
             </button>
 
             <button
-              onClick={() => {/* TODO: Implement save functionality */}}
+              onClick={() => {
+                if (requireAuth('save this event')) {
+                  // TODO: Implement save functionality
+                  alert('Event saved!');
+                }
+              }}
               className="flex items-center gap-2 px-4 py-2 bg-[rgb(var(--panel))] text-[rgb(var(--text))] rounded-xl hover:bg-[rgb(var(--bg))] token-border transition-colors text-sm font-medium"
             >
               <BookmarkIcon className="w-5 h-5" />
@@ -400,9 +501,25 @@ export default function EventDetailPage() {
                     </div>
                   </div>
 
-                  <button className="w-full px-4 py-2 bg-[rgb(var(--brand))] text-white rounded-lg hover:bg-[rgb(var(--brand))]/90 transition-colors text-sm">
+                  <button 
+                    onClick={() => {
+                      if (requireAuth('follow this organizer')) {
+                        // TODO: Implement follow functionality
+                        alert('Now following this organizer!');
+                      }
+                    }}
+                    className="w-full px-4 py-2 bg-[rgb(var(--brand))] text-white rounded-lg hover:bg-[rgb(var(--brand))]/90 transition-colors text-sm mb-3"
+                  >
                     Follow Organizer
                   </button>
+                  
+                  <Link
+                    href="/organizer/apply"
+                    className="w-full px-4 py-2 bg-[rgb(var(--bg))] text-[rgb(var(--text))] rounded-lg hover:bg-[rgb(var(--bg))]/80 transition-colors text-sm border border-[rgb(var(--border))] flex items-center justify-center gap-2"
+                  >
+                    <BuildingOfficeIcon className="w-4 h-4" />
+                    Host with Us
+                  </Link>
 
                   {event.organizer_email && (
                     <a
@@ -510,12 +627,120 @@ export default function EventDetailPage() {
                 Share Event
               </button>
               <Link
-                href="/events"
+                href="/list"
                 className="px-6 py-3 bg-[rgb(var(--brand))] text-white rounded-xl hover:bg-[rgb(var(--brand))]/90 transition-colors"
               >
                 Browse More Events
               </Link>
             </div>
+          </div>
+        </div>
+
+        {/* Host Similar Event CTA */}
+        <div className="text-center mt-12">
+          <div className="bg-[rgb(var(--panel))] token-border rounded-2xl p-8 max-w-2xl mx-auto">
+            <h3 className="text-2xl font-bold text-[rgb(var(--text))] mb-4">
+              Love this event idea?
+            </h3>
+            <p className="text-[rgb(var(--muted))] mb-6">
+              Host your own version and reach your community with Poppin's powerful event management tools
+            </p>
+            <Link
+              href="/organizer/apply"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-[rgb(var(--brand))] text-white rounded-xl hover:bg-[rgb(var(--brand))]/90 transition-colors font-medium"
+            >
+              <BuildingOfficeIcon className="w-5 h-5" />
+              Host Similar Event
+            </Link>
+          </div>
+        </div>
+
+        {/* Organizer Success Stories */}
+        <div className="mt-12">
+          <div className="text-center mb-8">
+            <h3 className="text-2xl font-bold text-[rgb(var(--text))] mb-4">
+              Organizer Success Stories
+            </h3>
+            <p className="text-[rgb(var(--muted))]">
+              See how other organizers are growing their communities
+            </p>
+          </div>
+          <div className="grid gap-6 md:grid-cols-3">
+            <div className="bg-[rgb(var(--panel))] token-border rounded-xl p-6">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-12 h-12 bg-[rgb(var(--brand))] rounded-full flex items-center justify-center">
+                  <BuildingOfficeIcon className="w-6 h-6 text-white" />
+                </div>
+                <div>
+                  <h4 className="font-semibold text-[rgb(var(--text))]">Sarah M.</h4>
+                  <p className="text-sm text-[rgb(var(--muted))]">Local Food Festival</p>
+                </div>
+              </div>
+              <p className="text-sm text-[rgb(var(--muted))] mb-4">
+                "Poppin helped us reach 3x more attendees and manage our event seamlessly. The analytics are incredible!"
+              </p>
+              <div className="flex items-center gap-2 text-sm text-[rgb(var(--muted))]">
+                <span className="font-medium text-[rgb(var(--brand))]">+300%</span>
+                <span>attendee growth</span>
+              </div>
+            </div>
+
+            <div className="bg-[rgb(var(--panel))] token-border rounded-xl p-6">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-12 h-12 bg-[rgb(var(--brand))] rounded-full flex items-center justify-center">
+                  <BuildingOfficeIcon className="w-6 h-6 text-white" />
+                </div>
+                <div>
+                  <h4 className="font-semibold text-[rgb(var(--text))]">Mike R.</h4>
+                  <p className="text-sm text-[rgb(var(--muted))]">Tech Meetup</p>
+                </div>
+              </div>
+              <p className="text-sm text-[rgb(var(--muted))] mb-4">
+                "From 50 to 500 attendees in just 6 months. Poppin's tools made scaling effortless."
+              </p>
+              <div className="flex items-center gap-2 text-sm text-[rgb(var(--muted))]">
+                <span className="font-medium text-[rgb(var(--brand))]">+900%</span>
+                <span>attendee growth</span>
+              </div>
+            </div>
+
+            <div className="bg-[rgb(var(--panel))] token-border rounded-xl p-6">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-12 h-12 bg-[rgb(var(--brand))] rounded-full flex items-center justify-center">
+                  <BuildingOfficeIcon className="w-6 h-6 text-white" />
+                </div>
+                <div>
+                  <h4 className="font-semibold text-[rgb(var(--text))]">Lisa K.</h4>
+                  <p className="text-sm text-[rgb(var(--muted))]">Art Workshop</p>
+                </div>
+              </div>
+              <p className="text-sm text-[rgb(var(--muted))] mb-4">
+                "The mobile app and social features helped us build a loyal community of art enthusiasts."
+              </p>
+              <div className="flex items-center gap-2 text-sm text-[rgb(var(--muted))]">
+                <span className="font-medium text-[rgb(var(--brand))]">+150%</span>
+                <span>repeat attendees</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Host with Us CTA */}
+        <div className="text-center mt-12">
+          <div className="bg-[rgb(var(--brand))] rounded-2xl p-8 max-w-2xl mx-auto">
+            <h3 className="text-2xl font-bold text-white mb-4">
+              Ready to start your journey?
+            </h3>
+            <p className="text-white/90 mb-6">
+              Join thousands of organizers who are already using Poppin to reach their communities
+            </p>
+            <Link
+              href="/organizer/apply"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-white text-[rgb(var(--brand))] rounded-xl hover:bg-white/90 transition-colors font-medium"
+            >
+              <BuildingOfficeIcon className="w-5 h-5" />
+              Host with Us
+            </Link>
           </div>
         </div>
 
@@ -542,7 +767,7 @@ export default function EventDetailPage() {
       </div>
 
       {/* Bottom spacing for navigation */}
-      <div className="pb-20"></div>
+      <div className="pb-16"></div>
     </div>
   );
 }

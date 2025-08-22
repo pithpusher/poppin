@@ -173,11 +173,49 @@ export default function ModerationPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[rgb(var(--bg))] py-12 px-4">
+      <div className="min-h-screen bg-[rgb(var(--bg))] py-8 px-4">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[rgb(var(--brand))] mx-auto"></div>
-            <p className="mt-4 text-[rgb(var(--muted))]">Loading moderation data...</p>
+          {/* Header Skeleton */}
+          <div className="text-center mb-8">
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-[rgb(var(--muted))]/20 rounded-2xl mb-4 animate-pulse" />
+            <div className="h-10 md:h-12 w-64 md:w-72 bg-[rgb(var(--muted))]/20 rounded animate-pulse mx-auto mb-4" />
+            <div className="h-6 md:h-7 w-80 md:w-96 bg-[rgb(var(--muted))]/20 rounded animate-pulse mx-auto" />
+          </div>
+
+          {/* Stats Overview Skeleton */}
+          <div className="grid gap-6 md:grid-cols-4 mb-8">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <div key={i} className="bg-[rgb(var(--panel))] token-border rounded-xl p-6 text-center">
+                <div className="w-12 h-12 bg-[rgb(var(--muted))]/20 rounded-full mx-auto mb-3 animate-pulse" />
+                <div className="h-6 w-12 bg-[rgb(var(--muted))]/20 rounded animate-pulse mx-auto mb-2" />
+                <div className="h-4 w-20 bg-[rgb(var(--muted))]/20 rounded animate-pulse mx-auto" />
+              </div>
+            ))}
+          </div>
+
+          {/* Navigation Tabs Skeleton */}
+          <div className="flex border-b border-[rgb(var(--border-color))]/20 mb-8">
+            {Array.from({ length: 3 }).map((_, i) => (
+              <div key={i} className="flex items-center gap-2 px-4 py-2">
+                <div className="w-5 h-5 bg-[rgb(var(--muted))]/20 rounded animate-pulse" />
+                <div className="h-5 w-16 bg-[rgb(var(--muted))]/20 rounded animate-pulse" />
+                <div className="w-6 h-6 bg-[rgb(var(--muted))]/20 rounded-full animate-pulse" />
+              </div>
+            ))}
+          </div>
+
+          {/* Tab Content Skeleton */}
+          <div className="space-y-4">
+            {Array.from({ length: 5 }).map((_, i) => (
+              <div key={i} className="bg-[rgb(var(--panel))] token-border rounded-xl p-4 space-y-3">
+                <div className="flex items-center justify-between">
+                  <div className="h-5 w-48 bg-[rgb(var(--muted))]/20 rounded animate-pulse" />
+                  <div className="h-6 w-16 bg-[rgb(var(--muted))]/20 rounded-full animate-pulse" />
+                </div>
+                <div className="h-4 w-32 bg-[rgb(var(--muted))]/20 rounded animate-pulse" />
+                <div className="h-4 w-24 bg-[rgb(var(--muted))]/20 rounded animate-pulse" />
+              </div>
+            ))}
           </div>
         </div>
       </div>
@@ -404,7 +442,7 @@ export default function ModerationPage() {
 
                       <div className="flex gap-2">
                         <Link
-                          href={`/o/${organizer.id}`}
+                          href={`/o/${organizer.slug || organizer.id}`}
                           className="inline-flex items-center gap-2 px-3 py-2 bg-[rgb(var(--bg))] text-[rgb(var(--text))] rounded-xl hover:bg-[rgb(var(--bg))]/80 transition-colors text-xs font-medium"
                         >
                           <EyeIcon className="w-4 h-4" />
@@ -535,7 +573,7 @@ export default function ModerationPage() {
       </div>
 
       {/* Bottom spacing for navigation */}
-      <div className="pb-20"></div>
+      <div className="pb-16"></div>
     </div>
   );
 }

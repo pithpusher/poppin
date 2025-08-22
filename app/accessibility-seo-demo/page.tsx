@@ -451,6 +451,9 @@ export default function AccessibilitySEODemo() {
           </div>
         </main>
       </div>
+
+      {/* Bottom spacing for navigation */}
+      <div className="pb-16"></div>
     </>
   );
 }

@@ -12,7 +12,8 @@ import {
   UserGroupIcon,
   UserIcon,
   CurrencyDollarIcon,
-  ArrowRightOnRectangleIcon
+  ArrowRightOnRectangleIcon,
+  Cog6ToothIcon
 } from '@heroicons/react/24/outline';
 import { usePathname } from 'next/navigation';
 
@@ -42,6 +43,7 @@ export default function HamburgerMenu() {
   }, [pathname]);
 
   const menuItems = [
+    // Primary Navigation
     { 
       href: '/', 
       label: 'Home', 
@@ -50,34 +52,38 @@ export default function HamburgerMenu() {
     },
     { 
       href: '/map', 
-      label: 'Map', 
+      label: 'Event Map', 
       icon: MapPinIcon,
-      description: 'View events on a map'
+      description: 'Explore events on an interactive map'
     },
     { 
-      href: '/events', 
-      label: 'Browse Events', 
+      href: '/list', 
+      label: 'Event List', 
       icon: CalendarIcon,
-      description: 'Find upcoming events'
+      description: 'Browse events in list format'
     },
+    
+    // Core Actions
     { 
-      href: '/events/new', 
+      href: '/post', 
       label: 'Post Event', 
       icon: PlusIcon,
       description: 'Create a new event',
       highlight: true
     },
-    { 
-      href: '/organizer/apply', 
+    {
+      href: '/organizers',
+      label: 'Organizers',
+      icon: UserGroupIcon,
+      description: 'Discover event organizers'
+    },
+    
+    // Business & Pricing
+    {
+      href: '/organizer/apply',
       label: 'Host With Us', 
       icon: UserGroupIcon,
       description: 'Become an event organizer'
-    },
-    { 
-      href: '/account', 
-      label: 'My Account', 
-      icon: UserIcon,
-      description: 'Manage your profile'
     },
     { 
       href: '/pricing', 
@@ -85,6 +91,22 @@ export default function HamburgerMenu() {
       icon: CurrencyDollarIcon,
       description: 'View plans and pricing'
     },
+    
+    // Account & Settings
+    { 
+      href: '/account', 
+      label: 'My Account', 
+      icon: UserIcon,
+      description: 'Manage your profile'
+    },
+    { 
+      href: '/settings', 
+      label: 'Settings', 
+      icon: Cog6ToothIcon,
+      description: 'Manage app settings and preferences'
+    },
+    
+    // Authentication
     { 
       href: '/auth', 
       label: 'Sign In', 

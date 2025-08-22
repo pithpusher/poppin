@@ -320,6 +320,9 @@ export default function MapEnhancementsDemoPage() {
         isOpen={isModalOpen}
         onClose={handleCloseModal}
       />
+
+      {/* Bottom spacing for navigation */}
+      <div className="pb-16"></div>
     </div>
   );
 }

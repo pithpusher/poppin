@@ -72,7 +72,7 @@
       "name": "Post Event",
       "short_name": "Post",
       "description": "Create a new event",
-      "url": "/events/new",
+              "url": "/post",
       "icons": [{ "src": "/icon-96x96.png", "sizes": "96x96" }]
     },
     {

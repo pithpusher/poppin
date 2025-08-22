@@ -3,6 +3,8 @@ import MiniMap from "@/components/map/MiniMap";
 import FeaturedEvents from "@/components/home/FeaturedEvents";
 import { tokens } from "@/components/tokens";
 import Link from "next/link";
+import { Suspense } from "react";
+import { EventListSkeleton } from "@/components/ui/Skeleton";
 
 export default function HomePage() {
   return (
@@ -38,7 +40,7 @@ export default function HomePage() {
                     View Events Near You
                   </Link>
                   <Link
-                    href="/events/new"
+                    href="/post"
                     className={`inline-flex items-center justify-center rounded-xl px-4 py-2 md:px-6 md:py-3 text-sm md:text-base ${tokens.border} ${tokens.muted} ${tokens.panel}
                                   hover:bg-white/10 html.light:hover:bg-zinc-50 transition-colors duration-200`}
                   >
@@ -52,19 +54,27 @@ export default function HomePage() {
         
         {/* See All Events Button */}
         <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-10">
-          <Link
-            href="/events"
-            className={`inline-flex items-center gap-2 px-4 py-2 md:px-6 md:py-3 rounded-xl text-sm md:text-base ${tokens.border} ${tokens.muted} ${tokens.panel} hover:bg-white/10 html.light:hover:bg-zinc-50 transition-all duration-200`}
-          >
-            View List of Events
-          </Link>
+          <div className="flex flex-col sm:flex-row gap-3 items-center">
+            <Link
+              href="/list"
+              className={`inline-flex items-center gap-2 px-4 py-2 md:px-6 md:py-3 rounded-xl text-sm md:text-base ${tokens.border} ${tokens.muted} ${tokens.panel} hover:bg-white/10 html.light:hover:bg-zinc-50 transition-all duration-200`}
+            >
+              View List of Events
+            </Link>
+            <Link
+              href="/organizers"
+              className={`inline-flex items-center gap-2 px-4 py-2 md:px-6 md:py-3 rounded-xl text-sm md:text-base ${tokens.border} ${tokens.muted} ${tokens.panel} hover:bg-white/10 html.light:hover:bg-zinc-50 transition-all duration-200`}
+            >
+              Browse Organizers
+            </Link>
+          </div>
         </div>
       </section>
 
-
-
-      {/* Featured Events */}
-      <FeaturedEvents />
+      {/* Featured Events with Skeleton Loading */}
+      <Suspense fallback={<EventListSkeleton count={6} />}>
+        <FeaturedEvents />
+      </Suspense>
       
       {/* Conversion CTA - Become an Organizer */}
       <section className="max-w-7xl mx-auto px-4 mt-16 md:mt-20 lg:mt-24 mb-20 md:mb-24">
@@ -112,6 +122,9 @@ export default function HomePage() {
           </div>
         </div>
       </section> */}
+
+      {/* Bottom spacing for navigation */}
+      <div className="pb-16"></div>
     </div>
   );
 }

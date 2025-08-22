@@ -143,6 +143,9 @@ export default function EnhancedEventsDemoPage() {
         onClose={handleCloseModal}
         onDirectionsClick={handleDirectionsClick}
       />
+
+      {/* Bottom spacing for navigation */}
+      <div className="pb-16"></div>
     </div>
   );
 }

@@ -167,9 +167,9 @@ export default function Pricing() {
               )}
               
               <div className="text-center mb-5 md:mb-6">
-                <h3 className="text-lg md:text-xl lg:text-2xl font-bold text-[rgb(var(--text))] mb-2 md:mb-3">{plan.name}</h3>
+                <h3 className="text-xl md:text-2xl lg:text-3xl font-bold text-[rgb(var(--text))] mb-2 md:mb-3">{plan.name}</h3>
                 <p className={`text-sm md:text-base ${tokens.muted} mb-3 md:mb-4`}>{plan.desc}</p>
-                <div className="text-2xl md:text-3xl lg:text-4xl font-bold text-[rgb(var(--text))] mb-4 md:mb-5">{plan.price}</div>
+                <div className="text-3xl md:text-4xl lg:text-5xl font-bold text-[rgb(var(--text))] mb-4 md:mb-5">{plan.price}</div>
               </div>
 
               <ul className="space-y-2.5 md:space-y-3 mb-5 md:mb-6">

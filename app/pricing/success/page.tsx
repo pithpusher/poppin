@@ -41,7 +41,7 @@ export default function CheckoutSuccessPage() {
         <h3 className="text-base font-semibold mb-4 text-center">What's next?</h3>
         <div className="space-y-4">
           <Link
-            href="/events/new"
+                            href="/post"
             className="block w-full p-4 bg-[rgb(var(--bg))] rounded-xl hover:bg-[rgb(var(--bg))]/80 transition-colors text-center"
           >
             <CalendarIcon className="w-6 h-6 mx-auto text-[rgb(var(--muted))] mb-2" />
@@ -81,7 +81,7 @@ export default function CheckoutSuccessPage() {
       </div>
 
       {/* Bottom spacing for navigation */}
-      <div className="pb-20"></div>
+      <div className="pb-16"></div>
     </div>
   );
 }

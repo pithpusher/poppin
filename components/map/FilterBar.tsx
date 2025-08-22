@@ -125,7 +125,7 @@ export default function FilterBar({
   return (
     <>
       {/* Quick Filters Bar */}
-      <div className="w-full bg-[rgb(var(--panel))] border-t border-[rgb(var(--border-color))]/20">
+      <div className="w-full bg-[rgb(var(--panel))]">
         <div className="w-full py-2 md:py-3 flex justify-center">
           <div className="flex items-center gap-2 md:gap-3 flex-wrap">
             {/* Date Range Quick Filters */}

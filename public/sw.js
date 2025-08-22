@@ -4,7 +4,7 @@ const urlsToCache = [
   '/',
   '/map',
   '/events',
-  '/events/new',
+  '/post',
   '/account',
   '/offline.html'
 ];

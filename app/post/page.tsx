@@ -722,7 +722,8 @@ export default function NewEventPage() {
       </div>
 
       {/* Bottom spacing for navigation */}
-      <div className="pb-20"></div>
+      <div className="h-16 sm:h-0"></div>
+      <div className="pb-12 sm:pb-0"></div>
 
       {/* Image Selection Modal */}
       {isImageModalOpen && (

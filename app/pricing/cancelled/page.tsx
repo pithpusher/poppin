@@ -108,7 +108,7 @@ export default function CheckoutCancelledPage() {
       </div>
 
       {/* Bottom spacing for navigation */}
-      <div className="pb-20"></div>
+      <div className="pb-16"></div>
     </div>
   );
 }

@@ -523,6 +523,9 @@ export default function AnalyticsDemo() {
           )}
         </div>
       </main>
+
+      {/* Bottom spacing for navigation */}
+      <div className="pb-16"></div>
     </div>
   );
 }
