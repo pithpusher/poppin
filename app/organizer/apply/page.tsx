@@ -12,6 +12,8 @@ import {
   CreditCardIcon,
   BanknotesIcon
 } from '@heroicons/react/24/outline';
+import ApplePayLogo from '@/components/icons/ApplePayLogo';
+import GooglePayLogo from '@/components/icons/GooglePayLogo';
 import { tokens } from '@/components/tokens';
 
 type FormData = {
@@ -31,7 +33,7 @@ type FormData = {
   references: string;
   selectedPlan: string;
   agreeToTerms: boolean;
-  paymentMethod: string;
+  paymentMethod: 'credit' | 'applepay' | 'googlepay';
   cardNumber: string;
   expiryDate: string;
   cvv: string;
@@ -235,6 +237,7 @@ export default function OrganizerApplyPage() {
                   value={formData.name}
                   onChange={(e) => handleInputChange('name', e.target.value)}
                   required
+                  autoComplete="name"
                   className="w-full px-3 py-2 rounded-lg token-border bg-[rgb(var(--bg))] text-[rgb(var(--text))] text-sm focus:outline-none focus:ring-2 focus:ring-red-800"
                   placeholder="Enter your full name"
                 />
@@ -250,6 +253,7 @@ export default function OrganizerApplyPage() {
                   value={formData.email}
                   onChange={(e) => handleInputChange('email', e.target.value)}
                   required
+                  autoComplete="email"
                   className="w-full px-3 py-2 rounded-lg token-border bg-[rgb(var(--bg))] text-[rgb(var(--text))] text-sm focus:outline-none focus:ring-2 focus:ring-red-800"
                   placeholder="Enter your email address"
                 />
@@ -265,6 +269,7 @@ export default function OrganizerApplyPage() {
                   value={formData.organization}
                   onChange={(e) => handleInputChange('organization', e.target.value)}
                   required
+                  autoComplete="organization"
                   className="w-full px-3 py-2 rounded-lg token-border bg-[rgb(var(--bg))] text-[rgb(var(--text))] text-sm focus:outline-none focus:ring-2 focus:ring-red-800"
                   placeholder="Enter your organization name"
                 />
@@ -286,6 +291,7 @@ export default function OrganizerApplyPage() {
                   type="url"
                   value={formData.website}
                   onChange={(e) => handleInputChange('website', e.target.value)}
+                  autoComplete="url"
                   className="w-full px-3 py-2 rounded-lg token-border bg-[rgb(var(--bg))] text-[rgb(var(--text))] text-sm focus:outline-none focus:ring-2 focus:ring-red-800"
                   placeholder="https://yourwebsite.com"
                 />
@@ -395,9 +401,7 @@ export default function OrganizerApplyPage() {
       case 3:
         return (
           <div>
-            <div className="text-center mb-6">
-              <p className="text-[rgb(var(--muted))]">Select the plan that best fits your event hosting needs</p>
-            </div>
+
             
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
               {pricingPlans.map((plan) => (
@@ -445,13 +449,13 @@ export default function OrganizerApplyPage() {
               ))}
             </div>
             
-            <div className="text-center">
+            <div className="text-center mt-8">
               {!formData.selectedPlan && (
-                <p className="text-sm text-[rgb(var(--brand))] mb-4">
+                <p className="text-sm text-[rgb(var(--brand))] mb-6 font-bold">
                   Please select a plan to continue
                 </p>
               )}
-              <p className="text-sm text-gray-500 mb-4">
+              <p className="text-sm text-gray-500 mb-6">
                 <Link href="/pricing" className="text-gray-500 hover:underline">View detailed feature comparison</Link> • 
                 <Link href="/pricing" className="text-gray-500 hover:underline"> See all plan benefits</Link> • 
                 <Link href="/pricing" className="text-gray-500 hover:underline"> FAQ</Link>
@@ -463,49 +467,55 @@ export default function OrganizerApplyPage() {
       case 4:
         return (
           <div>
-            <div className="text-center mb-6">
-              <p className="text-[rgb(var(--muted))]">
-                {formData.selectedPlan === 'explorer' 
-                  ? 'The Explorer plan is free - no payment required!' 
-                  : `Complete your payment for the ${pricingPlans.find(p => p.id === formData.selectedPlan)?.name} plan`
-                }
-              </p>
-            </div>
+            {formData.selectedPlan === 'explorer' && (
+              <div className="text-center mb-6">
+                <p className="text-[rgb(var(--muted))]">
+                  The Explorer plan is free - no payment required!
+                </p>
+              </div>
+            )}
 
             {formData.selectedPlan !== 'explorer' ? (
               <div className="space-y-6">
                 {/* Payment Method Selection */}
                 <div className="bg-[rgb(var(--bg))] rounded-lg p-4">
                   <h4 className="text-base font-semibold text-[rgb(var(--text))] mb-3">Payment Method</h4>
-                  <div className="grid gap-3 md:grid-cols-2">
-                    <label className="flex items-center gap-3 cursor-pointer p-3 bg-[rgb(var(--panel))] rounded-lg hover:bg-[rgb(var(--panel))]/80 transition-colors token-border">
-                      <input
-                        type="radio"
-                        name="paymentMethod"
-                        value="credit"
-                        checked={formData.paymentMethod === 'credit'}
-                        onChange={(e) => handleInputChange('paymentMethod', e.target.value)}
-                        className="w-4 h-4 text-[rgb(var(--brand))] border-[rgb(var(--muted))] focus:ring-[rgb(var(--brand))]"
-                      />
-                      <div className="flex items-center gap-3">
-                        <CreditCardIcon className="w-5 h-5 text-[rgb(var(--brand))]" />
-                        <span className="text-sm font-medium text-[rgb(var(--text))]">Credit/Debit Card</span>
-                      </div>
-                    </label>
-                    <label className="flex items-center gap-3 cursor-pointer p-3 bg-[rgb(var(--panel))] rounded-lg hover:bg-[rgb(var(--panel))]/80 transition-colors token-border">
-                      <input
-                        type="radio"
-                        name="paymentMethod"
-                        value="bank"
-                        checked={formData.paymentMethod === 'bank'}
-                        onChange={(e) => handleInputChange('paymentMethod', e.target.value)}
-                        className="w-4 h-4 text-[rgb(var(--brand))] border-[rgb(var(--muted))] focus:ring-[rgb(var(--brand))]"
-                      />
-                      <div className="flex items-center gap-3">
-                        <BanknotesIcon className="w-5 h-5 text-[rgb(var(--brand))]" />
-                        <span className="text-sm font-medium text-[rgb(var(--text))]">Bank Transfer</span>
-                      </div>
-                    </label>
+                  <div className="flex flex-col gap-3">
+                    <button
+                      type="button"
+                      onClick={() => handleInputChange('paymentMethod', 'credit')}
+                      className={`flex items-center justify-center gap-3 p-4 rounded-lg transition-all duration-200 hover:scale-105 w-full ${
+                        formData.paymentMethod === 'credit'
+                          ? 'bg-[rgb(var(--brand))] text-white'
+                          : 'bg-[rgb(var(--panel))] text-[rgb(var(--text))] hover:bg-[rgb(var(--panel))]/80'
+                      }`}
+                    >
+                      <CreditCardIcon className="w-7 h-6" />
+                      <span className="text-sm font-medium">Credit/Debit Card</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleInputChange('paymentMethod', 'applepay')}
+                      className={`flex items-center justify-center p-4 rounded-lg transition-all duration-200 hover:scale-105 w-full ${
+                        formData.paymentMethod === 'applepay'
+                          ? 'bg-[rgb(var(--brand))] text-white'
+                          : 'bg-[rgb(var(--panel))] text-[rgb(var(--text))] hover:bg-[rgb(var(--panel))]/80'
+                      }`}
+                    >
+                      <ApplePayLogo className="w-12 h-6" />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleInputChange('paymentMethod', 'googlepay')}
+                      className={`flex items-center justify-center p-4 rounded-lg transition-all duration-200 hover:scale-105 w-full ${
+                        formData.paymentMethod === 'googlepay'
+                          ? 'bg-[rgb(var(--brand))] text-white'
+                          : 'bg-[rgb(var(--panel))] text-[rgb(var(--text))] hover:bg-[rgb(var(--panel))]/80'
+                      }`}
+                    >
+                      <GooglePayLogo className="w-18 h-6" />
+                    </button>
+
                   </div>
                 </div>
 
@@ -523,6 +533,7 @@ export default function OrganizerApplyPage() {
                           type="text"
                           value={formData.cardNumber}
                           onChange={(e) => handleInputChange('cardNumber', e.target.value)}
+                          autoComplete="cc-number"
                           className="w-full px-3 py-2 rounded-lg token-border bg-[rgb(var(--bg))] text-[rgb(var(--text))] text-sm focus:outline-none focus:ring-2 focus:ring-red-800"
                           placeholder="1234 5678 9012 3456"
                           maxLength={19}
@@ -539,6 +550,7 @@ export default function OrganizerApplyPage() {
                             type="text"
                             value={formData.expiryDate}
                             onChange={(e) => handleInputChange('expiryDate', e.target.value)}
+                            autoComplete="cc-exp"
                             className="w-full px-3 py-2 rounded-lg token-border bg-[rgb(var(--bg))] text-[rgb(var(--text))] text-sm focus:outline-none focus:ring-2 focus:ring-red-800"
                             placeholder="MM/YY"
                             maxLength={5}
@@ -553,6 +565,7 @@ export default function OrganizerApplyPage() {
                             type="text"
                             value={formData.cvv}
                             onChange={(e) => handleInputChange('cvv', e.target.value)}
+                            autoComplete="cc-csc"
                             className="w-full px-3 py-2 rounded-lg token-border bg-[rgb(var(--bg))] text-[rgb(var(--text))] text-sm focus:outline-none focus:ring-2 focus:ring-red-800"
                             placeholder="123"
                             maxLength={4}
@@ -576,6 +589,7 @@ export default function OrganizerApplyPage() {
                         type="text"
                         value={formData.billingAddress}
                         onChange={(e) => handleInputChange('billingAddress', e.target.value)}
+                        autoComplete="street-address"
                         className="w-full px-3 py-2 rounded-lg token-border bg-[rgb(var(--bg))] text-[rgb(var(--text))] text-sm focus:outline-none focus:ring-2 focus:ring-red-800"
                         placeholder="123 Main Street"
                       />
@@ -591,6 +605,7 @@ export default function OrganizerApplyPage() {
                           type="text"
                           value={formData.city}
                           onChange={(e) => handleInputChange('city', e.target.value)}
+                          autoComplete="address-level2"
                           className="w-full px-3 py-2 rounded-lg token-border bg-[rgb(var(--bg))] text-[rgb(var(--text))] text-sm focus:outline-none focus:ring-2 focus:ring-red-800"
                           placeholder="City"
                         />
@@ -604,6 +619,7 @@ export default function OrganizerApplyPage() {
                           type="text"
                           value={formData.state}
                           onChange={(e) => handleInputChange('state', e.target.value)}
+                          autoComplete="address-level1"
                           className="w-full px-3 py-2 rounded-lg token-border bg-[rgb(var(--bg))] text-[rgb(var(--text))] text-sm focus:outline-none focus:ring-2 focus:ring-red-800"
                           placeholder="State"
                         />
@@ -617,6 +633,7 @@ export default function OrganizerApplyPage() {
                           type="text"
                           value={formData.zipCode}
                           onChange={(e) => handleInputChange('zipCode', e.target.value)}
+                          autoComplete="postal-code"
                           className="w-full px-3 py-2 rounded-lg token-border bg-[rgb(var(--bg))] text-[rgb(var(--text))] text-sm focus:outline-none focus:ring-2 focus:ring-red-800"
                           placeholder="12345"
                         />
@@ -708,7 +725,11 @@ export default function OrganizerApplyPage() {
                   {formData.selectedPlan !== 'explorer' && (
                     <div className="flex justify-between">
                       <span className="text-[rgb(var(--muted))]">Payment Method:</span>
-                      <span className="text-[rgb(var(--text))]">{formData.paymentMethod === 'credit' ? 'Credit/Debit Card' : 'Bank Transfer'}</span>
+                      <span className="text-[rgb(var(--text))]">
+                        {formData.paymentMethod === 'credit' ? 'Credit/Debit Card' : 
+                         formData.paymentMethod === 'applepay' ? 'Apple Pay' :
+                         formData.paymentMethod === 'googlepay' ? 'Google Pay' : 'Bank Transfer'}
+                      </span>
                     </div>
                   )}
                 </div>
@@ -760,31 +781,35 @@ export default function OrganizerApplyPage() {
 
       {/* Progress Steps */}
       <div className="max-w-2xl mx-auto px-4 py-6">
-        <div className="flex items-start justify-center mb-8">
+        <div className="flex items-start justify-center mb-6">
           {steps.map((step, index) => (
             <div key={step.number} className="flex items-start">
               <div className="flex flex-col items-center">
-                <div className={`flex items-center justify-center w-9 h-9 rounded-full border-2 ${
-                  currentStep >= step.number
-                    ? 'border-[rgb(var(--brand))] bg-[rgb(var(--brand))] text-white'
-                    : 'border-[rgb(var(--muted))] text-[rgb(var(--muted))]'
-                }`}>
+                <button
+                  onClick={() => setCurrentStep(step.number)}
+                  className={`flex items-center justify-center w-7 h-7 rounded-full border-2 transition-all duration-200 hover:scale-105 ${
+                    currentStep >= step.number
+                      ? 'border-[rgb(var(--brand))] bg-[rgb(var(--brand))] text-white cursor-pointer'
+                      : 'border-[rgb(var(--muted))] text-[rgb(var(--muted))] cursor-pointer hover:border-[rgb(var(--brand))] hover:text-[rgb(var(--brand))]'
+                  }`}
+                >
                   {currentStep > step.number ? (
-                    <CheckCircleIcon className="w-5 h-5" />
+                    <CheckCircleIcon className="w-4 h-4" />
                   ) : (
-                    <span className="text-sm font-semibold">{step.number}</span>
+                    <span className="text-xs font-semibold">{step.number}</span>
                   )}
-                </div>
-                <span
-                  className={`text-xs text-center mt-2 max-w-24 ${
+                </button>
+                <button
+                  onClick={() => setCurrentStep(step.number)}
+                  className={`text-xs text-center mt-1.5 max-w-20 transition-colors duration-200 hover:text-[rgb(var(--brand))] ${
                     currentStep === step.number ? 'text-[rgb(var(--brand))] font-medium' : 'text-[rgb(var(--muted))]'
                   }`}
                 >
                   {step.title}
-                </span>
+                </button>
               </div>
               {index < steps.length - 1 && (
-                <div className={`w-10 h-0.5 mx-3 self-center ${
+                <div className={`w-8 h-0.5 mx-2 self-center ${
                   currentStep > step.number ? 'bg-[rgb(var(--brand))]' : 'bg-[rgb(var(--muted))]'
                 }`} />
               )}
@@ -869,9 +894,8 @@ export default function OrganizerApplyPage() {
       <div className="max-w-2xl mx-auto px-4 py-6">
         <div className="bg-[rgb(var(--panel))] rounded-2xl token-border overflow-hidden">
           {/* Header */}
-          <div className="px-6 py-4 border-b border-[rgb(var(--border-color))]/20">
-            <h2 className="text-xl font-semibold text-[rgb(var(--text))]">Benefits of Being an Organizer</h2>
-            <p className="text-sm text-[rgb(var(--muted))] mt-1">Discover what you can achieve as an event organizer</p>
+          <div className="px-6 pt-6 pb-2">
+            <h2 className="text-lg font-semibold text-[rgb(var(--text))]">Benefits of Being an Organizer</h2>
           </div>
           
           {/* Content */}

@@ -415,6 +415,7 @@ export default function NewEventPage() {
                     type="text"
                     value={formData.title}
                     onChange={(e) => handleInputChange('title', e.target.value)}
+                    autoComplete="off"
                     className="w-full px-3 py-2 rounded-lg token-border bg-[rgb(var(--bg))] text-[rgb(var(--text))] text-sm focus:outline-none focus:ring-2 focus:ring-red-800"
                     placeholder="What's happening?"
                   />
@@ -481,6 +482,7 @@ export default function NewEventPage() {
                     value={formData.description}
                     onChange={(e) => handleInputChange('description', e.target.value)}
                     rows={3}
+                    autoComplete="off"
                     className="w-full px-3 py-2 rounded-lg token-border bg-[rgb(var(--bg))] text-[rgb(var(--text))] text-sm focus:outline-none focus:ring-2 focus:ring-red-800"
                     placeholder="Tell people about your event..."
                   />
@@ -561,6 +563,7 @@ export default function NewEventPage() {
                     type="text"
                     value={formData.venue_name}
                     onChange={(e) => handleInputChange('venue_name', e.target.value)}
+                    autoComplete="off"
                     className="w-full px-3 py-2 rounded-lg token-border bg-[rgb(var(--bg))] text-[rgb(var(--text))] text-sm focus:outline-none focus:ring-2 focus:ring-red-800"
                     placeholder="Where is it happening?"
                   />

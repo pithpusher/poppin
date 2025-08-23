@@ -243,6 +243,7 @@ export default function AccountPage() {
                     <input
                       type="text"
                       value={user.name || ''}
+                      autoComplete="name"
                       className="w-full px-3 py-2 rounded-lg bg-[rgb(var(--bg))] text-[rgb(var(--text))] token-border"
                       placeholder="Enter your full name"
                     />
@@ -255,6 +256,7 @@ export default function AccountPage() {
                       type="email"
                       value={user.email}
                       disabled
+                      autoComplete="email"
                       className="w-full px-3 py-2 rounded-lg bg-[rgb(var(--bg))] text-[rgb(var(--text))] token-border cursor-not-allowed"
                     />
                   </div>

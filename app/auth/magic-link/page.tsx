@@ -87,6 +87,7 @@ export default function MagicLinkPage() {
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       required
+                      autoComplete="email"
                       className="w-full pl-12 pr-4 py-4 rounded-xl bg-[rgb(var(--bg))] text-[rgb(var(--text))] token-border focus:outline-none focus:ring-2 focus:ring-[rgb(var(--brand))] focus:border-transparent transition-all duration-200"
                       placeholder="Enter your email"
                     />

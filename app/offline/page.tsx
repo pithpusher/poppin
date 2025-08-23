@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { ArrowLeftIcon, WifiIcon, WifiOffIcon } from '@heroicons/react/24/outline';
+import { ArrowLeftIcon, WifiIcon, SignalSlashIcon } from '@heroicons/react/24/outline';
 import OfflineIndicator from '@/components/mobile/OfflineMode';
 import { tokens } from '@/components/tokens';
 
@@ -52,7 +52,7 @@ export default function OfflinePage() {
                   </>
                 ) : (
                   <>
-                    <WifiOffIcon className="w-4 h-4" />
+                    <SignalSlashIcon className="w-4 h-4" />
                     Offline
                   </>
                 )}

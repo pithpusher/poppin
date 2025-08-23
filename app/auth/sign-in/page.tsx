@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { 
@@ -17,7 +17,7 @@ import {
 import { supabase } from '@/lib/supabaseClient';
 import { tokens } from '@/components/tokens';
 
-export default function SignInPage() {
+function SignInForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -129,6 +129,7 @@ export default function SignInPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
+                  autoComplete="email"
                   className="w-full pl-12 pr-4 py-4 rounded-xl bg-[rgb(var(--bg))] text-[rgb(var(--text))] token-border focus:outline-none focus:ring-2 focus:ring-[rgb(var(--brand))] focus:border-transparent transition-all duration-200"
                   placeholder="Enter your email"
                 />
@@ -148,6 +149,7 @@ export default function SignInPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
+                  autoComplete="current-password"
                   className="w-full pl-12 pr-12 py-4 rounded-xl bg-[rgb(var(--bg))] text-[rgb(var(--text))] token-border focus:outline-none focus:ring-2 focus:ring-[rgb(var(--brand))] focus:border-transparent transition-all duration-200"
                   placeholder="Enter your password"
                 />
@@ -303,5 +305,20 @@ export default function SignInPage() {
       <div className="h-16 sm:h-0"></div>
       <div className="pb-12 sm:pb-0"></div>
     </div>
+  );
+}
+
+export default function SignInPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-[rgb(var(--bg))] flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-8 h-8 border-2 border-[rgb(var(--brand))] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-[rgb(var(--muted))]">Loading...</p>
+        </div>
+      </div>
+    }>
+      <SignInForm />
+    </Suspense>
   );
 }
