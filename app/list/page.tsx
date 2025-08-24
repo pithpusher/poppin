@@ -459,7 +459,7 @@ export default function ListPage() {
                 {/* Header with Post Event Button - Non-sticky */}
                 <div className="relative z-30 bg-[rgb(var(--bg))] border-b border-[rgb(var(--border-color))]/20">
                     <div className="max-w-7xl mx-auto px-4 py-4 md:py-6 lg:py-8">
-                        <div className="flex items-center justify-between gap-4 md:gap-6">
+                        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 md:gap-6">
                             {/* Left Column - Event List Title */}
                             <div className="flex-shrink-0">
                                 <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-[rgb(var(--text))]">Event List</h1>
@@ -541,17 +541,17 @@ export default function ListPage() {
                             </div>
                             
                             {/* Right Column - CTA Buttons */}
-                            <div className="flex gap-2 md:gap-3 flex-shrink-0 ml-auto">
+                            <div className="flex gap-2 md:gap-3 flex-shrink-0 md:ml-auto w-full md:w-auto">
                                 <Link
                                     href="/map"
-                                    className="inline-flex items-center gap-2 px-2.5 py-1.5 md:px-3 md:py-2 bg-[rgb(var(--panel))] text-[rgb(var(--text))] rounded-xl text-xs md:text-sm font-medium hover:bg-[rgb(var(--bg))] transition-colors"
+                                    className="flex-1 md:flex-none inline-flex items-center justify-center gap-2 px-2.5 py-1.5 md:px-3 md:py-2 bg-[rgb(var(--panel))] text-[rgb(var(--text))] rounded-xl text-xs md:text-sm font-medium hover:bg-[rgb(var(--bg))] transition-colors"
                                 >
                                     Map View
                                 </Link>
                                 
                                 <Link
                                     href="/post"
-                                    className="inline-flex items-center gap-2 px-2.5 py-1.5 md:px-3 md:py-2 bg-[rgb(var(--brand))] text-white rounded-xl text-xs md:text-sm font-medium hover:bg-[rgb(var(--brand))]/90 transition-colors"
+                                    className="flex-1 md:flex-none inline-flex items-center justify-center gap-2 px-2.5 py-1.5 md:px-3 md:py-2 bg-[rgb(var(--brand))] text-white rounded-xl text-xs md:text-sm font-medium hover:bg-[rgb(var(--brand))]/90 transition-colors"
                                 >
                                     Post Event
                                 </Link>
