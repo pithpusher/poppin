@@ -68,6 +68,9 @@ export default function CalendarPage() {
         startDate?: string | null;
         endDate?: string | null;
     }) => {
+        // Only run on client side
+        if (typeof window === 'undefined') return;
+        
         const url = new URL(window.location.href);
         
         // Update URL parameters
@@ -232,6 +235,9 @@ export default function CalendarPage() {
 
     // Set default date range on page load
     useEffect(() => {
+        // Only run on client side
+        if (typeof window === 'undefined') return;
+        
         const today = new Date();
         const endOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
         const endOfWeek = new Date(today);
@@ -541,9 +547,11 @@ export default function CalendarPage() {
                                 onEventClick={(eventId) => {
                                     setSelectedId(eventId);
                                     // Scroll to event in calendar
-                                    const eventElement = document.getElementById(`event-${eventId}`);
-                                    if (eventElement) {
-                                        eventElement.scrollIntoView({ behavior: 'smooth' });
+                                    if (typeof document !== 'undefined') {
+                                        const eventElement = document.getElementById(`event-${eventId}`);
+                                        if (eventElement) {
+                                            eventElement.scrollIntoView({ behavior: 'smooth' });
+                                        }
                                     }
                                 }}
                                 currentLocation={location}
@@ -553,9 +561,11 @@ export default function CalendarPage() {
                                 onEventClick={(eventId) => {
                                     setSelectedId(eventId);
                                     // Scroll to event in calendar
-                                    const eventElement = document.getElementById(`event-${eventId}`);
-                                    if (eventElement) {
-                                        eventElement.scrollIntoView({ behavior: 'smooth' });
+                                    if (typeof document !== 'undefined') {
+                                        const eventElement = document.getElementById(`event-${eventId}`);
+                                        if (eventElement) {
+                                            eventElement.scrollIntoView({ behavior: 'smooth' });
+                                        }
                                     }
                                 }}
                                 currentLocation={location}
