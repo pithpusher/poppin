@@ -245,7 +245,7 @@ export default function EventDetailPage() {
             The event you're looking for doesn't exist or has been removed.
           </p>
           <Link
-            href="/list"
+            href="/calendar"
             className="inline-flex items-center px-4 py-2 bg-[rgb(var(--brand))] text-white rounded-xl text-sm font-medium hover:bg-[rgb(var(--brand))]/90 transition-colors"
           >
             Browse Events
@@ -261,7 +261,7 @@ export default function EventDetailPage() {
         {/* Back Button */}
         <div className="mb-6">
           <Link
-            href="/list"
+            href="/calendar"
             className="inline-flex items-center gap-2 text-[rgb(var(--muted))] hover:text-[rgb(var(--text))] transition-colors"
           >
             ← Back to Events
@@ -627,7 +627,7 @@ export default function EventDetailPage() {
                 Share Event
               </button>
               <Link
-                href="/list"
+                href="/calendar"
                 className="px-6 py-3 bg-[rgb(var(--brand))] text-white rounded-xl hover:bg-[rgb(var(--brand))]/90 transition-colors"
               >
                 Browse More Events

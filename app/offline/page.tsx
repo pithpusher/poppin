@@ -101,7 +101,7 @@ export default function OfflinePage() {
             <h3 className="text-lg font-semibold text-[rgb(var(--text))] mb-4">Quick Actions</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <Link
-                href="/list"
+                href="/calendar"
                 className="flex items-center gap-3 p-4 bg-[rgb(var(--bg))] rounded-lg hover:bg-[rgb(var(--bg))]/80 transition-colors"
               >
                 <div className="w-10 h-10 bg-[rgb(var(--brand))] rounded-lg flex items-center justify-center">

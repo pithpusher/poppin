@@ -56,10 +56,10 @@ export default function HomePage() {
         <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-10">
           <div className="flex flex-col sm:flex-row gap-3 items-center">
             <Link
-              href="/list"
+              href="/calendar"
               className={`inline-flex items-center gap-2 px-4 py-2 md:px-6 md:py-3 rounded-xl text-sm md:text-base ${tokens.border} ${tokens.muted} ${tokens.panel} hover:bg-white/10 html.light:hover:bg-zinc-50 transition-all duration-200`}
             >
-              View List of Events
+              View Calendar of Events
             </Link>
             <Link
               href="/organizers"

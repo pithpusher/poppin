@@ -411,7 +411,7 @@ export default function OrganizersPage() {
                            </Link>
                            
                            <Link
-                             href={`/list?organizer=${encodeURIComponent(organizer.name)}`}
+                             href={`/calendar?organizer=${encodeURIComponent(organizer.name)}`}
                              className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-[rgb(var(--bg))] text-[rgb(var(--text))] rounded-lg hover:bg-[rgb(var(--panel))] transition-colors text-sm font-medium"
                              onClick={(e) => e.stopPropagation()}
                            >
@@ -427,7 +427,7 @@ export default function OrganizersPage() {
              </div>
            </div>
 
-                       {/* Right Column - Sidebar (Similar to /list page) */}
+                       {/* Right Column - Sidebar (Similar to /calendar page) */}
             <div className="lg:w-80 lg:border-l lg:border-[rgb(var(--border-color))]/20 bg-[rgb(var(--bg))]">
               <div className="p-4 space-y-6 pb-16 sm:pb-6">
                 {/* Post Event CTA */}
@@ -451,7 +451,7 @@ export default function OrganizersPage() {
                   <h4 className="text-sm font-semibold text-[rgb(var(--text))]">Quick Actions</h4>
                   <div className="space-y-2">
                     <Link
-                      href="/list"
+                      href="/calendar"
                       className="flex items-center gap-3 p-3 bg-[rgb(var(--panel))] rounded-lg hover:bg-[rgb(var(--panel))]/80 transition-colors"
                     >
                       <CalendarIcon className="w-5 h-5 text-[rgb(var(--muted))]" />

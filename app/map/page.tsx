@@ -648,10 +648,10 @@ export default function MapPage() {
                             <div className="flex gap-1.5 md:gap-3 flex-shrink-0 ml-auto">
 
                             <Link
-                                href="/list"
-                                className="inline-flex items-center gap-1.5 px-2 py-1 md:px-3 md:py-2 bg-[rgb(var(--panel))] text-[rgb(var(--text))] rounded-lg md:rounded-xl text-xs md:text-sm font-medium hover:bg-[rgb(var(--bg))] transition-colors"
+                                href="/calendar"
+                                className="inline-flex items-center gap-1.5 px-2 py-1 md:px-3 md:py-2 bg-[rgb(var(--panel))] text-[rgb(var(--panel))] text-[rgb(var(--text))] rounded-lg md:rounded-xl text-xs md:text-sm font-medium hover:bg-[rgb(var(--bg))] transition-colors"
                             >
-                                List View
+                                Calendar View
                             </Link>
                             
                             <Link

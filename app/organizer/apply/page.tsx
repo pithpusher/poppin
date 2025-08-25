@@ -590,7 +590,7 @@ export default function OrganizerApplyPage() {
                         value={formData.billingAddress}
                         onChange={(e) => handleInputChange('billingAddress', e.target.value)}
                         autoComplete="street-address"
-                        className="w-full px-3 py-2 rounded-lg token-border bg-[rgb(var(--bg))] text-[rgb(var(--text))] text-sm focus:outline-none focus:ring-2 focus:ring-red-800"
+                     className="w-full px-3 py-2 rounded-lg token-border bg-[rgb(var(--bg))] text-[rgb(var(--text))] text-sm focus:outline-none focus:ring-2 focus:ring-red-800"
                         placeholder="123 Main Street"
                       />
                     </div>

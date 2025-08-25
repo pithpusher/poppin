@@ -57,10 +57,10 @@ export default function HamburgerMenu() {
       description: 'Explore events on an interactive map'
     },
     { 
-      href: '/list', 
-      label: 'Event List', 
+              href: '/calendar', 
+      label: 'Event Calendar', 
       icon: CalendarIcon,
-      description: 'Browse events in list format'
+      description: 'Browse events in calendar format'
     },
     
     // Core Actions
