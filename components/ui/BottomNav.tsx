@@ -7,31 +7,37 @@ export default function BottomNav() {
   const pathname = usePathname();
 
   const navigation = [
-  {
-    name: 'Home',
-    href: '/',
-    icon: HomeIcon,
-    current: pathname === '/'
-  },
-  {
-    name: 'Map',
-    href: '/map',
-    icon: MapPinIcon,
-    current: pathname === '/map'
-  },
-  {
-    name: 'Post',
-    href: '/post',
-    icon: PlusIcon,
-    current: pathname === '/post'
-  },
-  {
-    name: 'Calendar',
-    href: '/calendar',
-    icon: CalendarIcon,
-    current: pathname === '/calendar'
-  }
-];
+    {
+      name: 'Home',
+      href: '/',
+      icon: HomeIcon,
+      current: pathname === '/'
+    },
+    {
+      name: 'Map',
+      href: '/map',
+      icon: MapPinIcon,
+      current: pathname === '/map'
+    },
+    {
+      name: 'Post',
+      href: '/post',
+      icon: PlusIcon,
+      current: pathname === '/post'
+    },
+    {
+      name: 'Calendar',
+      href: '/calendar',
+      icon: CalendarIcon,
+      current: pathname === '/calendar'
+    },
+    {
+      name: 'Organizers',
+      href: '/organizers',
+      icon: UserGroupIcon,
+      current: pathname === '/organizers'
+    }
+  ];
 
   return (
     <nav className="sm:hidden fixed bottom-0 inset-x-0 z-50 bg-[rgb(var(--bg))] backdrop-blur-md border-t border-[rgb(var(--border-color))]/20 safe-area-bottom">
