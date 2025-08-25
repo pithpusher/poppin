@@ -2,9 +2,17 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { HomeIcon, MapPinIcon, PlusIcon, CalendarIcon, UserGroupIcon, UserIcon } from "@heroicons/react/24/outline";
+import { useEffect, useState } from "react";
 
 export default function BottomNav() {
-  const pathname = usePathname();
+  const [pathname, setPathname] = useState<string>('');
+  const [isClient, setIsClient] = useState(false);
+  const actualPathname = usePathname();
+
+  useEffect(() => {
+    setIsClient(true);
+    setPathname(actualPathname);
+  }, [actualPathname]);
 
   const navigation = [
     {
