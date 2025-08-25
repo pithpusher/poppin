@@ -3,7 +3,10 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { HomeIcon, MapPinIcon, PlusIcon, CalendarIcon, UserGroupIcon, UserIcon } from "@heroicons/react/24/outline";
 
-const navigation = [
+export default function BottomNav() {
+  const pathname = usePathname();
+
+  const navigation = [
   {
     name: 'Home',
     href: '/',
@@ -30,8 +33,6 @@ const navigation = [
   }
 ];
 
-export default function BottomNav(){
-  const path = usePathname();
   return (
     <nav className="sm:hidden fixed bottom-0 inset-x-0 z-50 bg-[rgb(var(--bg))] backdrop-blur-md border-t border-[rgb(var(--border-color))]/20 safe-area-bottom">
       <div className="max-w-7xl mx-auto px-2 flex justify-around h-14">
